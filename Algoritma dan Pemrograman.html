@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UTM Algoritma dan Pemrograman UT</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList = [
+    {
+      "questionNumber": 1,
+      "question": "Definisi yang paling tepat dari Algoritma adalah...",
+      "answerOptions": [
+        {
+          "text": "Sekumpulan instruksi yang ditulis dalam bahasa pemrograman tertentu.",
+          "isCorrect": false,
+          "rationale": "Ini adalah definisi dari 'program', bukan algoritma. Algoritma bersifat independen dari bahasa pemrograman."
+        },
+        {
+          "text": "Langkah-langkah logis yang tersusun secara sistematis untuk menyelesaikan suatu masalah.",
+          "isCorrect": true,
+          "rationale": "Algoritma adalah prosedur langkah demi langkah yang jelas dan terbatas untuk memecahkan masalah atau mencapai tujuan. Ini menekankan aspek logis dan sistematis."
+        },
+        {
+          "text": "Notasi grafis untuk merepresentasikan urutan proses suatu program.",
+          "isCorrect": false,
+          "rationale": "Ini adalah definisi dari 'Flowchart'."
+        },
+        {
+          "text": "Proses mengubah kode sumber menjadi kode mesin yang dapat dieksekusi oleh komputer.",
+          "isCorrect": false,
+          "rationale": "Ini adalah definisi dari 'kompilasi' atau 'interpretasi'."
+        }
+      ]
+    },
+    {
+      "questionNumber": 2,
+      "question": "Salah satu ciri utama algoritma yang baik adalah Finiteness, yang artinya...",
+      "answerOptions": [
+        {
+          "text": "Setiap langkah harus menghasilkan output yang jelas dan pasti.",
+          "isCorrect": false,
+          "rationale": "Ini adalah ciri 'Definiteness' (Kepastian)."
+        },
+        {
+          "text": "Algoritma harus dapat diterapkan pada berbagai jenis input.",
+          "isCorrect": false,
+          "rationale": "Ini terkait dengan 'Generality' (Generalitas)."
+        },
+        {
+          "text": "Proses harus berhenti setelah melaksanakan sejumlah langkah yang terbatas.",
+          "isCorrect": true,
+          "rationale": "Finiteness (Keterbatasan) memastikan bahwa algoritma akan selalu berakhir dalam waktu terbatas, tidak berjalan selamanya (infinite loop)."
+        },
+        {
+          "text": "Algoritma harus memiliki nol atau lebih masukan (input).",
+          "isCorrect": false,
+          "rationale": "Ini adalah ciri 'Input'."
+        }
+      ]
+    },
+    {
+      "questionNumber": 3,
+      "question": "Teknik penulisan algoritma yang menggunakan bahasa yang mirip dengan bahasa pemrograman tetapi tidak terikat oleh aturan sintaks disebut...",
+      "answerOptions": [
+        {
+          "text": "Flowchart",
+          "isCorrect": false,
+          "rationale": "Flowchart menggunakan notasi grafis (simbol)."
+        },
+        {
+          "text": "Notasi Algoritmik",
+          "isCorrect": false,
+          "rationale": "Ini istilah umum untuk semua cara penulisan algoritma."
+        },
+        {
+          "text": "Source Code",
+          "isCorrect": false,
+          "rationale": "Source Code adalah program nyata yang ditulis dengan sintaks bahasa pemrograman."
+        },
+        {
+          "text": "Pseudocode",
+          "isCorrect": true,
+          "rationale": "Pseudocode (kode semu) adalah notasi informal yang memudahkan pembacaan dan konversi ke berbagai bahasa pemrograman. (Disebutkan pada file 4 PPT STSI4102.ppt)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 4,
+      "question": "Simbol Flowchart yang digunakan untuk menyatakan proses input atau output (masukan/keluaran) adalah...",
+      "answerOptions": [
+        {
+          "text": "Persegi Panjang (Rectangle)",
+          "isCorrect": false,
+          "rationale": "Melambangkan proses perhitungan atau manipulasi data."
+        },
+        {
+          "text": "Jajaran Genjang (Parallelogram)",
+          "isCorrect": true,
+          "rationale": "Simbol ini mewakili operasi Input/Output."
+        },
+        {
+          "text": "Belah Ketupat (Diamond)",
+          "isCorrect": false,
+          "rationale": "Melambangkan Decision (Keputusan) atau Percabangan."
+        },
+        {
+          "text": "Oval/Terminator",
+          "isCorrect": false,
+          "rationale": "Melambangkan Start/End (Mulai/Selesai)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 5,
+      "question": "Dalam konteks efisiensi algoritma, efisiensi waktu diukur berdasarkan...",
+      "answerOptions": [
+        {
+          "text": "Jumlah baris kode dalam program.",
+          "isCorrect": false,
+          "rationale": "Jumlah baris kode tidak selalu berkorelasi dengan efisiensi waktu eksekusi."
+        },
+        {
+          "text": "Kebutuhan memori yang digunakan oleh program.",
+          "isCorrect": false,
+          "rationale": "Ini adalah efisiensi ruang (space efficiency)."
+        },
+        {
+          "text": "Lama waktu (secara nyata) yang dibutuhkan untuk program berjalan.",
+          "isCorrect": false,
+          "rationale": "Waktu nyata dipengaruhi oleh spesifikasi hardware. Efisiensi waktu diukur secara abstrak dengan jumlah operasi dasar."
+        },
+        {
+          "text": "Jumlah operasi dasar yang dieksekusi oleh algoritma sebagai fungsi dari ukuran input.",
+          "isCorrect": true,
+          "rationale": "Efisiensi waktu diukur secara abstrak menggunakan notasi Big O yang menghitung kompleksitas algoritma (jumlah langkah/operasi dasar) relatif terhadap input. (Disebutkan pada file 3 PPT STSI4102.ppt)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 6,
+      "question": "Struktur kontrol yang digunakan untuk menjalankan suatu pernyataan atau blok pernyataan hanya jika suatu kondisi bernilai TRUE adalah...",
+      "answerOptions": [
+        {
+          "text": "Perulangan (Looping)",
+          "isCorrect": false,
+          "rationale": "Perulangan digunakan untuk mengulang serangkaian instruksi."
+        },
+        {
+          "text": "Struktur Urutan (Sequence)",
+          "isCorrect": false,
+          "rationale": "Struktur urutan menjalankan instruksi secara berurutan tanpa syarat."
+        },
+        {
+          "text": "Struktur Percabangan (Selection/Conditional)",
+          "isCorrect": true,
+          "rationale": "Percabangan (seperti IF-THEN, IF-THEN-ELSE) digunakan untuk memilih salah satu dari beberapa kemungkinan aksi berdasarkan kondisi."
+        },
+        {
+          "text": "Fungsi (Function)",
+          "isCorrect": false,
+          "rationale": "Fungsi adalah blok kode yang dapat digunakan kembali."
+        }
+      ]
+    },
+    {
+      "questionNumber": 7,
+      "question": "Jika terdapat dua kondisi, dan kita ingin menjalankan suatu aksi jika Kondisi A TRUE dan Kondisi B TRUE, operator logika yang paling tepat digunakan adalah...",
+      "answerOptions": [
+        {
+          "text": "OR (atau)",
+          "isCorrect": false,
+          "rationale": "OR akan bernilai TRUE jika salah satu atau keduanya TRUE."
+        },
+        {
+          "text": "NOT (tidak)",
+          "isCorrect": false,
+          "rationale": "NOT digunakan untuk membalik nilai logika (negasi)."
+        },
+        {
+          "text": "AND (dan)",
+          "isCorrect": true,
+          "rationale": "Operator AND (konjungsi) mengharuskan kedua kondisi bernilai TRUE untuk menghasilkan nilai TRUE."
+        },
+        {
+          "text": "XOR (exclusive OR)",
+          "isCorrect": false,
+          "rationale": "XOR akan bernilai TRUE jika salah satu TRUE, tetapi tidak keduanya."
+        }
+      ]
+    },
+    {
+      "questionNumber": 8,
+      "question": "Jenis perulangan yang paling tepat digunakan jika jumlah iterasi (pengulangan) sudah diketahui secara pasti di awal adalah...",
+      "answerOptions": [
+        {
+          "text": "DO-WHILE",
+          "isCorrect": false,
+          "rationale": "Perulangan DO-WHILE adalah 'post-test loop', digunakan ketika minimal satu kali iterasi harus dilakukan, tidak bergantung pada jumlah pasti yang diketahui."
+        },
+        {
+          "text": "WHILE",
+          "isCorrect": false,
+          "rationale": "Perulangan WHILE adalah 'pre-test loop' yang digunakan ketika jumlah iterasi tidak pasti dan bergantung pada kondisi."
+        },
+        {
+          "text": "FOR",
+          "isCorrect": true,
+          "rationale": "Perulangan FOR (counting loop) dirancang khusus untuk mengulang blok kode dalam jumlah tertentu (count/range) yang telah ditetapkan."
+        },
+        {
+          "text": "REPEATE-UNTIL",
+          "isCorrect": false,
+          "rationale": "Sama seperti DO-WHILE, ini adalah 'post-test loop' dan kondisinya kebalikan dari WHILE/DO-WHILE."
+        }
+      ]
+    },
+    {
+      "questionNumber": 9,
+      "question": "Perulangan WHILE disebut sebagai *pre-test loop* karena...",
+      "answerOptions": [
+        {
+          "text": "Pemeriksaan kondisi dilakukan setelah blok kode dieksekusi.",
+          "isCorrect": false,
+          "rationale": "Ini adalah ciri *post-test loop* (contoh: DO-WHILE)."
+        },
+        {
+          "text": "Blok kode selalu dieksekusi minimal satu kali.",
+          "isCorrect": false,
+          "rationale": "Ini adalah ciri *post-test loop* (contoh: DO-WHILE)."
+        },
+        {
+          "text": "Pemeriksaan kondisi dilakukan di awal sebelum blok kode dieksekusi.",
+          "isCorrect": true,
+          "rationale": "Dalam WHILE, kondisi diuji di awal. Jika FALSE, blok kode di dalam loop tidak akan dieksekusi sama sekali."
+        },
+        {
+          "text": "Digunakan untuk perulangan dengan jumlah iterasi yang telah diketahui.",
+          "isCorrect": false,
+          "rationale": "Ini adalah ciri perulangan FOR."
+        }
+      ]
+    },
+    {
+      "questionNumber": 10,
+      "question": "Pada bahasa pemrograman yang mendukung, struktur `switch-case` paling sering digunakan sebagai alternatif yang lebih ringkas dari struktur percabangan...",
+      "answerOptions": [
+        {
+          "text": "IF-THEN tunggal",
+          "isCorrect": false,
+          "rationale": "IF-THEN tunggal tidak dapat membandingkan banyak nilai sekaligus."
+        },
+        {
+          "text": "Nested FOR",
+          "isCorrect": false,
+          "rationale": "FOR digunakan untuk perulangan, bukan percabangan."
+        },
+        {
+          "text": "IF-THEN-ELSE",
+          "isCorrect": false,
+          "rationale": "IF-THEN-ELSE digunakan untuk dua kemungkinan aksi."
+        },
+        {
+          "text": "IF-ELSE IF bertingkat",
+          "isCorrect": true,
+          "rationale": "Ketika kita memiliki banyak pilihan nilai yang dibandingkan dengan satu variabel (multi-branching), `switch-case` lebih ringkas daripada serangkaian `IF-ELSE IF` yang panjang."
+        }
+      ]
+    },
+    {
+      "questionNumber": 11,
+      "question": "Dalam Java dan bahasa C-style lainnya, operator Ternary (`? :`) berfungsi sebagai bentuk singkat dari struktur kontrol...",
+      "answerOptions": [
+        {
+          "text": "FOR loop",
+          "isCorrect": false,
+          "rationale": "Operator Ternary adalah bentuk singkat dari percabangan, bukan perulangan."
+        },
+        {
+          "text": "IF-THEN-ELSE",
+          "isCorrect": true,
+          "rationale": "Operator Ternary (kondisi ? nilai_jika_true : nilai_jika_false) adalah bentuk singkat untuk menetapkan nilai berdasarkan kondisi, yang merupakan fungsionalitas dasar IF-THEN-ELSE. (Disebutkan pada file 8 PPT STSI4102.ppt)."
+        },
+        {
+          "text": "SWITCH-CASE",
+          "isCorrect": false,
+          "rationale": "SWITCH-CASE biasanya digunakan untuk banyak pilihan."
+        },
+        {
+          "text": "DO-WHILE",
+          "isCorrect": false,
+          "rationale": "DO-WHILE adalah perulangan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 12,
+      "question": "Jika suatu perulangan FOR memiliki inisialisasi `i=1`, kondisi `i <= 5`, dan *increment* `i++`, berapa kali blok kode di dalamnya akan dieksekusi?",
+      "answerOptions": [
+        {
+          "text": "4 kali",
+          "isCorrect": false,
+          "rationale": "Perulangan dilakukan untuk i = 1, 2, 3, 4, 5."
+        },
+        {
+          "text": "5 kali",
+          "isCorrect": true,
+          "rationale": "Iterasi terjadi saat i = 1, 2, 3, 4, dan 5. Total 5 kali. Saat i = 6, kondisi i <= 5 menjadi FALSE dan perulangan berhenti."
+        },
+        {
+          "text": "6 kali",
+          "isCorrect": false,
+          "rationale": "Iterasi akan berhenti sebelum i mencapai 6."
+        },
+        {
+          "text": "Tak terbatas",
+          "isCorrect": false,
+          "rationale": "Ada kondisi berhenti yang jelas (i <= 5)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 13,
+      "question": "Apa yang terjadi jika kondisi di dalam perulangan WHILE selalu bernilai TRUE dan tidak ada mekanisme untuk mengubahnya menjadi FALSE?",
+      "answerOptions": [
+        {
+          "text": "Program akan berhenti secara otomatis setelah 1000 iterasi.",
+          "isCorrect": false,
+          "rationale": "Tidak ada mekanisme otomatis seperti itu kecuali ada batasan sistem."
+        },
+        {
+          "text": "Program akan menghasilkan error sintaks.",
+          "isCorrect": false,
+          "rationale": "Ini bukan error sintaks, tetapi error logika runtime."
+        },
+        {
+          "text": "Terjadi *Infinite Loop* (perulangan tak terbatas) yang dapat menyebabkan program crash atau hang.",
+          "isCorrect": true,
+          "rationale": "Jika kondisi tidak pernah FALSE, perulangan akan terus berjalan selamanya, menyebabkan *Infinite Loop*."
+        },
+        {
+          "text": "Perulangan akan dieksekusi sekali dan kemudian berhenti.",
+          "isCorrect": false,
+          "rationale": "Perulangan akan terus berlanjut karena kondisi selalu TRUE."
+        }
+      ]
+    },
+    {
+      "questionNumber": 14,
+      "question": "Struktur kontrol yang memastikan blok kode di dalamnya akan dieksekusi minimal satu kali, terlepas dari kondisi awalnya, adalah...",
+      "answerOptions": [
+        {
+          "text": "FOR loop",
+          "isCorrect": false,
+          "rationale": "FOR bisa jadi tidak dieksekusi sama sekali jika kondisi awal sudah FALSE."
+        },
+        {
+          "text": "WHILE loop",
+          "isCorrect": false,
+          "rationale": "WHILE bisa jadi tidak dieksekusi sama sekali jika kondisi awal sudah FALSE (*pre-test*)."
+        },
+        {
+          "text": "IF-THEN-ELSE",
+          "isCorrect": false,
+          "rationale": "Ini adalah percabangan, bukan perulangan."
+        },
+        {
+          "text": "DO-WHILE loop",
+          "isCorrect": true,
+          "rationale": "DO-WHILE adalah *post-test loop*, yang memeriksa kondisi di akhir iterasi. Oleh karena itu, blok kode di dalamnya dijamin dieksekusi minimal satu kali."
+        }
+      ]
+    },
+    {
+      "questionNumber": 15,
+      "question": "Penggunaan pernyataan `break` di dalam perulangan bertujuan untuk...",
+      "answerOptions": [
+        {
+          "text": "Melewati satu kali iterasi dan melanjutkan ke iterasi berikutnya.",
+          "isCorrect": false,
+          "rationale": "Ini adalah fungsi dari pernyataan `continue`."
+        },
+        {
+          "text": "Mengakhiri eksekusi program secara keseluruhan.",
+          "isCorrect": false,
+          "rationale": "Ini terlalu luas, `break` hanya mengakhiri perulangan terdekat."
+        },
+        {
+          "text": "Menghentikan perulangan dan melanjutkan eksekusi ke pernyataan setelah blok perulangan.",
+          "isCorrect": true,
+          "rationale": "`break` digunakan untuk keluar secara paksa dari perulangan (FOR, WHILE, DO-WHILE) atau dari blok `switch`."
+        },
+        {
+          "text": "Memulai kembali perulangan dari awal.",
+          "isCorrect": false,
+          "rationale": "Perulangan akan dimulai dari awal secara normal dalam iterasi berikutnya, bukan diinisialisasi ulang."
+        }
+      ]
+    },
+    {
+      "questionNumber": 16,
+      "question": "Dalam bahasa pemrograman, Tipe Data adalah klasifikasi yang menentukan...",
+      "answerOptions": [
+        {
+          "text": "Nama variabel yang diizinkan untuk digunakan.",
+          "isCorrect": false,
+          "rationale": "Ini adalah aturan penamaan (identifier rules)."
+        },
+        {
+          "text": "Jenis nilai yang dapat disimpan oleh variabel dan operasi yang dapat dilakukan padanya.",
+          "isCorrect": true,
+          "rationale": "Tipe data (seperti bilangan riil, integer, boolean yang disebutkan di file 7 PPT STSI4102.ppt) menentukan format data dan operasi yang legal."
+        },
+        {
+          "text": "Berapa banyak memori yang tersedia untuk seluruh program.",
+          "isCorrect": false,
+          "rationale": "Ini adalah urusan manajemen memori sistem/JVM."
+        },
+        {
+          "text": "Langkah-langkah logis penyelesaian masalah.",
+          "isCorrect": false,
+          "rationale": "Ini adalah definisi dari Algoritma."
+        }
+      ]
+    },
+    {
+      "questionNumber": 17,
+      "question": "Tipe data primitif yang paling tepat digunakan untuk menyimpan nilai TRUE atau FALSE adalah...",
+      "answerOptions": [
+        {
+          "text": "Integer",
+          "isCorrect": false,
+          "rationale": "Integer digunakan untuk bilangan bulat."
+        },
+        {
+          "text": "Char",
+          "isCorrect": false,
+          "rationale": "Char digunakan untuk satu karakter."
+        },
+        {
+          "text": "Boolean",
+          "isCorrect": true,
+          "rationale": "Boolean digunakan untuk menyimpan nilai logika (TRUE atau FALSE). (Disebutkan di file 7 PPT STSI4102.ppt)."
+        },
+        {
+          "text": "Float",
+          "isCorrect": false,
+          "rationale": "Float digunakan untuk bilangan pecahan/riil."
+        }
+      ]
+    },
+    {
+      "questionNumber": 18,
+      "question": "Dalam Java, tipe data `int` memiliki ukuran 32 bit, dan `long` memiliki ukuran 64 bit. Perbedaan ini menunjukkan konsep...",
+      "answerOptions": [
+        {
+          "text": "Abstraksi Data",
+          "isCorrect": false,
+          "rationale": "Abstraksi adalah penyembunyian detail yang tidak perlu."
+        },
+        {
+          "text": "Efisiensi Waktu",
+          "isCorrect": false,
+          "rationale": "Ini adalah tentang penggunaan ruang memori."
+        },
+        {
+          "text": "Overloading",
+          "isCorrect": false,
+          "rationale": "Overloading adalah penggunaan nama fungsi yang sama dengan parameter berbeda."
+        },
+        {
+          "text": "Efisiensi Ruang (Space Efficiency)",
+          "isCorrect": true,
+          "rationale": "Memilih tipe data yang lebih kecil (seperti `int` daripada `long`) jika jangkauan nilai yang dibutuhkan mencukupi dapat menghemat penggunaan memori (Space Efficiency)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 19,
+      "question": "Manakah dari berikut ini yang merupakan aturan penamaan (identifier) variabel yang TIDAK BENAR dalam sebagian besar bahasa pemrograman?",
+      "answerOptions": [
+        {
+          "text": "total_harga",
+          "isCorrect": false,
+          "rationale": "Penggunaan underscore (_) diizinkan."
+        },
+        {
+          "text": "hasil_akhir1",
+          "isCorrect": false,
+          "rationale": "Boleh mengandung angka, asalkan tidak dimulai dengan angka."
+        },
+        {
+          "text": "2jumlahData",
+          "isCorrect": true,
+          "rationale": "Nama variabel tidak boleh diawali dengan angka. Seharusnya `jumlahData2` atau `jumlahData`."
+        },
+        {
+          "text": "namaSiswa",
+          "isCorrect": false,
+          "rationale": "Penggunaan CamelCase diizinkan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 20,
+      "question": "Apa yang dimaksud dengan konstanta dalam pemrograman?",
+      "answerOptions": [
+        {
+          "text": "Sebuah variabel yang nilainya dapat diubah selama eksekusi program.",
+          "isCorrect": false,
+          "rationale": "Ini adalah definisi dari variabel biasa."
+        },
+        {
+          "text": "Sebuah nilai yang tidak dapat berubah (tetap) selama eksekusi program.",
+          "isCorrect": true,
+          "rationale": "Konstanta digunakan untuk nilai-nilai yang fix (misalnya nilai PI, atau batas maksimum) dan tidak boleh dimodifikasi setelah diinisialisasi."
+        },
+        {
+          "text": "Fungsi yang selalu mengembalikan nilai yang sama.",
+          "isCorrect": false,
+          "rationale": "Ini bisa jadi *pure function* tetapi bukan konstanta."
+        },
+        {
+          "text": "Tipe data khusus untuk bilangan bulat yang sangat besar.",
+          "isCorrect": false,
+          "rationale": "Ini adalah tipe data `BigInt` atau `long`, bukan konstanta secara umum."
+        }
+      ]
+    },
+    {
+      "questionNumber": 21,
+      "question": "Operator yang digunakan untuk membandingkan dua nilai dan menghasilkan nilai boolean (TRUE/FALSE) adalah operator...",
+      "answerOptions": [
+        {
+          "text": "Aritmatika",
+          "isCorrect": false,
+          "rationale": "Digunakan untuk perhitungan matematis (+, -, *, /)."
+        },
+        {
+          "text": "Penugasan (Assignment)",
+          "isCorrect": false,
+          "rationale": "Digunakan untuk memberikan nilai ke variabel (=)."
+        },
+        {
+          "text": "Relasional (Perbandingan)",
+          "isCorrect": true,
+          "rationale": "Operator Relasional (>, <, >=, <=, ==, !=) membandingkan nilai."
+        },
+        {
+          "text": "Bitwise",
+          "isCorrect": false,
+          "rationale": "Digunakan untuk operasi pada tingkat bit."
+        }
+      ]
+    },
+    {
+      "questionNumber": 22,
+      "question": "Manakah hasil dari ekspresi aritmatika berikut: `10 + 5 * 2 - 4 / 2` (dengan mempertimbangkan urutan operasi standar)?",
+      "answerOptions": [
+        {
+          "text": "13",
+          "isCorrect": false,
+          "rationale": "Jika dihitung dari kiri: 15 * 2 - 4 / 2 = 30 - 2 = 28. Ini salah."
+        },
+        {
+          "text": "18",
+          "isCorrect": true,
+          "rationale": "Urutan: Perkalian/Pembagian dahulu, kemudian Penambahan/Pengurangan. (5 * 2 = 10), (4 / 2 = 2). Ekspresi menjadi: 10 + 10 - 2 = 20 - 2 = 18."
+        },
+        {
+          "text": "28",
+          "isCorrect": false,
+          "rationale": "Hasil jika 10 + 5 * 2 = 30, lalu dikurangi 2. Ini salah karena melanggar urutan operasi."
+        },
+        {
+          "text": "20",
+          "isCorrect": false,
+          "rationale": "Hasil jika (10 + 5 * 2) = 20, dan (4 / 2) = 2, lalu 20 + 2 = 22. Ini salah."
+        }
+      ]
+    },
+    {
+      "questionNumber": 23,
+      "question": "Dalam Java dan bahasa C-style lainnya, operator `%` (Modulo) menghasilkan...",
+      "answerOptions": [
+        {
+          "text": "Hasil bagi dari dua bilangan.",
+          "isCorrect": false,
+          "rationale": "Ini adalah fungsi dari operator `/` (pembagian)."
+        },
+        {
+          "text": "Pangkat dari suatu bilangan.",
+          "isCorrect": false,
+          "rationale": "Tidak ada operator pangkat tunggal; biasanya menggunakan fungsi `Math.pow()`."
+        },
+        {
+          "text": "Sisa hasil bagi (remainder) dari dua bilangan.",
+          "isCorrect": true,
+          "rationale": "Operator Modulo (%) digunakan untuk mendapatkan sisa pembagian bilangan bulat. Contoh: 10 % 3 = 1."
+        },
+        {
+          "text": "Negasi dari suatu bilangan.",
+          "isCorrect": false,
+          "rationale": "Negasi menggunakan operator minus tunggal (-)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 24,
+      "question": "Apa fungsi dari operator *Unary Increment* `++` (misalnya `i++`)?",
+      "answerOptions": [
+        {
+          "text": "Mengurangi nilai variabel sebanyak satu.",
+          "isCorrect": false,
+          "rationale": "Ini adalah fungsi dari operator *Decrement* (`--`)."
+        },
+        {
+          "text": "Menggandakan nilai variabel.",
+          "isCorrect": false,
+          "rationale": "Untuk menggandakan menggunakan `i = i * 2;` atau `i *= 2;`."
+        },
+        {
+          "text": "Menetapkan nilai variabel menjadi TRUE.",
+          "isCorrect": false,
+          "rationale": "Ini untuk tipe data boolean."
+        },
+        {
+          "text": "Menambah nilai variabel sebanyak satu.",
+          "isCorrect": true,
+          "rationale": "Operator `++` (Increment) adalah operator unary yang menambah nilai variabel dengan 1."
+        }
+      ]
+    },
+    {
+      "questionNumber": 25,
+      "question": "Jika `A = TRUE` dan `B = FALSE`, berapakah hasil dari ekspresi logika `A AND (NOT B)`?",
+      "answerOptions": [
+        {
+          "text": "FALSE",
+          "isCorrect": false,
+          "rationale": "Jika B=FALSE, maka NOT B = TRUE. A AND TRUE = TRUE."
+        },
+        {
+          "text": "TRUE",
+          "isCorrect": true,
+          "rationale": "NOT B adalah TRUE. Maka ekspresi menjadi TRUE AND TRUE, yang hasilnya adalah TRUE."
+        },
+        {
+          "text": "ERROR",
+          "isCorrect": false,
+          "rationale": "Ini adalah operasi logika yang valid."
+        },
+        {
+          "text": "NULL",
+          "isCorrect": false,
+          "rationale": "Hasil dari operasi logika adalah Boolean (TRUE/FALSE)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 26,
+      "question": "Kumpulan variabel yang memiliki tipe data yang sama dan diorganisasikan dalam satu nama yang diindeks secara berurutan disebut...",
+      "answerOptions": [
+        {
+          "text": "Struktur",
+          "isCorrect": false,
+          "rationale": "Struktur (Struct) adalah kumpulan variabel dengan tipe data berbeda."
+        },
+        {
+          "text": "Kelas",
+          "isCorrect": false,
+          "rationale": "Kelas adalah blueprint dari objek dalam OOP."
+        },
+        {
+          "text": "Pointer",
+          "isCorrect": false,
+          "rationale": "Pointer adalah variabel yang menyimpan alamat memori."
+        },
+        {
+          "text": "Array (Larik)",
+          "isCorrect": true,
+          "rationale": "Array adalah koleksi elemen dengan tipe data yang sama yang diakses menggunakan indeks (biasanya dimulai dari 0)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 27,
+      "question": "Jika sebuah array diinisialisasi dengan `[10, 20, 30, 40, 50]`, berapa nilai yang tersimpan pada indeks ke-3?",
+      "answerOptions": [
+        {
+          "text": "30",
+          "isCorrect": false,
+          "rationale": "30 berada pada indeks ke-2 (indeks dimulai dari 0)."
+        },
+        {
+          "text": "40",
+          "isCorrect": true,
+          "rationale": "Indeks 0 = 10, Indeks 1 = 20, Indeks 2 = 30, Indeks 3 = 40."
+        },
+        {
+          "text": "50",
+          "isCorrect": false,
+          "rationale": "50 berada pada indeks ke-4."
+        },
+        {
+          "text": "Terjadi Error",
+          "isCorrect": false,
+          "rationale": "Indeks 3 valid untuk array dengan 5 elemen."
+        }
+      ]
+    },
+    {
+      "questionNumber": 28,
+      "question": "Blok kode yang dirancang untuk menjalankan tugas tertentu dan dapat dipanggil berkali-kali dari bagian lain dalam program (prinsip *reusability*) disebut...",
+      "answerOptions": [
+        {
+          "text": "Variabel Global",
+          "isCorrect": false,
+          "rationale": "Variabel global adalah variabel yang dapat diakses di mana saja."
+        },
+        {
+          "text": "Main Program",
+          "isCorrect": false,
+          "rationale": "Main program adalah titik masuk utama, bukan blok kode yang dapat digunakan kembali untuk tugas spesifik."
+        },
+        {
+          "text": "Fungsi/Prosedur",
+          "isCorrect": true,
+          "rationale": "Fungsi (jika mengembalikan nilai) atau Prosedur (jika tidak) adalah unit modular yang meningkatkan reusability kode. (Reusability adalah salah satu kelebihan Algoritma di file 3 PPT STSI4102.ppt)."
+        },
+        {
+          "text": "Array Dinamis",
+          "isCorrect": false,
+          "rationale": "Array dinamis adalah struktur data."
+        }
+      ]
+    },
+    {
+      "questionNumber": 29,
+      "question": "Dalam pemrograman, pemanggilan fungsi dengan mekanisme Pass-by-Value berarti...",
+      "answerOptions": [
+        {
+          "text": "Fungsi dapat memodifikasi nilai asli dari variabel yang dikirimkan.",
+          "isCorrect": false,
+          "rationale": "Ini adalah ciri *Pass-by-Reference*."
+        },
+        {
+          "text": "Alamat memori dari variabel yang dikirimkan diteruskan ke fungsi.",
+          "isCorrect": false,
+          "rationale": "Ini adalah ciri *Pass-by-Reference*."
+        },
+        {
+          "text": "Hanya nilai (salinan) dari variabel yang diteruskan, sehingga fungsi tidak dapat memodifikasi nilai asli.",
+          "isCorrect": true,
+          "rationale": "Pass-by-Value adalah mekanisme yang paling umum untuk tipe data primitif, di mana salinan nilai yang dikirim, sehingga aman dari modifikasi tak terduga."
+        },
+        {
+          "text": "Variabel harus bertipe data objek (Object).",
+          "isCorrect": false,
+          "rationale": "Tidak ada hubungannya dengan tipe data; ini adalah mekanisme pemanggilan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 30,
+      "question": "Array dua dimensi paling tepat digunakan untuk merepresentasikan data dalam bentuk...",
+      "answerOptions": [
+        {
+          "text": "Daftar belanja berurutan.",
+          "isCorrect": false,
+          "rationale": "Daftar berurutan cukup menggunakan Array satu dimensi."
+        },
+        {
+          "text": "Pohon keluarga (Tree structure).",
+          "isCorrect": false,
+          "rationale": "Lebih cocok menggunakan struktur data *Tree*."
+        },
+        {
+          "text": "Tabel atau Matriks (Baris dan Kolom).",
+          "isCorrect": true,
+          "rationale": "Array dua dimensi memiliki dua indeks ([baris][kolom]) yang ideal untuk merepresentasikan struktur data berbentuk tabel/matriks."
+        },
+        {
+          "text": "Kumpulan data yang tidak berurutan.",
+          "isCorrect": false,
+          "rationale": "Array selalu berurutan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 31,
+      "question": "Konsep dasar OOP yang berfokus pada penyembunyian detail implementasi dari pengguna (user) dan hanya menampilkan fungsionalitas yang diperlukan disebut...",
+      "answerOptions": [
+        {
+          "text": "Inheritance (Pewarisan)",
+          "isCorrect": false,
+          "rationale": "Inheritance adalah konsep penurunan sifat dari kelas induk ke anak."
+        },
+        {
+          "text": "Polymorphism (Polimorfisme)",
+          "isCorrect": false,
+          "rationale": "Polymorphism adalah kemampuan objek untuk memiliki banyak bentuk (berperilaku berbeda di konteks berbeda)."
+        },
+        {
+          "text": "Encapsulation (Enkapsulasi)",
+          "isCorrect": false,
+          "rationale": "Encapsulation adalah penggabungan data (variabel) dan method (fungsi) dalam satu unit (kelas), sering kali melibatkan penyembunyian."
+        },
+        {
+          "text": "Abstraction (Abstraksi)",
+          "isCorrect": true,
+          "rationale": "Abstraksi adalah konsep menyajikan hanya informasi penting dan menyembunyikan detail latar belakang yang tidak relevan. (Abstraksi juga disebutkan sebagai salah satu kelebihan algoritma di file 3 PPT STSI4102.ppt)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 32,
+      "question": "Dalam konteks OOP, sebuah blueprint atau cetak biru yang mendefinisikan sifat (attributes/data) dan perilaku (methods/functions) dari suatu objek disebut...",
+      "answerOptions": [
+        {
+          "text": "Objek (Object)",
+          "isCorrect": false,
+          "rationale": "Objek adalah instance nyata dari sebuah kelas."
+        },
+        {
+          "text": "Interface",
+          "isCorrect": false,
+          "rationale": "Interface adalah kontrak yang mendefinisikan method tanpa implementasi."
+        },
+        {
+          "text": "Kelas (Class)",
+          "isCorrect": true,
+          "rationale": "Kelas adalah cetak biru (blueprint) yang digunakan untuk menciptakan objek, mendefinisikan struktur data dan method."
+        },
+        {
+          "text": "Method",
+          "isCorrect": false,
+          "rationale": "Method adalah perilaku atau fungsi yang dilakukan oleh objek, bukan blueprint keseluruhan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 33,
+      "question": "Konsep dasar OOP di mana sebuah kelas baru (Subclass) dapat mewarisi sifat dan perilaku dari kelas yang sudah ada (Superclass), mempromosikan *code reusability*, disebut...",
+      "answerOptions": [
+        {
+          "text": "Encapsulation",
+          "isCorrect": false,
+          "rationale": "Encapsulation berfokus pada pembungkusan data dan method dalam satu unit."
+        },
+        {
+          "text": "Polymorphism",
+          "isCorrect": false,
+          "rationale": "Polymorphism berfokus pada kemampuan objek untuk mengambil banyak bentuk."
+        },
+        {
+          "text": "Inheritance (Pewarisan)",
+          "isCorrect": true,
+          "rationale": "Inheritance memungkinkan kelas anak mewarisi atribut dan method dari kelas induk, yang merupakan mekanisme kunci untuk *reusability*."
+        },
+        {
+          "text": "Abstraction",
+          "isCorrect": false,
+          "rationale": "Abstraction berfokus pada menyembunyikan detail implementasi yang tidak perlu."
+        }
+      ]
+    },
+    {
+      "questionNumber": 34,
+      "question": "Dalam konteks Encapsulation (Enkapsulasi) di Java, fungsi utama dari Access Modifier `private` pada suatu variabel atau method adalah...",
+      "answerOptions": [
+        {
+          "text": "Memungkinkan akses dari mana saja di dalam paket yang sama.",
+          "isCorrect": false,
+          "rationale": "Ini adalah ciri dari *default* (package-private) atau *protected*."
+        },
+        {
+          "text": "Memungkinkan akses hanya dari kelas itu sendiri.",
+          "isCorrect": true,
+          "rationale": "`private` membatasi akses anggota kelas (variabel/method) hanya di dalam kelas di mana ia didefinisikan. Ini adalah fondasi dari Encapsulation."
+        },
+        {
+          "text": "Memungkinkan akses dari semua kelas, termasuk Subclass di paket berbeda.",
+          "isCorrect": false,
+          "rationale": "Ini adalah ciri dari `public`."
+        },
+        {
+          "text": "Memungkinkan akses dari Subclass dan paket yang sama.",
+          "isCorrect": false,
+          "rationale": "Ini adalah ciri dari `protected`."
+        }
+      ]
+    },
+    {
+      "questionNumber": 35,
+      "question": "Method khusus yang namanya sama dengan nama kelas, dan secara otomatis dipanggil ketika sebuah objek (instance) baru dari kelas tersebut dibuat menggunakan kata kunci `new`, disebut...",
+      "answerOptions": [
+        {
+          "text": "Static Method",
+          "isCorrect": false,
+          "rationale": "Static method dipanggil melalui kelas, bukan objek, dan tidak harus memiliki nama yang sama dengan kelas."
+        },
+        {
+          "text": "Getter/Setter",
+          "isCorrect": false,
+          "rationale": "Getter/Setter adalah method standar untuk mengakses/memodifikasi properti, dipanggil setelah objek dibuat."
+        },
+        {
+          "text": "Final Method",
+          "isCorrect": false,
+          "rationale": "Final method tidak dapat di-*override* oleh Subclass."
+        },
+        {
+          "text": "Constructor (Konstruktor)",
+          "isCorrect": true,
+          "rationale": "Constructor bertanggung jawab untuk inisialisasi awal objek baru. (Disebutkan di file 9 PPT STSI4102.ppt)."
+        }
+      ]
+    },
+    {
+    "questionNumber": 36,
+    "question": "Perbedaan utama antara Class String dengan Class StringBuffer di Java adalah...",
+    "answerOptions": [
+      {
+        "text": "String dapat menampung karakter, sedangkan StringBuffer hanya dapat menampung angka.",
+        "isCorrect": false,
+        "rationale": "Keduanya menampung urutan karakter."
+      },
+      {
+        "text": "String bersifat mutable (dapat diubah), sedangkan StringBuffer bersifat immutable (tidak dapat diubah).",
+        "isCorrect": false,
+        "rationale": "Ini terbalik. String bersifat immutable (tidak dapat diubah), StringBuffer bersifat mutable (dapat diubah)."
+      },
+      {
+        "text": "String bersifat immutable (tidak dapat diubah), sedangkan StringBuffer bersifat mutable (dapat diubah).",
+        "isCorrect": true,
+        "rationale": "Objek String tidak dapat diubah setelah dibuat, sedangkan StringBuffer dapat dimodifikasi tanpa membuat objek baru."
+      },
+      {
+        "text": "String adalah tipe data primitif, sedangkan StringBuffer adalah objek.",
+        "isCorrect": false,
+        "rationale": "Keduanya adalah objek (tipe data referensi)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Method dari Class String yang digunakan untuk mendapatkan panjang (jumlah karakter) dari string adalah...",
+    "answerOptions": [
+      {
+        "text": "size()",
+        "isCorrect": false,
+        "rationale": "Tidak ada method ini pada String; ini biasanya untuk Collections."
+      },
+      {
+        "text": "length()",
+        "isCorrect": true,
+        "rationale": "Method length() digunakan untuk mendapatkan jumlah karakter dalam String."
+      },
+      {
+        "text": "length",
+        "isCorrect": false,
+        "rationale": "Ini adalah properti array, bukan method String."
+      },
+      {
+        "text": "count()",
+        "isCorrect": false,
+        "rationale": "Bukan method standar untuk panjang string."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Dalam Java, method dari Class StringBuffer yang digunakan untuk menambahkan string lain ke akhir objek String adalah...",
+    "answerOptions": [
+      {
+        "text": "join()",
+        "isCorrect": false,
+        "rationale": "join() digunakan untuk menggabungkan elemen array/list."
+      },
+      {
+        "text": "insert()",
+        "isCorrect": false,
+        "rationale": "insert() menyisipkan string pada posisi tertentu."
+      },
+      {
+        "text": "append()",
+        "isCorrect": true,
+        "rationale": "append() menambahkan konten ke akhir StringBuffer."
+      },
+      {
+        "text": "concat()",
+        "isCorrect": false,
+        "rationale": "concat() adalah method pada Class String."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Method dari Class Math di Java yang berfungsi untuk mengembalikan nilai absolut (nilai mutlak) dari suatu bilangan adalah...",
+    "answerOptions": [
+      {
+        "text": "Math.ceil()",
+        "isCorrect": false,
+        "rationale": "Digunakan untuk pembulatan ke atas."
+      },
+      {
+        "text": "Math.round()",
+        "isCorrect": false,
+        "rationale": "Digunakan untuk pembulatan ke angka terdekat."
+      },
+      {
+        "text": "Math.max()",
+        "isCorrect": false,
+        "rationale": "Digunakan untuk mencari nilai maksimum."
+      },
+      {
+        "text": "Math.abs()",
+        "isCorrect": true,
+        "rationale": "Math.abs() mengembalikan nilai mutlak."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Jika kita memiliki angka 4.8, method Math.floor(4.8) akan menghasilkan nilai...",
+    "answerOptions": [
+      {
+        "text": "5",
+        "isCorrect": false,
+        "rationale": "Ini adalah hasil dari Math.ceil()."
+      },
+      {
+        "text": "4",
+        "isCorrect": true,
+        "rationale": "Math.floor() membulatkan ke bawah."
+      },
+      {
+        "text": "4.8",
+        "isCorrect": false,
+        "rationale": "Method pembulatan tidak mengembalikan angka asli."
+      },
+      {
+        "text": "5.0",
+        "isCorrect": false,
+        "rationale": "Ini hasil Math.ceil() dalam double."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Pada notasi Big O, kompleksitas waktu O(n) melambangkan...",
+    "answerOptions": [
+      {
+        "text": "Waktu eksekusi konstan.",
+        "isCorrect": false,
+        "rationale": "Ini adalah O(1)."
+      },
+      {
+        "text": "Waktu eksekusi yang tumbuh eksponensial.",
+        "isCorrect": false,
+        "rationale": "Ini O(2^n) atau O(n!)."
+      },
+      {
+        "text": "Waktu eksekusi linear terhadap input.",
+        "isCorrect": true,
+        "rationale": "Jika input bertambah, waktu eksekusi bertambah sebanding."
+      },
+      {
+        "text": "Waktu eksekusi kuadrat.",
+        "isCorrect": false,
+        "rationale": "Ini adalah O(n^2)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Sebuah algoritma pencarian yang efisien pada data yang sudah diurutkan (seperti Binary Search) umumnya memiliki kompleksitas waktu...",
+    "answerOptions": [
+      {
+        "text": "O(n)",
+        "isCorrect": false,
+        "rationale": "Ini adalah Linear Search."
+      },
+      {
+        "text": "O(n^2)",
+        "isCorrect": false,
+        "rationale": "Ini kompleksitas algoritma pengurutan sederhana."
+      },
+      {
+        "text": "O(log n)",
+        "isCorrect": true,
+        "rationale": "Binary Search membagi ruang pencarian menjadi dua setiap langkah."
+      },
+      {
+        "text": "O(1)",
+        "isCorrect": false,
+        "rationale": "Akses langsung."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Manakah dari notasi Big O berikut yang menunjukkan algoritma yang paling efisien (paling cepat)?",
+    "answerOptions": [
+      {
+        "text": "O(n^2)",
+        "isCorrect": false,
+        "rationale": "Paling lambat di antara pilihan ini."
+      },
+      {
+        "text": "O(n)",
+        "isCorrect": false,
+        "rationale": "Masih lebih lambat dari O(log n) dan O(1)."
+      },
+      {
+        "text": "O(1)",
+        "isCorrect": true,
+        "rationale": "Paling cepat; tidak bergantung ukuran input."
+      },
+      {
+        "text": "O(log n)",
+        "isCorrect": false,
+        "rationale": "Lebih cepat dari linear, tapi masih kalah dari O(1)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Jika Anda menggunakan loop bersarang (Nested Loop) untuk membandingkan setiap elemen dalam array dengan setiap elemen lainnya, maka kompleksitas waktunya adalah...",
+    "answerOptions": [
+      {
+        "text": "O(n)",
+        "isCorrect": false,
+        "rationale": "Ini loop tunggal."
+      },
+      {
+        "text": "O(n log n)",
+        "isCorrect": false,
+        "rationale": "Ini untuk algoritma pengurutan efisien."
+      },
+      {
+        "text": "O(n^2)",
+        "isCorrect": true,
+        "rationale": "Loop dalam berjalan n kali untuk setiap n loop luar → n × n."
+      },
+      {
+        "text": "O(log n)",
+        "isCorrect": false,
+        "rationale": "Kompleksitas logaritmik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Pada deklarasi final double PI = 3.14159; kata kunci final menunjukkan bahwa PI adalah...",
+    "answerOptions": [
+      {
+        "text": "Variabel lokal.",
+        "isCorrect": false,
+        "rationale": "Terkait scope, bukan final."
+      },
+      {
+        "text": "Variabel yang dapat diubah sewaktu-waktu.",
+        "isCorrect": false,
+        "rationale": "Ini kebalikannya."
+      },
+      {
+        "text": "Konstanta yang nilainya tidak dapat diubah.",
+        "isCorrect": true,
+        "rationale": "final menjadikan variabel sebagai konstanta."
+      },
+      {
+        "text": "Tipe data baru.",
+        "isCorrect": false,
+        "rationale": "Bukan demikian."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Prinsip pemrograman yang memecah masalah besar menjadi modul-modul kecil disebut...",
+    "answerOptions": [
+      {
+        "text": "Enkapsulasi",
+        "isCorrect": false,
+        "rationale": "Terkait penyembunyian data."
+      },
+      {
+        "text": "Decomposition / Modularitas",
+        "isCorrect": true,
+        "rationale": "Memecah masalah menjadi bagian-bagian kecil."
+      },
+      {
+        "text": "Polimorfisme",
+        "isCorrect": false,
+        "rationale": "Banyak bentuk."
+      },
+      {
+        "text": "Abstraksi",
+        "isCorrect": false,
+        "rationale": "Menyembunyikan detail tidak penting."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Kelebihan algoritma yang bersifat universal dan tidak bergantung pada bahasa pemrograman disebut...",
+    "answerOptions": [
+      {
+        "text": "Finiteness",
+        "isCorrect": false,
+        "rationale": "Algoritma harus memiliki akhir."
+      },
+      {
+        "text": "Definiteness",
+        "isCorrect": false,
+        "rationale": "Instruksi harus jelas."
+      },
+      {
+        "text": "Reusability",
+        "isCorrect": true,
+        "rationale": "Algoritma bisa digunakan di berbagai platform atau bahasa."
+      },
+      {
+        "text": "Input",
+        "isCorrect": false,
+        "rationale": "Algoritma harus memiliki input."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Tahapan yang benar setelah Analisis Masalah dan Perancangan Algoritma adalah...",
+    "answerOptions": [
+      {
+        "text": "Implementasi → Pengujian → Pemeliharaan",
+        "isCorrect": true,
+        "rationale": "Urutan standar siklus pengembangan program."
+      },
+      {
+        "text": "Pengujian → Implementasi → Pemeliharaan",
+        "isCorrect": false,
+        "rationale": "Testing dilakukan setelah coding."
+      },
+      {
+        "text": "Dokumentasi → Implementasi → Pemeliharaan",
+        "isCorrect": false,
+        "rationale": "Dokumentasi bukan langkah utama sebelum coding."
+      },
+      {
+        "text": "Pemeliharaan → Pengujian → Implementasi",
+        "isCorrect": false,
+        "rationale": "Urutan terbalik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Dalam pemrograman, Syntax Error terjadi ketika...",
+    "answerOptions": [
+      {
+        "text": "Program berjalan tanpa batas.",
+        "isCorrect": false,
+        "rationale": "Itu Logical Error."
+      },
+      {
+        "text": "Aturan penulisan kode dilanggar.",
+        "isCorrect": true,
+        "rationale": "Syntax Error disebabkan kesalahan tata bahasa."
+      },
+      {
+        "text": "Program berjalan tetapi outputnya salah.",
+        "isCorrect": false,
+        "rationale": "Itu Logical Error."
+      },
+      {
+        "text": "Program mengakses memori tidak valid.",
+        "isCorrect": false,
+        "rationale": "Itu Runtime Error."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Method charAt(int index) digunakan untuk...",
+    "answerOptions": [
+      {
+        "text": "Mengubah karakter pada indeks tertentu.",
+        "isCorrect": false,
+        "rationale": "String immutable."
+      },
+      {
+        "text": "Mencari indeks karakter tertentu.",
+        "isCorrect": false,
+        "rationale": "Itu method indexOf()."
+      },
+      {
+        "text": "Mendapatkan substring.",
+        "isCorrect": false,
+        "rationale": "Itu method substring()."
+      },
+      {
+        "text": "Mengambil karakter pada posisi indeks tertentu.",
+        "isCorrect": true,
+        "rationale": "charAt() mengembalikan karakter di indeks tersebut."
+      }
+    ]
+  }
+]
+
+
+  function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>

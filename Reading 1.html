@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal UO Reading 1 UT</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #ffffff;
+      margin: 0;
+      padding: 0 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 22px;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .jawaban button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      background: #e0e0e0;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .jawaban button:hover {
+      background: #d5d5d5;
+    }
+    .jawaban button.benar {
+      background-color: #c8e6c9;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+    }
+    .penjelasan {
+      background: #e3f2fd;
+      padding: 10px;
+      border-left: 5px solid #1976d2;
+      margin-top: 10px;
+      display: none;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .counter {
+      background: #fff3cd;
+      padding: 10px;
+      border-left: 5px solid #ffa000;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+    @media screen and (max-width: 480px) {
+      h1 { font-size: 18px; }
+      .jawaban button { font-size: 15px; padding: 12px; }
+    }
+
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal Reading 1 UT</h1>
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+
+function updateCounter() {
+  document.getElementById("benar").textContent = totalBenar;
+  document.getElementById("salah").textContent = totalSalah;
+  }
+  const soalList = [
+    {
+      soal: "1. What is the main purpose of a topic sentence in a paragraph?",
+      pilihan: [
+        "To conclude the paragraph",
+        "To introduce the main idea",
+        "To give background information",
+        "To list supporting facts"
+      ],
+      kunci: 1,
+      penjelasan: [
+        "Salah. Menyimpulkan paragraf adalah fungsi dari kalimat penutup, bukan kalimat topik.",
+        "Benar. Kalimat topik memperkenalkan ide utama dari paragraf.",
+        "Salah. Informasi latar belakang biasanya datang sebelum kalimat topik.",
+        "Salah. Fakta pendukung muncul setelah kalimat topik, bukan dalam kalimat topik."
+      ]
+    },
+    {
+      soal: "2. The word 'synonym' refers to...",
+      pilihan: [
+        "A word with the opposite meaning",
+        "A word with the same meaning",
+        "A difficult word",
+        "A new vocabulary"
+      ],
+      kunci: 1,
+      penjelasan: [
+        "Salah. Kata yang berlawanan disebut antonym.",
+        "Benar. Synonym adalah kata yang memiliki arti sama atau mirip.",
+        "Salah. Kesulitan kata tidak berkaitan dengan sinonim.",
+        "Salah. Kosakata baru belum tentu sinonim."
+      ]
+    },
+    {
+  soal: "3. What does the word 'antonym' mean?",
+  pilihan: [
+    "A word that has a similar meaning",
+    "A word that has the opposite meaning",
+    "A word that sounds the same",
+    "A word that is difficult to pronounce"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Kata dengan arti yang sama disebut synonym.",
+    "Benar. Antonym berarti kata yang memiliki arti yang berlawanan.",
+    "Salah. Kata yang terdengar sama disebut homophone.",
+    "Salah. Kesulitan pengucapan tidak menentukan arti antonym."
+  ]
+},
+{
+  soal: "4. What is skimming in reading?",
+  pilihan: [
+    "Reading every word carefully",
+    "Reading quickly to get the main idea",
+    "Reading to find specific details",
+    "Reading and translating each word"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Skimming tidak membaca setiap kata secara teliti.",
+    "Benar. Skimming adalah membaca cepat untuk menemukan ide utama.",
+    "Salah. Itu adalah scanning, bukan skimming.",
+    "Salah. Menerjemahkan setiap kata bukan bagian dari skimming."
+  ]
+},
+{
+  soal: "5. What is scanning in reading?",
+  pilihan: [
+    "Reading to understand the plot",
+    "Reading to memorize facts",
+    "Reading quickly to find specific information",
+    "Reading slowly for enjoyment"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Memahami plot adalah bagian dari membaca ekstensif.",
+    "Salah. Scanning tidak fokus pada menghafal.",
+    "Benar. Scanning adalah membaca cepat untuk mencari informasi spesifik.",
+    "Salah. Membaca lambat untuk kesenangan adalah extensive reading."
+  ]
+},
+{
+  soal: "6. What is the function of a concluding sentence in a paragraph?",
+  pilihan: [
+    "To introduce a new idea",
+    "To support the topic sentence",
+    "To summarize the main idea",
+    "To describe an example"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Kalimat penutup tidak memperkenalkan ide baru.",
+    "Salah. Itu adalah fungsi kalimat pendukung.",
+    "Benar. Kalimat penutup merangkum ide utama dalam paragraf.",
+    "Salah. Memberi contoh dilakukan dalam kalimat pendukung."
+  ]
+},
+{
+  soal: "7. Which sentence is a topic sentence?",
+  pilihan: [
+    "For example, many students use digital dictionaries.",
+    "This essay will explain the importance of reading.",
+    "Books can be expensive, but they are valuable.",
+    "In conclusion, reading is beneficial for students."
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Ini adalah kalimat contoh, bukan kalimat topik.",
+    "Benar. Kalimat ini menyatakan ide utama dari tulisan.",
+    "Salah. Ini merupakan opini, bukan pernyataan topik utama.",
+    "Salah. Ini adalah kalimat penutup."
+  ]
+},
+{
+  soal: "8. Which is a supporting sentence?",
+  pilihan: [
+    "Reading is important for success.",
+    "To sum up, reading is useful.",
+    "Many students read books to prepare for exams.",
+    "This text is about reading habits."
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Ini adalah kalimat topik.",
+    "Salah. Ini kalimat penutup.",
+    "Benar. Kalimat ini memberikan dukungan konkret terhadap ide utama.",
+    "Salah. Ini hanya menyebutkan topik."
+  ]
+},
+{
+  soal: "9. What is a paragraph?",
+  pilihan: [
+    "A sentence that tells a story",
+    "A group of related sentences about one topic",
+    "A list of unrelated facts",
+    "A type of punctuation"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Paragraf terdiri dari beberapa kalimat, bukan satu kalimat.",
+    "Benar. Paragraf adalah kumpulan kalimat yang membahas satu topik.",
+    "Salah. Fakta yang tidak saling berhubungan tidak membentuk paragraf.",
+    "Salah. Paragraf bukan tanda baca."
+  ]
+},
+{
+  soal: "10. What is the main idea of a paragraph?",
+  pilihan: [
+    "The last sentence",
+    "The most interesting detail",
+    "The central thought or point",
+    "The title of the paragraph"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Kalimat terakhir bisa saja penutup, bukan ide utama.",
+    "Salah. Detail menarik belum tentu merupakan ide utama.",
+    "Benar. Ide utama adalah gagasan inti dari paragraf.",
+    "Salah. Judul tidak selalu mencerminkan isi paragraf sepenuhnya."
+  ]
+},
+{
+  soal: "11. Which of the following is an example of a transition signal?",
+  pilihan: [
+    "Because", "Book", "Dictionary", "Read"
+  ],
+  kunci: 0,
+  penjelasan: [
+    "Benar. 'Because' adalah kata penghubung yang menunjukkan sebab-akibat.",
+    "Salah. 'Book' adalah kata benda, bukan kata penghubung.",
+    "Salah. 'Dictionary' bukan sinyal transisi.",
+    "Salah. 'Read' adalah kata kerja, bukan kata penghubung."
+  ]
+},
+{
+  soal: "12. Which sentence is likely from a narrative text?",
+  pilihan: [
+    "First, I woke up and brushed my teeth.",
+    "Books are important tools for education.",
+    "Reading develops your vocabulary.",
+    "There are many types of dictionaries."
+  ],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Kalimat ini menceritakan urutan kejadian, ciri teks naratif.",
+    "Salah. Kalimat ini bersifat deskriptif atau argumentatif.",
+    "Salah. Ini termasuk teks eksposisi.",
+    "Salah. Ini adalah informasi faktual, bukan narasi."
+  ]
+},
+{
+  soal: "13. What is the purpose of a descriptive text?",
+  pilihan: [
+    "To tell a story",
+    "To explain how to do something",
+    "To describe a person, place, or thing",
+    "To argue a point of view"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Itu tujuan teks naratif.",
+    "Salah. Itu tujuan prosedur atau eksplanasi.",
+    "Benar. Descriptive text menjelaskan ciri-ciri objek secara detail.",
+    "Salah. Itu tujuan dari teks argumentatif."
+  ]
+},
+{
+  soal: "14. What is the best strategy to guess the meaning of a new word?",
+  pilihan: [
+    "Skip the word completely",
+    "Check the surrounding words for clues",
+    "Always ask the teacher",
+    "Use a calculator"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Melewatkan kata membuat kamu kehilangan pemahaman.",
+    "Benar. Konteks di sekitar kata membantu menebak makna.",
+    "Salah. Tidak selalu memungkinkan untuk bertanya pada guru.",
+    "Salah. Kalkulator tidak membantu dalam pemahaman kata."
+  ]
+},
+{
+  soal: "15. What does a dictionary entry usually include?",
+  pilihan: [
+    "Only pictures",
+    "Just a translation",
+    "Definition, pronunciation, and example",
+    "The publisher’s name"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Gambar bukan bagian utama entri kamus.",
+    "Salah. Kamus memberikan lebih dari sekadar terjemahan.",
+    "Benar. Entri kamus mencakup definisi, pelafalan, dan contoh.",
+    "Salah. Nama penerbit tidak penting dalam entri kata."
+  ]
+},
+{
+  soal: "16. Which of the following is a reading skill?",
+  pilihan: [
+    "Writing a summary",
+    "Speaking in English",
+    "Skimming and scanning",
+    "Drawing pictures"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Itu keterampilan menulis.",
+    "Salah. Itu keterampilan berbicara.",
+    "Benar. Skimming dan scanning adalah teknik membaca cepat.",
+    "Salah. Menggambar bukan bagian dari keterampilan membaca."
+  ]
+},
+{
+  soal: "17. What is the meaning of 'context clues'?",
+  pilihan: [
+    "Hints found around the word",
+    "A part of the dictionary",
+    "Words with opposite meaning",
+    "The main idea of a paragraph"
+  ],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Context clues adalah petunjuk makna dari kata-kata di sekitarnya.",
+    "Salah. Kamus bukan satu-satunya sumber konteks.",
+    "Salah. Itu adalah antonym, bukan context clue.",
+    "Salah. Ide utama bukan clue konteks."
+  ]
+},
+{
+  soal: "18. A ‘narrative’ text usually has...",
+  pilihan: [
+    "Facts and data",
+    "Steps and instructions",
+    "A story with a beginning, middle, and end",
+    "Definitions of difficult words"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Itu ciri teks eksposisi atau deskriptif.",
+    "Salah. Itu ciri teks prosedur.",
+    "Benar. Narasi memiliki alur cerita dari awal hingga akhir.",
+    "Salah. Definisi adalah bagian dari teks informatif atau kamus."
+  ]
+},
+{
+  soal: "19. What is the function of a title in a text?",
+  pilihan: [
+    "To list all the details",
+    "To summarize the whole story",
+    "To indicate the topic or subject",
+    "To confuse the reader"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Detail dijelaskan dalam isi teks.",
+    "Salah. Ringkasan biasanya ada di akhir atau awal paragraf.",
+    "Benar. Judul menunjukkan topik utama bacaan.",
+    "Salah. Judul bertujuan memberi petunjuk, bukan membingungkan."
+  ]
+},
+{
+  soal: "20. What is the meaning of 'genre' in reading?",
+  pilihan: [
+    "The length of a text",
+    "The price of a book",
+    "The type or category of a text",
+    "The language of the text"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Genre tidak berkaitan dengan panjang teks.",
+    "Salah. Harga buku tidak menentukan genre.",
+    "Benar. Genre berarti jenis atau kategori teks, seperti naratif, deskriptif, dll.",
+    "Salah. Bahasa bukan bagian dari definisi genre."
+  ]
+},
+{
+  soal: "21. Which of the following is an example of a fact?",
+  pilihan: [
+    "Dogs are the best pets",
+    "I think reading is fun",
+    "Water boils at 100°C",
+    "Chocolate is more delicious than vanilla"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Ini adalah opini, bukan fakta.",
+    "Salah. Ini adalah pendapat pribadi.",
+    "Benar. Ini adalah fakta ilmiah yang dapat dibuktikan.",
+    "Salah. Ini adalah preferensi, bukan fakta."
+  ]
+},
+{
+  soal: "22. What is the best strategy to find the main idea of a paragraph?",
+  pilihan: [
+    "Ignore the first sentence",
+    "Read only the last sentence",
+    "Look for repeated ideas or the topic sentence",
+    "Translate every word"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Kalimat pertama sering mengandung ide utama.",
+    "Salah. Kalimat terakhir biasanya penutup, bukan ide utama.",
+    "Benar. Ide utama sering diulang atau terdapat di kalimat topik.",
+    "Salah. Menerjemahkan tidak langsung menunjukkan ide utama."
+  ]
+},
+{
+  soal: "23. Why are headings important in a text?",
+  pilihan: [
+    "They add decoration",
+    "They help organize and signal the content",
+    "They make the text longer",
+    "They confuse readers"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Heading bukan hiasan.",
+    "Benar. Heading membantu pembaca memahami isi bagian teks.",
+    "Salah. Heading tidak menambah panjang isi.",
+    "Salah. Heading justru membantu, bukan membingungkan."
+  ]
+},
+{
+  soal: "24. What is the synonym of 'happy'?",
+  pilihan: [
+    "Sad",
+    "Angry",
+    "Joyful",
+    "Tired"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. 'Sad' adalah lawan kata dari 'happy'.",
+    "Salah. 'Angry' bukan sinonim dari 'happy'.",
+    "Benar. 'Joyful' memiliki arti yang sama dengan 'happy'.",
+    "Salah. 'Tired' tidak berhubungan langsung."
+  ]
+},
+{
+  soal: "25. What is the antonym of 'difficult'?",
+  pilihan: [
+    "Easy",
+    "Hard",
+    "Complicated",
+    "Tough"
+  ],
+  kunci: 0,
+  penjelasan: [
+    "Benar. 'Easy' adalah lawan kata dari 'difficult'.",
+    "Salah. 'Hard' adalah sinonim dari 'difficult'.",
+    "Salah. 'Complicated' juga mirip maknanya.",
+    "Salah. 'Tough' adalah sinonim, bukan antonim."
+  ]
+},
+{
+  soal: "26. What kind of text gives instructions?",
+  pilihan: [
+    "Descriptive text",
+    "Narrative text",
+    "Procedural text",
+    "Expository text"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Descriptive hanya menggambarkan objek.",
+    "Salah. Narrative adalah cerita.",
+    "Benar. Procedural memberi petunjuk langkah demi langkah.",
+    "Salah. Expository menjelaskan informasi atau ide."
+  ]
+},
+{
+  soal: "27. Which of the following is used to express cause and effect?",
+  pilihan: [
+    "Because",
+    "However",
+    "Furthermore",
+    "Therefore"
+  ],
+  kunci: 0,
+  penjelasan: [
+    "Benar. 'Because' digunakan untuk menyatakan sebab.",
+    "Salah. 'However' menunjukkan kontras.",
+    "Salah. 'Furthermore' digunakan untuk tambahan.",
+    "Salah. 'Therefore' menyatakan akibat, bukan sebab."
+  ]
+},
+{
+  soal: "28. Which text type tells about real events in history?",
+  pilihan: [
+    "Procedural text",
+    "Historical recount",
+    "Narrative fiction",
+    "Advertisement"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Procedural menjelaskan langkah-langkah.",
+    "Benar. Historical recount menceritakan peristiwa nyata masa lalu.",
+    "Salah. Narrative fiction bersifat fiksi/imajinatif.",
+    "Salah. Advertisement bertujuan mempromosikan sesuatu."
+  ]
+},
+{
+  soal: "29. Which of these is a characteristic of narrative text?",
+  pilihan: [
+    "It lists steps",
+    "It includes events in time order",
+    "It describes places only",
+    "It gives instructions"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Itu ciri procedural text.",
+    "Benar. Narrative memiliki urutan peristiwa berdasarkan waktu.",
+    "Salah. Narrative tidak hanya menggambarkan tempat.",
+    "Salah. Memberi instruksi bukan tujuan narrative."
+  ]
+},
+{
+  soal: "30. Which word is similar in meaning to 'begin'?",
+  pilihan: [
+    "End",
+    "Start",
+    "Stop",
+    "Pause"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. 'End' adalah antonim dari 'begin'.",
+    "Benar. 'Start' adalah sinonim dari 'begin'.",
+    "Salah. 'Stop' memiliki arti menghentikan, bukan memulai.",
+    "Salah. 'Pause' berarti berhenti sementara."
+  ]
+},
+{
+  soal: "31. Which signal word shows contrast?",
+  pilihan: [
+    "Although",
+    "Because",
+    "Also",
+    "Such as"
+  ],
+  kunci: 0,
+  penjelasan: [
+    "Benar. 'Although' digunakan untuk menyatakan perbandingan atau pertentangan.",
+    "Salah. 'Because' menunjukkan hubungan sebab.",
+    "Salah. 'Also' menambahkan informasi.",
+    "Salah. 'Such as' menunjukkan contoh."
+  ]
+},
+{
+  soal: "32. What is a supporting detail?",
+  pilihan: [
+    "A word with similar meaning",
+    "A sentence that supports the main idea",
+    "The conclusion of the paragraph",
+    "A sentence with unrelated facts"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Ini definisi dari sinonim.",
+    "Benar. Supporting detail mendukung ide utama dalam paragraf.",
+    "Salah. Ini adalah kesimpulan, bukan detail pendukung.",
+    "Salah. Fakta tidak relevan bukan detail pendukung."
+  ]
+},
+{
+  soal: "33. Which is a genre of reading text?",
+  pilihan: [
+    "Recount",
+    "Book",
+    "Page",
+    "Word"
+  ],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Recount adalah salah satu jenis teks bacaan.",
+    "Salah. Book adalah media, bukan genre.",
+    "Salah. Page adalah bagian dari buku.",
+    "Salah. Word adalah satuan bahasa, bukan genre."
+  ]
+},
+{
+  soal: "34. What does 'explicit information' mean?",
+  pilihan: [
+    "Hidden information",
+    "Information stated clearly in the text",
+    "Information from another book",
+    "Author’s opinion"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Itu adalah informasi implisit.",
+    "Benar. Informasi eksplisit tertulis langsung dan jelas.",
+    "Salah. Informasi ini berasal dari teks yang sedang dibaca.",
+    "Salah. Opini bisa eksplisit atau implisit, bukan definisi dari eksplisit."
+  ]
+},
+{
+  soal: "35. What does the title of a text help us do?",
+  pilihan: [
+    "Know the author’s name",
+    "Understand the main topic",
+    "Write a review",
+    "Skip reading"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Nama penulis tidak selalu muncul di judul.",
+    "Benar. Judul membantu kita mengenali topik utama.",
+    "Salah. Judul tidak langsung membantu menulis ulasan.",
+    "Salah. Judul bukan untuk dilewati, tapi untuk menarik perhatian."
+  ]
+},
+{
+  soal: "36. Which sentence shows the author's opinion?",
+  pilihan: [
+    "Dogs are mammals",
+    "I believe dogs are the best pets",
+    "Dogs have fur",
+    "Dogs can bark"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Ini adalah fakta ilmiah.",
+    "Benar. Kalimat ini berisi opini atau pandangan pribadi penulis.",
+    "Salah. Ini adalah fakta umum.",
+    "Salah. Ini juga merupakan fakta biologis."
+  ]
+},
+{
+  soal: "37. What is the opposite of 'strong'?",
+  pilihan: ["Weak", "Powerful", "Smart", "Fast"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. 'Weak' adalah lawan kata dari 'strong'.",
+    "Salah. 'Powerful' justru sinonim dari 'strong'.",
+    "Salah. 'Smart' tidak berkaitan langsung dengan 'strong'.",
+    "Salah. 'Fast' menunjukkan kecepatan, bukan kekuatan."
+  ]
+},
+{
+  soal: "38. Why do we use punctuation in reading texts?",
+  pilihan: [
+    "To make the text longer",
+    "To confuse the reader",
+    "To separate ideas and aid understanding",
+    "To decorate the page"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Panjang teks tidak dipengaruhi tanda baca.",
+    "Salah. Tujuan tanda baca bukan untuk membingungkan.",
+    "Benar. Tanda baca membantu memisahkan ide dan memudahkan pemahaman.",
+    "Salah. Tanda baca bukan hiasan."
+  ]
+},
+{
+  soal: "39. Which of the following is a homophone?",
+  pilihan: ["Two and too", "Big and large", "Run and ran", "Book and pen"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. 'Two' dan 'too' diucapkan sama tapi maknanya berbeda.",
+    "Salah. Itu sinonim, bukan homophone.",
+    "Salah. Itu bentuk kata kerja berbeda, bukan homophone.",
+    "Salah. Itu dua kata benda biasa, bukan homophone."
+  ]
+},
+{
+  soal: "40. What is an index in a book?",
+  pilihan: [
+    "A list of chapters",
+    "A summary of the book",
+    "An alphabetical list of topics with page numbers",
+    "The cover of the book"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Itu disebut daftar isi.",
+    "Salah. Itu adalah ringkasan, bukan index.",
+    "Benar. Index memuat daftar topik dan nomor halaman.",
+    "Salah. Sampul buku bukan index."
+  ]
+},
+{
+  soal: "41. What does the word 'conclude' mean?",
+  pilihan: ["To begin something", "To make something", "To end something", "To explain something"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. 'Conclude' berarti mengakhiri, bukan memulai.",
+    "Salah. 'Conclude' bukan berarti membuat sesuatu.",
+    "Benar. 'Conclude' artinya menyimpulkan atau mengakhiri.",
+    "Salah. Menjelaskan adalah 'explain'."
+  ]
+},
+{
+  soal: "42. What is a skimming strategy used for?",
+  pilihan: [
+    "To find details",
+    "To read everything word by word",
+    "To get the general idea quickly",
+    "To memorize all sentences"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Itu tujuan dari scanning, bukan skimming.",
+    "Salah. Skimming tidak membaca semua kata.",
+    "Benar. Skimming digunakan untuk memahami ide umum secara cepat.",
+    "Salah. Tujuan skimming bukan untuk menghafal."
+  ]
+},
+{
+  soal: "43. What type of sentence is: 'She goes to school every day'?",
+  pilihan: ["Simple present", "Simple past", "Present continuous", "Future tense"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Kalimat tersebut menggunakan bentuk simple present.",
+    "Salah. Kalimat ini tidak menggunakan bentuk lampau.",
+    "Salah. Tidak ada 'is/are + verb-ing' dalam kalimat.",
+    "Salah. Tidak menunjukkan masa depan."
+  ]
+},
+{
+  soal: "44. What does 'synopsis' refer to in reading?",
+  pilihan: ["The main character", "The full story", "A brief summary", "A difficult word"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. 'Main character' adalah tokoh utama, bukan sinopsis.",
+    "Salah. Sinopsis adalah ringkasan, bukan keseluruhan cerita.",
+    "Benar. Sinopsis adalah ringkasan singkat suatu teks atau cerita.",
+    "Salah. Bukan berarti kata sulit."
+  ]
+},
+{
+  soal: "45. Which of the following words is a transition word?",
+  pilihan: ["Run", "Because", "Cat", "House"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. 'Run' adalah kata kerja.",
+    "Benar. 'Because' adalah kata penghubung yang menunjukkan sebab.",
+    "Salah. 'Cat' adalah kata benda.",
+    "Salah. 'House' juga kata benda."
+  ]
+},
+{
+  soal: "46. What is a paragraph?",
+  pilihan: [
+    "A group of sentences with one main idea",
+    "A single word",
+    "A sentence with a question",
+    "A group of unrelated ideas"
+  ],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Paragraf adalah kumpulan kalimat dengan satu ide utama.",
+    "Salah. Kata tunggal bukan paragraf.",
+    "Salah. Kalimat tanya bukan definisi paragraf.",
+    "Salah. Paragraf harus terdiri dari ide yang saling berhubungan."
+  ]
+},
+{
+  soal: "47. Which strategy is best for finding a specific name in a long text?",
+  pilihan: ["Skimming", "Predicting", "Scanning", "Summarizing"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Skimming digunakan untuk menemukan ide umum.",
+    "Salah. Predicting digunakan untuk menebak isi sebelum membaca.",
+    "Benar. Scanning digunakan untuk menemukan informasi spesifik.",
+    "Salah. Summarizing adalah merangkum, bukan mencari informasi."
+  ]
+},
+{
+  soal: "48. What does the word 'predict' mean in reading?",
+  pilihan: [
+    "To explain the past",
+    "To guess what will happen",
+    "To remember what you read",
+    "To copy the text"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Menjelaskan masa lalu bukan 'predict'.",
+    "Benar. 'Predict' berarti menebak apa yang akan terjadi.",
+    "Salah. Itu disebut 'recall'.",
+    "Salah. Menyalin teks tidak termasuk memprediksi."
+  ]
+},
+{
+  soal: "49. Which of the following is not a reading strategy?",
+  pilihan: ["Skimming", "Translating", "Scanning", "Summarizing"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Skimming adalah strategi membaca cepat.",
+    "Benar. Menerjemahkan bukan termasuk strategi membaca akademik.",
+    "Salah. Scanning digunakan untuk mencari informasi khusus.",
+    "Salah. Summarizing adalah strategi merangkum isi."
+  ]
+},
+{
+  soal: "50. Why is it important to identify the purpose of a text?",
+  pilihan: [
+    "To guess every word",
+    "To ignore the meaning",
+    "To understand the writer's intention",
+    "To rewrite the text"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Menebak kata bukan tujuan utama.",
+    "Salah. Justru kita harus memahami makna.",
+    "Benar. Tujuan teks membantu memahami maksud penulis.",
+    "Salah. Menulis ulang teks bukan alasan utama."
+  ]
+}
+  ];
+
+   const container = document.getElementById("container");
+
+  soalList.forEach((s, idx) => {
+    const div = document.createElement("div");
+    div.className = "soal";
+    div.innerHTML = `<p><b>${s.soal}</b></p>`;
+    const jawabanDiv = document.createElement("div");
+    jawabanDiv.className = "jawaban";
+    s.pilihan.forEach((j, jIdx) => {
+      const btn = document.createElement("button");
+      btn.innerText = j;
+      btn.onclick = () => {
+        if (btn.clicked) return;
+        btn.clicked = true;
+        [...jawabanDiv.children].forEach(b => b.disabled = true);
+        if (jIdx === s.kunci) {
+        btn.classList.add("benar");
+        totalBenar++;
+        } else {
+        btn.classList.add("salah");
+        jawabanDiv.children[s.kunci].classList.add("benar");
+        totalSalah++;
+        }
+        updateCounter();
+
+        const penjelasanDiv = document.createElement("div");
+        penjelasanDiv.className = "penjelasan";
+        penjelasanDiv.innerText = "Penjelasan: " + s.penjelasan[jIdx];
+        div.appendChild(penjelasanDiv);
+        penjelasanDiv.style.display = "block";
+      };
+      jawabanDiv.appendChild(btn);
+    });
+    div.appendChild(jawabanDiv);
+    container.appendChild(div);
+  });
+</script>
+
+</body>
+</html>

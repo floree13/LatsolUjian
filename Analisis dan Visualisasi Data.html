@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UTM Analisis dan Visualisasi Data UT</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList = [
+    {
+    "questionNumber": 1,
+    "question": "Transformasi data yang bertujuan untuk mengurangi skewness data dan membuat distribusinya lebih mendekati normal dikenal sebagai...",
+    "answerOptions": [
+      {
+        "text": "Transformasi Normalisasi Z-Score",
+        "isCorrect": false,
+        "rationale": "Normalisasi Z-Score adalah standarisasi data, bukan fokus pada skewness."
+      },
+      {
+        "text": "Transformasi Logaritmik",
+        "isCorrect": false,
+        "rationale": "Transformasi logaritmik adalah salah satu jenisnya, tetapi istilah umum yang mencakup seri transformasi ini adalah Tukey's Ladder of Powers."
+      },
+      {
+        "text": "Tukey's Ladder of Powers",
+        "isCorrect": true,
+        "rationale": "Tukey's Ladder of Powers adalah serangkaian transformasi yang digunakan untuk mengurangi skewness dan mendekati normalitas."
+      },
+      {
+        "text": "Pengkodean One-Hot",
+        "isCorrect": false,
+        "rationale": "Ini adalah teknik untuk data kategori, tidak relevan dengan skewness data numerik."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Mengapa asumsi normalitas penting dalam banyak uji statistik klasik seperti uji t, ANOVA, dan regresi linear?",
+    "answerOptions": [
+      {
+        "text": "Untuk memastikan data berukuran kecil.",
+        "isCorrect": false,
+        "rationale": "Asumsi normalitas berlaku terlepas dari ukuran data (meski Central Limit Theorem membantu data besar)."
+      },
+      {
+        "text": "Untuk mempermudah proses agregasi data.",
+        "isCorrect": false,
+        "rationale": "Normalitas tidak terkait langsung dengan agregasi data."
+      },
+      {
+        "text": "Karena estimasi parameter menjadi lebih efisien dan uji hipotesis memberikan p-value yang valid.",
+        "isCorrect": true,
+        "rationale": "Banyak uji statistik mengandalkan asumsi normalitas untuk validitas inferensi statistik."
+      },
+      {
+        "text": "Untuk mengeliminasi data yang hilang.",
+        "isCorrect": false,
+        "rationale": "Ini adalah masalah data hilang, bukan normalitas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Dalam pengujian normalitas secara visual, plot manakah yang membandingkan kuantil data dengan kuantil distribusi normal, di mana titik-titik harus mengikuti garis lurus diagonal jika data berdistribusi normal?",
+    "answerOptions": [
+      {
+        "text": "Histogram",
+        "isCorrect": false,
+        "rationale": "Histogram melihat bentuk distribusi, bukan perbandingan kuantil."
+      },
+      {
+        "text": "Box Plot",
+        "isCorrect": false,
+        "rationale": "Box Plot melihat penyebaran dan outlier."
+      },
+      {
+        "text": "Q-Q Plot (Quantile-Quantile Plot)",
+        "isCorrect": true,
+        "rationale": "Q-Q Plot membandingkan kuantil data dengan kuantil distribusi normal."
+      },
+      {
+        "text": "Scatter Plot",
+        "isCorrect": false,
+        "rationale": "Scatter Plot melihat hubungan antar variabel."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Proses mengubah data sehingga memiliki rata-rata nol (0) dan standar deviasi satu (1) disebut...",
+    "answerOptions": [
+      {
+        "text": "Normalisasi (Min-Max Scaling)",
+        "isCorrect": false,
+        "rationale": "Normalisasi mengubah data ke rentang 0-1."
+      },
+      {
+        "text": "Agregasi",
+        "isCorrect": false,
+        "rationale": "Agregasi menggabungkan baris data."
+      },
+      {
+        "text": "Standarisasi (Z-Score Normalization)",
+        "isCorrect": true,
+        "rationale": "Standarisasi menghasilkan data dengan rata-rata 0 dan standar deviasi 1."
+      },
+      {
+        "text": "Pivoting",
+        "isCorrect": false,
+        "rationale": "Pivoting mengubah format data dari panjang ke lebar."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Teknik mengubah data kategori menjadi format numerik dengan menciptakan kolom biner (0 atau 1) untuk setiap kategori unik disebut...",
+    "answerOptions": [
+      {
+        "text": "Label Encoding",
+        "isCorrect": false,
+        "rationale": "Label Encoding memberikan nilai numerik tunggal (1, 2, 3, dst) ke setiap kategori."
+      },
+      {
+        "text": "Agregasi",
+        "isCorrect": false,
+        "rationale": "Agregasi menggabungkan data."
+      },
+      {
+        "text": "Standarisasi",
+        "isCorrect": false,
+        "rationale": "Standarisasi untuk data numerik."
+      },
+      {
+        "text": "One-Hot Encoding",
+        "isCorrect": true,
+        "rationale": "One-Hot Encoding menciptakan kolom biner untuk setiap kategori."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Transformasi Pangkat seperti 'Akar Kuadrat' (√x) memiliki batasan utama, yaitu...",
+    "answerOptions": [
+      {
+        "text": "Tidak dapat diterapkan pada nilai yang sangat besar.",
+        "isCorrect": false,
+        "rationale": "Dapat diterapkan, namun efeknya mungkin minimal."
+      },
+      {
+        "text": "Hanya dapat digunakan pada data kategori.",
+        "isCorrect": false,
+        "rationale": "Transformasi pangkat hanya untuk data numerik."
+      },
+      {
+        "text": "Tidak bisa diterapkan pada nilai negatif atau nol.",
+        "isCorrect": true,
+        "rationale": "Akar kuadrat bilangan negatif menghasilkan bilangan imajiner, dan akar kuadrat nol tidak mengubah masalah skewness."
+      },
+      {
+        "text": "Menghasilkan data yang selalu berdistribusi normal.",
+        "isCorrect": false,
+        "rationale": "Tidak menjamin normalitas, hanya membantu mengurangi skewness."
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Koefisien Keragaman (Coefficient of Variation/CV) adalah ukuran statistik yang digunakan untuk...",
+    "answerOptions": [
+      {
+        "text": "Mengukur skewness data.",
+        "isCorrect": false,
+        "rationale": "Skewness diukur dengan koefisien skewness."
+      },
+      {
+        "text": "Menghitung rata-rata dari suatu set data.",
+        "isCorrect": false,
+        "rationale": "Diukur dengan mean."
+      },
+      {
+        "text": "Mengukur tingkat variasi relatif dari suatu set data, terutama untuk membandingkan data dengan satuan pengukuran berbeda.",
+        "isCorrect": true,
+        "rationale": "CV membandingkan variasi relatif (CV = s / x̄ × 100%)."
+      },
+      {
+        "text": "Menghitung z-score dari setiap observasi.",
+        "isCorrect": false,
+        "rationale": "Z-score adalah standardisasi nilai individu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Jika nilai Z-score suatu observasi adalah -1.5, maka artinya nilai tersebut...",
+    "answerOptions": [
+      {
+        "text": "Berada 1.5 satuan di atas rata-rata.",
+        "isCorrect": false,
+        "rationale": "Z-score negatif berarti di bawah rata-rata."
+      },
+      {
+        "text": "Sama dengan rata-rata.",
+        "isCorrect": false,
+        "rationale": "Z-score 0 berarti sama dengan rata-rata."
+      },
+      {
+        "text": "Berada 1.5 standar deviasi di bawah rata-rata.",
+        "isCorrect": true,
+        "rationale": "Z-score menunjukkan jarak terhadap mean dalam satuan standar deviasi."
+      },
+      {
+        "text": "Nilai tersebut adalah outlier.",
+        "isCorrect": false,
+        "rationale": "Biasanya di luar ±3 dianggap outlier. Nilai -1.5 masih normal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Tipe data hilang di mana data yang hilang tidak memiliki pola tertentu dan tidak ada hubungan antara data yang hilang dengan variabel lain dalam dataset disebut...",
+    "answerOptions": [
+      {
+        "text": "Missing at Random (MAR)",
+        "isCorrect": false,
+        "rationale": "MAR tergantung pada variabel yang teramati."
+      },
+      {
+        "text": "Missing Not at Random (MNAR)",
+        "isCorrect": false,
+        "rationale": "MNAR tergantung pada informasi yang tidak ada/nilai yang hilang itu sendiri."
+      },
+      {
+        "text": "Missing Completely at Random (MCAR)",
+        "isCorrect": true,
+        "rationale": "MCAR berarti data hilang sepenuhnya acak tanpa pola sistematis."
+      },
+      {
+        "text": "Missing Systematic (MS)",
+        "isCorrect": false,
+        "rationale": "Ini bukan tipe data hilang yang umum diakui."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Jika responden perempuan cenderung tidak menjawab pertanyaan tentang pendapatan, tetapi pola kehilangan data ini dapat diprediksi dari variabel lain seperti tingkat pendidikan, maka ini dikategorikan sebagai...",
+    "answerOptions": [
+      {
+        "text": "Missing Completely at Random (MCAR)",
+        "isCorrect": false,
+        "rationale": "Ada hubungan yang teramati (jenis kelamin dan pendidikan)."
+      },
+      {
+        "text": "Missing Not at Random (MNAR)",
+        "isCorrect": false,
+        "rationale": "Pola kehilangan dapat dijelaskan oleh variabel lain yang ada (pendidikan)."
+      },
+      {
+        "text": "Missing at Random (MAR)",
+        "isCorrect": true,
+        "rationale": "Pola kehilangan data tergantung pada informasi yang ada (variabel yang diamati)."
+      },
+      {
+        "text": "Missing by Design",
+        "isCorrect": false,
+        "rationale": "Ini bukan tipe data hilang yang umum."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Salah satu penyebab umum data hilang adalah 'non-respons' dalam survei. Apa maksud dari non-respons?",
+    "answerOptions": [
+      {
+        "text": "Responden memberikan jawaban yang tidak masuk akal.",
+        "isCorrect": false,
+        "rationale": "Ini lebih ke kesalahan data entry atau outlier."
+      },
+      {
+        "text": "Responden menolak atau tidak mengisi bagian tertentu dari survei.",
+        "isCorrect": true,
+        "rationale": "Non-respons terjadi ketika individu gagal menjawab sebagian/seluruh pertanyaan."
+      },
+      {
+        "text": "Data rusak karena kesalahan sistem.",
+        "isCorrect": false,
+        "rationale": "Ini adalah kerusakan data."
+      },
+      {
+        "text": "Kesalahan input oleh petugas survei.",
+        "isCorrect": false,
+        "rationale": "Ini termasuk kesalahan pengumpulan data, bukan non-respons."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Manakah dari fungsi R berikut yang digunakan untuk menghitung total jumlah nilai hilang di seluruh dataset?",
+    "answerOptions": [
+      {
+        "text": "colSums(is.na(data))",
+        "isCorrect": false,
+        "rationale": "Menghitung jumlah NA per kolom, bukan total."
+      },
+      {
+        "text": "na.omit(data)",
+        "isCorrect": false,
+        "rationale": "Menghapus baris dengan NA."
+      },
+      {
+        "text": "sum(is.na(data))",
+        "isCorrect": true,
+        "rationale": "is.na menghasilkan TRUE/FALSE dan sum menjumlahkan TRUE sebagai NA."
+      },
+      {
+        "text": "mean(data, na.rm = TRUE)",
+        "isCorrect": false,
+        "rationale": "Menghitung mean sambil mengabaikan NA."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Pendekatan penanganan data hilang menggunakan fungsi na.omit(data) termasuk dalam teknik...",
+    "answerOptions": [
+      {
+        "text": "Imputasi (Mengisi Data)",
+        "isCorrect": false,
+        "rationale": "na.omit menghapus, bukan mengisi."
+      },
+      {
+        "text": "Deleksi Kasus (Menghapus Baris)",
+        "isCorrect": true,
+        "rationale": "Menghapus baris yang mengandung NA."
+      },
+      {
+        "text": "Transformasi Data",
+        "isCorrect": false,
+        "rationale": "Tidak melakukan transformasi."
+      },
+      {
+        "text": "Deteksi Outlier",
+        "isCorrect": false,
+        "rationale": "Bukan untuk mendeteksi outlier."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Imputasi dengan menggunakan nilai median dari kolom lebih disarankan daripada mean ketika...",
+    "answerOptions": [
+      {
+        "text": "Data berdistribusi normal.",
+        "isCorrect": false,
+        "rationale": "Mean lebih baik untuk data normal."
+      },
+      {
+        "text": "Data merupakan variabel kategori.",
+        "isCorrect": false,
+        "rationale": "Modus lebih tepat untuk kategori."
+      },
+      {
+        "text": "Terdapat banyak outlier atau data memiliki distribusi sangat miring (skewed).",
+        "isCorrect": true,
+        "rationale": "Median lebih robust terhadap outlier."
+      },
+      {
+        "text": "Data hilang adalah jenis MCAR.",
+        "isCorrect": false,
+        "rationale": "Jenis missingness tidak menentukan antara mean/median."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Metode imputasi yang menggunakan nilai dari titik data terdekat (k-Nearest Neighbors), seperti knnImputation dari paket DMwR, termasuk jenis...",
+    "answerOptions": [
+      {
+        "text": "Imputasi Sederhana (Simple Imputation)",
+        "isCorrect": false,
+        "rationale": "Simple imputation biasanya Mean/Median/Modus."
+      },
+      {
+        "text": "Imputasi Regresi",
+        "isCorrect": false,
+        "rationale": "Imputasi regresi menggunakan model regresi."
+      },
+      {
+        "text": "Imputasi Berbasis Prediksi",
+        "isCorrect": true,
+        "rationale": "knnImputation memprediksi nilai hilang dengan KNN."
+      },
+      {
+        "text": "Imputasi Multi-Langkah",
+        "isCorrect": false,
+        "rationale": "Ini merujuk pada Multiple Imputation."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Paket R mice (Multiple Imputation by Chained Equations) paling sering digunakan untuk...",
+    "answerOptions": [
+      {
+        "text": "Imputasi Mean tunggal",
+        "isCorrect": false,
+        "rationale": "mice digunakan untuk Multiple Imputation."
+      },
+      {
+        "text": "Imputasi k-Nearest Neighbors",
+        "isCorrect": false,
+        "rationale": "Ini dilakukan oleh knnImputation."
+      },
+      {
+        "text": "Multiple Imputation (Imputasi Berganda)",
+        "isCorrect": true,
+        "rationale": "mice adalah paket utama untuk Multiple Imputation."
+      },
+      {
+        "text": "Imputasi Berbasis Clustering",
+        "isCorrect": false,
+        "rationale": "Tidak terkait mice."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Fungsi aggr() dari paket VIM digunakan untuk...",
+    "answerOptions": [
+      {
+        "text": "Menghapus nilai yang hilang dari dataset.",
+        "isCorrect": false,
+        "rationale": "aggr digunakan untuk visualisasi."
+      },
+      {
+        "text": "Mengisi nilai hilang dengan modus.",
+        "isCorrect": false,
+        "rationale": "Bukan untuk imputasi."
+      },
+      {
+        "text": "Membuat bar plot atau heatmap untuk melihat pola data hilang.",
+        "isCorrect": true,
+        "rationale": "aggr memvisualisasikan pola missing."
+      },
+      {
+        "text": "Melakukan Analisis Regresi.",
+        "isCorrect": false,
+        "rationale": "Tidak terkait regresi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Jika data hilang bergantung pada informasi yang tidak ada dalam dataset (variabel tidak teramati), ini disebut...",
+    "answerOptions": [
+      {
+        "text": "Missing Completely at Random (MCAR)",
+        "isCorrect": false,
+        "rationale": "MCAR tidak tergantung apapun."
+      },
+      {
+        "text": "Missing at Random (MAR)",
+        "isCorrect": false,
+        "rationale": "MAR bergantung variabel teramati."
+      },
+      {
+        "text": "Missing Not at Random (MNAR)",
+        "isCorrect": true,
+        "rationale": "MNAR bergantung informasi yang tidak teramati."
+      },
+      {
+        "text": "Missing Value Imputation (MVI)",
+        "isCorrect": false,
+        "rationale": "Ini nama teknik, bukan pola missing."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Teknik imputasi canggih yang menggunakan algoritma Random Forest untuk memprediksi nilai hilang adalah...",
+    "answerOptions": [
+      {
+        "text": "mice",
+        "isCorrect": false,
+        "rationale": "mice dapat memakai berbagai metode tetapi bukan khusus Random Forest."
+      },
+      {
+        "text": "knnImputation",
+        "isCorrect": false,
+        "rationale": "Ini menggunakan kNN."
+      },
+      {
+        "text": "missForest",
+        "isCorrect": true,
+        "rationale": "missForest menggunakan Random Forest untuk imputasi."
+      },
+      {
+        "text": "na.omit",
+        "isCorrect": false,
+        "rationale": "na.omit menghapus data hilang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Tindakan awal dan paling penting sebelum menangani data hilang adalah...",
+    "answerOptions": [
+      {
+        "text": "Menghapus semua baris dengan nilai hilang (na.omit).",
+        "isCorrect": false,
+        "rationale": "Menghapus tanpa analisis menyebabkan bias."
+      },
+      {
+        "text": "Melakukan visualisasi data teks.",
+        "isCorrect": false,
+        "rationale": "Tidak relevan."
+      },
+      {
+        "text": "Mengecek jumlah dan letak data yang hilang (Deteksi Data Hilang).",
+        "isCorrect": true,
+        "rationale": "Ini langkah paling awal sebelum memilih metode imputasi."
+      },
+      {
+        "text": "Melakukan standarisasi data.",
+        "isCorrect": false,
+        "rationale": "Standarisasi dilakukan setelah penanganan NA."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Analisis regresi adalah teknik statistik yang digunakan untuk memodelkan hubungan antara...",
+    "answerOptions": [
+      {
+        "text": "Dua variabel dependen.",
+        "isCorrect": false,
+        "rationale": "Regresi memodelkan 1 variabel dependen terhadap 1 atau lebih independen."
+      },
+      {
+        "text": "Variabel dependen (tergantung) dan satu atau lebih variabel independen (bebas).",
+        "isCorrect": true,
+        "rationale": "Ini adalah definisi utama analisis regresi."
+      },
+      {
+        "text": "Dua variabel kategori.",
+        "isCorrect": false,
+        "rationale": "Ini dianalisis dengan uji seperti Chi-Square."
+      },
+      {
+        "text": "Rata-rata dan standar deviasi.",
+        "isCorrect": false,
+        "rationale": "Ini adalah statistik deskriptif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Dalam langkah eksplorasi data awal untuk analisis regresi, manakah dari visualisasi berikut yang paling berguna untuk memahami distribusi dari satu variabel secara individu?",
+    "answerOptions": [
+      {
+        "text": "Scatter Plot",
+        "isCorrect": false,
+        "rationale": "Scatter Plot untuk hubungan antar dua variabel."
+      },
+      {
+        "text": "Heatmap Korelasi",
+        "isCorrect": false,
+        "rationale": "Heatmap untuk melihat matriks korelasi."
+      },
+      {
+        "text": "Histogram",
+        "isCorrect": true,
+        "rationale": "Histogram paling baik untuk memvisualisasikan distribusi satu variabel."
+      },
+      {
+        "text": "Q-Q Plot",
+        "isCorrect": false,
+        "rationale": "Q-Q Plot untuk menguji normalitas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Matriks Korelasi dan Heatmap Korelasi di awal analisis regresi eksploratif bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Mengidentifikasi outlier dalam data.",
+        "isCorrect": false,
+        "rationale": "Outlier dilihat melalui Box Plot atau scatter plot."
+      },
+      {
+        "text": "Menguji asumsi normalitas.",
+        "isCorrect": false,
+        "rationale": "Untuk menguji normalitas digunakan Q-Q Plot atau uji statistik."
+      },
+      {
+        "text": "Mengukur kinerja model regresi.",
+        "isCorrect": false,
+        "rationale": "Kinerja diukur dengan R-squared, RMSE, dll."
+      },
+      {
+        "text": "Mengidentifikasi potensi hubungan linear antara variabel dependen dan independen.",
+        "isCorrect": true,
+        "rationale": "Korelasi mengukur kekuatan dan arah hubungan linear."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Asumsi regresi yang menyatakan bahwa varian dari residual harus konstan di semua tingkat variabel independen disebut...",
+    "answerOptions": [
+      {
+        "text": "Linearitas",
+        "isCorrect": false,
+        "rationale": "Linearitas adalah hubungan garis lurus."
+      },
+      {
+        "text": "Multikolinearitas",
+        "isCorrect": false,
+        "rationale": "Multikolinearitas adalah korelasi antar variabel independen."
+      },
+      {
+        "text": "Homoscedasticity (Homoskedastisitas)",
+        "isCorrect": true,
+        "rationale": "Homoscedasticity adalah varian error yang konstan."
+      },
+      {
+        "text": "Normalitas",
+        "isCorrect": false,
+        "rationale": "Normalitas adalah distribusi error yang normal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Masalah yang timbul ketika variabel independen dalam model regresi memiliki korelasi yang sangat tinggi satu sama lain disebut...",
+    "answerOptions": [
+      {
+        "text": "Heteroscedasticity",
+        "isCorrect": false,
+        "rationale": "Ini adalah masalah varian residual yang tidak konstan."
+      },
+      {
+        "text": "Autokorelasi",
+        "isCorrect": false,
+        "rationale": "Ini adalah korelasi antar residual dari observasi yang berbeda."
+      },
+      {
+        "text": "Multikolinearitas",
+        "isCorrect": true,
+        "rationale": "Multikolinearitas adalah korelasi yang tinggi di antara variabel independen."
+      },
+      {
+        "text": "Normalitas",
+        "isCorrect": false,
+        "rationale": "Ini adalah asumsi distribusi residual."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Metode yang digunakan dalam Analisis Regresi Konfirmasi untuk mendapatkan garis regresi y=ax+b yang meminimalkan jumlah kuadrat error adalah...",
+    "answerOptions": [
+      {
+        "text": "Metode Cross-Validation",
+        "isCorrect": false,
+        "rationale": "Cross-Validation adalah teknik validasi model."
+      },
+      {
+        "text": "Metode Least Square (Kuadrat Terkecil)",
+        "isCorrect": true,
+        "rationale": "Least Square Method dirancang untuk meminimalkan jumlah kuadrat error."
+      },
+      {
+        "text": "Metode Monte Carlo",
+        "isCorrect": false,
+        "rationale": "Ini adalah metode simulasi."
+      },
+      {
+        "text": "Metode Analisis Varians (ANOVA)",
+        "isCorrect": false,
+        "rationale": "ANOVA adalah uji statistik perbandingan rata-rata."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Fungsi rlm() dari paket MASS digunakan untuk menjalankan model Regresi Robust. Kapan regresi jenis ini lebih dianjurkan?",
+    "answerOptions": [
+      {
+        "text": "Ketika semua asumsi regresi terpenuhi.",
+        "isCorrect": false,
+        "rationale": "Regresi linear biasa lebih efisien."
+      },
+      {
+        "text": "Ketika ingin memodelkan data teks.",
+        "isCorrect": false,
+        "rationale": "Tidak relevan."
+      },
+      {
+        "text": "Ketika terdapat outlier atau asumsi normalitas error tidak terpenuhi signifikan.",
+        "isCorrect": true,
+        "rationale": "Regresi Robust stabil terhadap outlier."
+      },
+      {
+        "text": "Ketika ingin membuat visualisasi interaktif.",
+        "isCorrect": false,
+        "rationale": "Untuk visualisasi gunakan Shiny/plotly."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Proses membagi data menjadi data latih dan data uji adalah bagian dari tahap...",
+    "answerOptions": [
+      {
+        "text": "Eksplorasi Data Awal",
+        "isCorrect": false,
+        "rationale": "Eksplorasi hanya melihat pola awal."
+      },
+      {
+        "text": "Pembersihan Data",
+        "isCorrect": false,
+        "rationale": "Ini tentang missing value dan outlier."
+      },
+      {
+        "text": "Analisis Korelasi",
+        "isCorrect": false,
+        "rationale": "Digunakan untuk hubungan antar variabel."
+      },
+      {
+        "text": "Validasi Model",
+        "isCorrect": true,
+        "rationale": "Train-test split digunakan untuk menguji model."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Dalam persamaan garis regresi least square y=ax+b, koefisien a (slope) dirumuskan dengan...",
+    "answerOptions": [
+      {
+        "text": "a = (1/n)(Σy - aΣx)",
+        "isCorrect": false,
+        "rationale": "Ini rumus intercept."
+      },
+      {
+        "text": "a = (nΣxy - ΣxΣy) / (nΣx² - (Σx)²)",
+        "isCorrect": true,
+        "rationale": "Ini rumus slope regresi sederhana."
+      },
+      {
+        "text": "a = (xi - x̄) / SD",
+        "isCorrect": false,
+        "rationale": "Ini rumus Z-score."
+      },
+      {
+        "text": "a = sqrt(Σ(yi - ȳ)²/(n-1))",
+        "isCorrect": false,
+        "rationale": "Ini standar deviasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Nilai R-squared dalam analisis regresi memberikan informasi tentang...",
+    "answerOptions": [
+      {
+        "text": "Nilai rata-rata variabel dependen.",
+        "isCorrect": false,
+        "rationale": "R-squared bukan rata-rata."
+      },
+      {
+        "text": "Tingkat multikolinearitas antar variabel independen.",
+        "isCorrect": false,
+        "rationale": "Ini diukur dengan VIF."
+      },
+      {
+        "text": "Proporsi varians variabel dependen yang dijelaskan oleh model.",
+        "isCorrect": true,
+        "rationale": "R-squared menunjukkan seberapa baik model menjelaskan varians."
+      },
+      {
+        "text": "Kemiringan garis regresi.",
+        "isCorrect": false,
+        "rationale": "Ini adalah koefisien slope."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Proses pra-pemrosesan data teks untuk memecah teks menjadi unit-unit yang lebih kecil, seperti kata, disebut...",
+    "answerOptions": [
+      {
+        "text": "Normalisasi Teks",
+        "isCorrect": false,
+        "rationale": "Normalisasi mengubah format teks."
+      },
+      {
+        "text": "Tokenisasi",
+        "isCorrect": true,
+        "rationale": "Tokenisasi memecah teks menjadi token."
+      },
+      {
+        "text": "Stemming",
+        "isCorrect": false,
+        "rationale": "Stemming mengubah kata ke bentuk dasar."
+      },
+      {
+        "text": "Analisis N-grams",
+        "isCorrect": false,
+        "rationale": "Ini menganalisis pola kata berurutan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Kata-kata umum seperti 'dan', 'atau', 'tetapi' biasanya dihapus melalui proses...",
+    "answerOptions": [
+      {
+        "text": "Lemmatization",
+        "isCorrect": false,
+        "rationale": "Lemmatization mengubah kata ke bentuk dasar linguistik."
+      },
+      {
+        "text": "Penghapusan Tanda Baca",
+        "isCorrect": false,
+        "rationale": "Ini menghapus simbol."
+      },
+      {
+        "text": "Penghapusan Stop Words",
+        "isCorrect": true,
+        "rationale": "Stop words dihapus agar fokus pada kata penting."
+      },
+      {
+        "text": "Word Frequency Analysis",
+        "isCorrect": false,
+        "rationale": "Ini analisis, bukan pembersihan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Analisis yang menghitung frekuensi kemunculan kata dalam korpus teks disebut...",
+    "answerOptions": [
+      {
+        "text": "Analisis Sentimen",
+        "isCorrect": false,
+        "rationale": "Ini menganalisis emosi."
+      },
+      {
+        "text": "Analisis N-grams",
+        "isCorrect": false,
+        "rationale": "Ini melihat pola kata berurutan."
+      },
+      {
+        "text": "Visualisasi Heatmap",
+        "isCorrect": false,
+        "rationale": "Ini untuk distribusi antar dokumen."
+      },
+      {
+        "text": "Word Frequency Analysis",
+        "isCorrect": true,
+        "rationale": "Ini hitungan frekuensi kemunculan kata."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Visualisasi data teks yang menampilkan kata paling sering muncul dengan ukuran kata sesuai frekuensinya adalah...",
+    "answerOptions": [
+      {
+        "text": "Bar Plot Frekuensi",
+        "isCorrect": false,
+        "rationale": "Menggunakan bar, bukan ukuran kata."
+      },
+      {
+        "text": "Heatmap",
+        "isCorrect": false,
+        "rationale": "Menggunakan warna."
+      },
+      {
+        "text": "Word Cloud",
+        "isCorrect": true,
+        "rationale": "Ukuran kata menunjukkan frekuensi."
+      },
+      {
+        "text": "Scatter Plot",
+        "isCorrect": false,
+        "rationale": "Tidak cocok untuk teks."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Dalam Analisis Sentimen menggunakan tidytext di R, skor sentimen sering dihitung dengan...",
+    "answerOptions": [
+      {
+        "text": "Total Kata / Total Ulasan",
+        "isCorrect": false,
+        "rationale": "Ini panjang rata-rata ulasan."
+      },
+      {
+        "text": "Positive Count + Negative Count",
+        "isCorrect": false,
+        "rationale": "Ini jumlah total, bukan skor."
+      },
+      {
+        "text": "Positive Count - Negative Count",
+        "isCorrect": true,
+        "rationale": "Skor sentimen standar tidytext."
+      },
+      {
+        "text": "Total Kata Positif / Total Kata Negatif",
+        "isCorrect": false,
+        "rationale": "Ini rasio."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Di R, untuk mengambil kamus sentimen 'bing', fungsi yang digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "get_words(\"bing\")",
+        "isCorrect": false,
+        "rationale": "Fungsi yang benar adalah get_sentiments()."
+      },
+      {
+        "text": "bing_lexicon()",
+        "isCorrect": false,
+        "rationale": "Bukan fungsi standar di tidytext."
+      },
+      {
+        "text": "get_sentiments(\"bing\")",
+        "isCorrect": true,
+        "rationale": "Ini fungsi yang benar."
+      },
+      {
+        "text": "sentiment_score(\"bing\")",
+        "isCorrect": false,
+        "rationale": "Tidak ada fungsi tersebut."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Analisis N-grams (Bigram, Trigram) bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Mengurangi kata ke bentuk dasarnya.",
+        "isCorrect": false,
+        "rationale": "Itu Stemming/Lemmatization."
+      },
+      {
+        "text": "Menganalisis pola kata yang berdekatan untuk memahami konteks.",
+        "isCorrect": true,
+        "rationale": "Tujuan utama N-grams."
+      },
+      {
+        "text": "Menghitung frekuensi kata tunggal.",
+        "isCorrect": false,
+        "rationale": "Itu Word Frequency Analysis."
+      },
+      {
+        "text": "Mengubah teks menjadi huruf kecil.",
+        "isCorrect": false,
+        "rationale": "Itu normalisasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Heatmap dalam visualisasi data teks digunakan untuk melihat...",
+    "answerOptions": [
+      {
+        "text": "Distribusi kata atau tema dalam berbagai dokumen.",
+        "isCorrect": true,
+        "rationale": "Heatmap menunjukkan intensitas frekuensi kata."
+      },
+      {
+        "text": "Skor sentimen rata-rata korpus.",
+        "isCorrect": false,
+        "rationale": "Biasanya menggunakan bar/line."
+      },
+      {
+        "text": "Struktur hierarkis topik.",
+        "isCorrect": false,
+        "rationale": "Itu untuk topic modeling."
+      },
+      {
+        "text": "Tren kata dari waktu ke waktu.",
+        "isCorrect": false,
+        "rationale": "Gunakan line plot."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Pernyataan yang paling tepat mendeskripsikan Data Interaktif adalah...",
+    "answerOptions": [
+      {
+        "text": "Data yang hanya menyajikan informasi apa adanya.",
+        "isCorrect": false,
+        "rationale": "Ini data statis."
+      },
+      {
+        "text": "Data yang memungkinkan pengguna berinteraksi dengan visualisasi.",
+        "isCorrect": true,
+        "rationale": "Ini definisi data interaktif."
+      },
+      {
+        "text": "Visualisasi yang tidak responsif.",
+        "isCorrect": false,
+        "rationale": "Tidak terkait."
+      },
+      {
+        "text": "Data yang selalu berformat CSV.",
+        "isCorrect": false,
+        "rationale": "Format bukan definisi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Komponen utama data interaktif yang mencakup fitur seperti filter, drill-dropdown, hover effect, dan animasi adalah...",
+    "answerOptions": [
+      {
+        "text": "Sumber Data",
+        "isCorrect": false,
+        "rationale": "Ini hanya tempat penyimpanan."
+      },
+      {
+        "text": "Alat Visualisasi Data (Tools)",
+        "isCorrect": false,
+        "rationale": "Ini perangkat lunak."
+      },
+      {
+        "text": "Interaksi Pengguna (User Interaction)",
+        "isCorrect": true,
+        "rationale": "Fitur tersebut adalah bagian dari interaksi pengguna."
+      },
+      {
+        "text": "Dashboard",
+        "isCorrect": false,
+        "rationale": "Dashboard adalah jenis visualisasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Apa nama framework di R yang memungkinkan Anda untuk membuat aplikasi web interaktif, yang merupakan dasar untuk membangun dashboard?",
+    "answerOptions": [
+      {
+        "text": "ggplot2",
+        "isCorrect": false,
+        "rationale": "ggplot2 adalah untuk visualisasi statis."
+      },
+      {
+        "text": "dplyr",
+        "isCorrect": false,
+        "rationale": "dplyr adalah untuk manipulasi data."
+      },
+      {
+        "text": "Shiny",
+        "isCorrect": true,
+        "rationale": "Shiny adalah framework utama R untuk aplikasi web interaktif dan dashboard."
+      },
+      {
+        "text": "DT",
+        "isCorrect": false,
+        "rationale": "DT digunakan untuk tabel interaktif, tetapi bukan framework utama."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Sebuah aplikasi Shiny secara dasar terdiri dari dua bagian utama, yaitu...",
+    "answerOptions": [
+      {
+        "text": "Plot dan Tabel",
+        "isCorrect": false,
+        "rationale": "Ini adalah output, bukan struktur dasar aplikasi."
+      },
+      {
+        "text": "Input dan Output",
+        "isCorrect": false,
+        "rationale": "Ini adalah data yang mengalir, bukan struktur kode."
+      },
+      {
+        "text": "User Interface (UI) dan Server",
+        "isCorrect": true,
+        "rationale": "UI (tampilan) dan Server (logika) adalah dua komponen inti Shiny."
+      },
+      {
+        "text": "Header dan Sidebar",
+        "isCorrect": false,
+        "rationale": "Ini adalah elemen UI dalam shinydashboard."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Dalam logika Server Shiny, fungsi manakah yang digunakan untuk menghasilkan plot yang responsif terhadap input pengguna?",
+    "answerOptions": [
+      {
+        "text": "plotOutput()",
+        "isCorrect": false,
+        "rationale": "plotOutput() adalah penampung di UI."
+      },
+      {
+        "text": "renderPlot()",
+        "isCorrect": true,
+        "rationale": "renderPlot() adalah fungsi server yang menghasilkan plot reaktif."
+      },
+      {
+        "text": "renderUI()",
+        "isCorrect": false,
+        "rationale": "renderUI() menghasilkan elemen UI dinamis."
+      },
+      {
+        "text": "reactive()",
+        "isCorrect": false,
+        "rationale": "reactive() membuat ekspresi reaktif, bukan output plot."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Untuk menambahkan tabel interaktif dengan fitur sorting dan filtering ke aplikasi Shiny, paket R tambahan yang digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "ggplot2",
+        "isCorrect": false,
+        "rationale": "ggplot2 untuk visualisasi."
+      },
+      {
+        "text": "plotly",
+        "isCorrect": false,
+        "rationale": "plotly untuk grafik interaktif."
+      },
+      {
+        "text": "DT",
+        "isCorrect": true,
+        "rationale": "DT digunakan untuk membuat tabel HTML interaktif."
+      },
+      {
+        "text": "shinydashboard",
+        "isCorrect": false,
+        "rationale": "shinydashboard untuk layout dashboard, bukan tabel."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Apa yang dimaksud dengan konsep Responsivitas dalam Visualisasi Data Interaktif?",
+    "answerOptions": [
+      {
+        "text": "Kemampuan visualisasi untuk menampilkan data terbaru secara real-time.",
+        "isCorrect": false,
+        "rationale": "Itu adalah pembaruan real-time."
+      },
+      {
+        "text": "Kemampuan visualisasi untuk disesuaikan dengan berbagai ukuran layar dan perangkat.",
+        "isCorrect": true,
+        "rationale": "Responsivitas = adaptasi tampilan terhadap ukuran layar."
+      },
+      {
+        "text": "Kemampuan pengguna untuk melakukan filter dan drill down.",
+        "isCorrect": false,
+        "rationale": "Itu interaktivitas."
+      },
+      {
+        "text": "Proses publikasi aplikasi ke server Shinyapps.io.",
+        "isCorrect": false,
+        "rationale": "Itu adalah proses deployment."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Jenis visualisasi interaktif yang merupakan koleksi dari beberapa visualisasi yang saling terkait dan memberikan pandangan menyeluruh terhadap data adalah...",
+    "answerOptions": [
+      {
+        "text": "Bar Chart",
+        "isCorrect": false,
+        "rationale": "Bar chart hanya visualisasi tunggal."
+      },
+      {
+        "text": "Scatter Plot",
+        "isCorrect": false,
+        "rationale": "Scatter plot hanya visualisasi tunggal."
+      },
+      {
+        "text": "Map Interaktif",
+        "isCorrect": false,
+        "rationale": "Map hanya satu jenis visualisasi."
+      },
+      {
+        "text": "Dashboard",
+        "isCorrect": true,
+        "rationale": "Dashboard terdiri dari berbagai visualisasi dalam satu tampilan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Untuk menghubungkan akun Shinyapps.io dengan RStudio agar dapat melakukan deployment, Anda perlu menggunakan fungsi rsconnect::setAccountInfo() yang membutuhkan tiga parameter utama, yaitu...",
+    "answerOptions": [
+      {
+        "text": "server, port, username",
+        "isCorrect": false,
+        "rationale": "Tidak digunakan dalam fungsi tersebut."
+      },
+      {
+        "text": "name, token, secret",
+        "isCorrect": true,
+        "rationale": "Ini parameter wajib: name (username), token, dan secret."
+      },
+      {
+        "text": "ui, server, appname",
+        "isCorrect": false,
+        "rationale": "Ini bagian aplikasi Shiny."
+      },
+      {
+        "text": "data, model, plot",
+        "isCorrect": false,
+        "rationale": "Tidak terkait deployment."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Fungsi utama dari Tooltip dan Hover dalam teknik visualisasi data interaktif adalah...",
+    "answerOptions": [
+      {
+        "text": "Memungkinkan pengguna memilih subset data.",
+        "isCorrect": false,
+        "rationale": "Itu fungsi filter."
+      },
+      {
+        "text": "Menampilkan informasi tambahan saat pengguna mengarahkan kursor ke elemen visualisasi.",
+        "isCorrect": true,
+        "rationale": "Tooltip memberikan detail on-demand."
+      },
+      {
+        "text": "Mengubah data dari format panjang ke format lebar.",
+        "isCorrect": false,
+        "rationale": "Itu pivoting."
+      },
+      {
+        "text": "Membuat efek visual perubahan data dari waktu ke waktu.",
+        "isCorrect": false,
+        "rationale": "Itu animasi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Untuk menjalankan aplikasi Shiny di R, perintah terakhir yang harus dieksekusi setelah mendefinisikan UI dan Server adalah...",
+    "answerOptions": [
+      {
+        "text": "library(shiny)",
+        "isCorrect": false,
+        "rationale": "Hanya memuat paket."
+      },
+      {
+        "text": "runApp('app.R')",
+        "isCorrect": false,
+        "rationale": "runApp digunakan pada folder aplikasi, bukan inline."
+      },
+      {
+        "text": "shinyApp(ui = ui, server = server)",
+        "isCorrect": true,
+        "rationale": "Digunakan untuk menjalankan aplikasi dalam satu file."
+      },
+      {
+        "text": "plot(ui, server)",
+        "isCorrect": false,
+        "rationale": "Tidak relevan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Proses instalasi IDE RStudio disarankan karena menyediakan lingkungan terintegrasi yang lebih komprehensif daripada R default. RStudio dapat diinstal setelah...",
+    "answerOptions": [
+      {
+        "text": "Menginstal paket ggplot2.",
+        "isCorrect": false,
+        "rationale": "Tidak harus setelah instal paket."
+      },
+      {
+        "text": "Mengunduh dan menginstal R dari CRAN.",
+        "isCorrect": true,
+        "rationale": "R wajib diinstal dulu sebelum RStudio."
+      },
+      {
+        "text": "Menerapkan transformasi pangkat pada data.",
+        "isCorrect": false,
+        "rationale": "Tidak terkait instalasi."
+      },
+      {
+        "text": "Mendefinisikan UI dan Server Shiny.",
+        "isCorrect": false,
+        "rationale": "Ini terjadi setelah RStudio siap digunakan."
+      }
+    ]
+  }
+  ]
+
+
+  function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>

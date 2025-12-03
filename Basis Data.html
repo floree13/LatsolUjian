@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UTM Basis Data UT</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList = [
+    {
+      "questionNumber": 1,
+      "question": "Apa definisi paling tepat dari Basis Data (Database) berdasarkan konsep dasar yang dipelajari?",
+      "answerOptions": [
+        {
+          "text": "Sekumpulan program yang digunakan untuk mengatur dan mengolah data.",
+          "isCorrect": false,
+          "rationale": "Ini adalah definisi dari Database Management System (DBMS), bukan Basis Data itu sendiri."
+        },
+        {
+          "text": "Representasi fakta dunia nyata yang mewakili suatu objek seperti angka, huruf, atau simbol.",
+          "isCorrect": false,
+          "rationale": "Ini adalah definisi dari Data, yang merupakan komponen dari Basis Data."
+        },
+        {
+          "text": "Kumpulan data yang terorganisasi dan tersimpan secara terpusat dalam table/file yang saling berhubungan untuk mempermudah penelusuran.",
+          "isCorrect": true,
+          "rationale": "Basis Data adalah kumpulan data yang terintegrasi, terorganisasi, dan saling terkait yang disimpan untuk kemudahan akses dan pengambilan data."
+        },
+        {
+          "text": "Aplikasi yang dapat menangani akses pengguna kepada data dan mengelola sumber daya data.",
+          "isCorrect": false,
+          "rationale": "Definisi ini lebih merujuk kepada Database Management System (DBMS) menurut C.J. Date/Gordon C. Everest."
+        }
+      ]
+    },
+    {
+      "questionNumber": 2,
+      "question": "Salah satu tujuan utama dari penggunaan Basis Data adalah meminimalkan...",
+      "answerOptions": [
+        {
+          "text": "Biaya dan waktu pengembangan aplikasi.",
+          "isCorrect": false,
+          "rationale": "Meskipun bisa memengaruhi, ini bukan tujuan utama yang berkaitan langsung dengan kualitas data."
+        },
+        {
+          "text": "Redundansi data dan ketidakkonsistenan data.",
+          "isCorrect": true,
+          "rationale": "Minimalisasi duplikasi dan menjaga integritas data adalah tujuan utama dari perancangan Basis Data."
+        },
+        {
+          "text": "Jumlah tabel dan kompleksitas relasi antar entitas.",
+          "isCorrect": false,
+          "rationale": "Tujuan utamanya bukan mengurangi jumlah tabel, melainkan mengoptimalkan struktur data."
+        },
+        {
+          "text": "Akses multi-user dan keamanan data.",
+          "isCorrect": false,
+          "rationale": "Ini adalah manfaat atau fungsi Basis Data, bukan hal yang ingin diminimalkan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 3,
+      "question": "Menurut C.J. Date, DBMS (Database Management System) didefinisikan sebagai sebuah aplikasi yang dapat menangani apa?",
+      "answerOptions": [
+        {
+          "text": "Manajemen sumber daya data.",
+          "isCorrect": false,
+          "rationale": "Definisi ini dikemukakan oleh Gordon C. Everest, bukan C.J. Date."
+        },
+        {
+          "text": "Akses pengguna kepada basis data.",
+          "isCorrect": true,
+          "rationale": "C.J. Date mendefinisikan DBMS sebagai aplikasi untuk menangani akses pengguna ke basis data."
+        },
+        {
+          "text": "Integrasi dan keamanan basis data.",
+          "isCorrect": false,
+          "rationale": "Ini adalah fungsi, bukan definisi langsung dari C.J. Date."
+        },
+        {
+          "text": "Pengembangan program aplikasi berbasis data.",
+          "isCorrect": false,
+          "rationale": "DBMS digunakan untuk pengelolaan data, bukan hanya untuk pengembangan program aplikasi."
+        }
+      ]
+    },
+    {
+      "questionNumber": 4,
+      "question": "Lapisan tertinggi dalam tiga tingkat abstraksi data yang berorientasi pada kebutuhan pengguna dan hanya menampilkan sebagian data yang relevan bagi pengguna disebut level apa?",
+      "answerOptions": [
+        {
+          "text": "Physical Level (Level Fisik)",
+          "isCorrect": false,
+          "rationale": "Level ini menjelaskan bagaimana data disimpan secara fisik di media penyimpanan."
+        },
+        {
+          "text": "Logical Level (Level Konseptual)",
+          "isCorrect": false,
+          "rationale": "Level ini menjelaskan data apa yang disimpan dalam basis data dan hubungan antar data secara keseluruhan."
+        },
+        {
+          "text": "View Level (Level Pandangan)",
+          "isCorrect": true,
+          "rationale": "View Level merupakan lapisan tertinggi yang hanya menampilkan struktur data sederhana yang disesuaikan dengan kebutuhan spesifik pengguna."
+        },
+        {
+          "text": "Internal Level (Level Internal)",
+          "isCorrect": false,
+          "rationale": "Istilah ini adalah nama lain dari Physical Level, yang menjelaskan penyimpanan fisik."
+        }
+      ]
+    },
+    {
+      "questionNumber": 5,
+      "question": "MySQL merupakan Database Management System (DBMS) yang paling populer dan memiliki sifat utama...",
+      "answerOptions": [
+        {
+          "text": "Berbayar (komersil) dan hanya dapat digunakan untuk sistem operasi tertentu.",
+          "isCorrect": false,
+          "rationale": "MySQL bersifat open-source dan dapat digunakan di berbagai sistem operasi."
+        },
+        {
+          "text": "Dikembangkan oleh Software Development Laboratories (SDL) dan sangat kuat dalam urusan relasi.",
+          "isCorrect": false,
+          "rationale": "Oracle dikembangkan oleh SDL, sementara PostgreSQL dikenal karena kuat dalam urusan relasi/integritas data."
+        },
+        {
+          "text": "Gratis (open-source) dan dapat digunakan untuk keperluan pribadi maupun komersil.",
+          "isCorrect": true,
+          "rationale": "MySQL dikenal karena sifatnya yang gratis dan fleksibel untuk berbagai keperluan, menjadikannya sangat populer."
+        },
+        {
+          "text": "Memisahkan proses antara basis data klien dan aplikasi, server ukuran basis data besar.",
+          "isCorrect": false,
+          "rationale": "Ini adalah keistimewaan yang dimiliki oleh DBMS seperti Oracle."
+        }
+      ]
+    },
+    {
+      "questionNumber": 6,
+      "question": "Model data yang menggunakan konsep himpunan entitas, atribut, dan himpunan relasi untuk menggambarkan struktur basis data adalah...",
+      "answerOptions": [
+        {
+          "text": "Model Database Hierarki (Hierarchical Database Model)",
+          "isCorrect": false,
+          "rationale": "Model Hierarki menggunakan struktur pohon (tree structure) dengan hubungan parent-child (satu ke banyak)."
+        },
+        {
+          "text": "Entity Relationship Model (ERM)",
+          "isCorrect": true,
+          "rationale": "ERM adalah model konseptual tingkat tinggi yang menggunakan entitas, atribut, dan relasi sebagai konsep dasarnya."
+        },
+        {
+          "text": "Model Database Jaringan (Network Database Model)",
+          "isCorrect": false,
+          "rationale": "Model Jaringan menggunakan konsep record dan set untuk menggambarkan hubungan yang lebih kompleks (many-to-many)."
+        },
+        {
+          "text": "Relational Database Model (Model Relasional)",
+          "isCorrect": false,
+          "rationale": "Model Relasional menggunakan tabel (relasi) untuk menyimpan data, ini adalah model logis, bukan konseptual tingkat tinggi."
+        }
+      ]
+    },
+    {
+      "questionNumber": 7,
+      "question": "Dalam Entity Relationship Model (ERM), atribut yang nilainya dapat dibagi lagi menjadi komponen yang lebih kecil (misalnya alamat dibagi menjadi jalan, kota, kode pos) disebut atribut jenis apa?",
+      "answerOptions": [
+        {
+          "text": "Atribut Kunci (Key Attribute)",
+          "isCorrect": false,
+          "rationale": "Atribut Kunci digunakan untuk mengidentifikasi entitas secara unik."
+        },
+        {
+          "text": "Atribut Komposit (Composite Attribute)",
+          "isCorrect": true,
+          "rationale": "Atribut Komposit adalah atribut yang tersusun dari beberapa atribut sederhana lainnya."
+        },
+        {
+          "text": "Atribut Multivalued",
+          "isCorrect": false,
+          "rationale": "Atribut Multivalued adalah atribut yang memiliki lebih dari satu nilai untuk satu entitas (misalnya: hobi)."
+        },
+        {
+          "text": "Atribut Derivatif (Derived Attribute)",
+          "isCorrect": false,
+          "rationale": "Atribut Derivatif adalah atribut yang nilainya dapat diturunkan dari atribut lain (misalnya: usia dari tanggal lahir)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 8,
+      "question": "Atribut yang berfungsi sebagai kunci utama pada satu tabel, tetapi digunakan pada tabel lain sebagai penghubung relasi, disebut...",
+      "answerOptions": [
+        {
+          "text": "Kunci Kandidat (Candidate Key)",
+          "isCorrect": false,
+          "rationale": "Kunci Kandidat adalah atribut atau sekumpulan atribut yang dapat menjadi kunci utama."
+        },
+        {
+          "text": "Kunci Primer (Primary Key)",
+          "isCorrect": false,
+          "rationale": "Kunci Primer adalah kunci yang dipilih untuk mengidentifikasi setiap baris secara unik dalam tabelnya sendiri."
+        },
+        {
+          "text": "Kunci Alternatif (Alternate Key)",
+          "isCorrect": false,
+          "rationale": "Kunci Alternatif adalah Kunci Kandidat yang tidak dipilih menjadi Kunci Primer."
+        },
+        {
+          "text": "Kunci Tamu (Foreign Key)",
+          "isCorrect": true,
+          "rationale": "Kunci Tamu adalah kunci utama dari tabel lain yang digunakan untuk menciptakan hubungan relasi antar tabel (AK03)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 9,
+      "question": "Jika dalam sebuah relasi, satu entitas dari himpunan entitas A dapat berelasi dengan banyak entitas dari himpunan entitas B, dan sebaliknya satu entitas dari B dapat berelasi dengan banyak entitas dari A, maka derajat relasi tersebut adalah...",
+      "answerOptions": [
+        {
+          "text": "Satu ke Satu (One-to-One / 1:1)",
+          "isCorrect": false,
+          "rationale": "Ini berarti satu entitas dari A berelasi dengan maksimal satu entitas dari B, dan sebaliknya."
+        },
+        {
+          "text": "Satu ke Banyak (One-to-Many / 1:N)",
+          "isCorrect": false,
+          "rationale": "Ini berarti satu entitas dari A dapat berelasi dengan banyak entitas dari B, tetapi satu entitas dari B hanya berelasi dengan satu entitas dari A."
+        },
+        {
+          "text": "Banyak ke Banyak (Many-to-Many / N:N)",
+          "isCorrect": true,
+          "rationale": "Relasi N:N terjadi ketika banyak entitas di satu sisi dapat berhubungan dengan banyak entitas di sisi lain."
+        },
+        {
+          "text": "Tunggal ke Tunggal (Single-to-Single)",
+          "isCorrect": false,
+          "rationale": "Ini bukan istilah standar dalam derajat kardinalitas ERM."
+        }
+      ]
+    },
+    {
+      "questionNumber": 10,
+      "question": "Langkah pertama yang harus dilakukan setelah menganalisis narasi studi kasus (misalnya, perpustakaan) dalam perancangan aplikasi basis data adalah...",
+      "answerOptions": [
+        {
+          "text": "Membuat user interface (antarmuka pengguna) dari aplikasi.",
+          "isCorrect": false,
+          "rationale": "Pembuatan interface adalah bagian dari implementasi atau desain tingkat lanjut."
+        },
+        {
+          "text": "Membuat perintah-perintah DML untuk manipulasi data.",
+          "isCorrect": false,
+          "rationale": "Perintah DML baru bisa dibuat setelah struktur tabel selesai dirancang."
+        },
+        {
+          "text": "Melakukan Normalisasi data hingga mencapai bentuk 3NF.",
+          "isCorrect": false,
+          "rationale": "Normalisasi dilakukan setelah data dikelompokkan ke dalam tabel (relasi)."
+        },
+        {
+          "text": "Melakukan identifikasi entitas, atribut, relasi, dan derajat kardinalitas untuk membuat Diagram ER.",
+          "isCorrect": true,
+          "rationale": "Tahap awal desain adalah memodelkan data secara konseptual menggunakan Diagram ER (ERM) (AK15)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 11,
+      "question": "Dalam tahapan pengembangan aplikasi basis data yang terdiri dari 3 jenis tahapan, urutan yang benar adalah...",
+      "answerOptions": [
+        {
+          "text": "Perencanaan, Analisis, Implementasi",
+          "isCorrect": false,
+          "rationale": "Perencanaan adalah bagian dari model 5 tahapan."
+        },
+        {
+          "text": "Analisis, Desain dan Perancangan, Implementasi",
+          "isCorrect": true,
+          "rationale": "Model 3 tahapan (tahapan yang lebih sederhana) terdiri dari Analisis, Desain dan Perancangan, dan Implementasi (AK14)."
+        },
+        {
+          "text": "Analisis, Desain dan Perancangan, Penggunaan",
+          "isCorrect": false,
+          "rationale": "Penggunaan/Reviu/Evaluasi adalah bagian dari model 5 tahapan (AK14)."
+        },
+        {
+          "text": "Analisis, Implementasi, Reviu",
+          "isCorrect": false,
+          "rationale": "Fase Desain dan Perancangan terlewatkan dalam urutan ini."
+        }
+      ]
+    },
+    {
+      "questionNumber": 12,
+      "question": "Tahapan yang ke-5 (terakhir) dalam pengembangan aplikasi basis data dengan 5 tahapan adalah...",
+      "answerOptions": [
+        {
+          "text": "Perencanaan",
+          "isCorrect": false,
+          "rationale": "Perencanaan adalah tahapan pertama dalam model 5 tahapan (AK14)."
+        },
+        {
+          "text": "Implementasi",
+          "isCorrect": false,
+          "rationale": "Implementasi adalah tahapan ke-4, setelah desain (AK14)."
+        },
+        {
+          "text": "Analisis",
+          "isCorrect": false,
+          "rationale": "Analisis adalah tahapan ke-2, setelah perencanaan (AK14)."
+        },
+        {
+          "text": "Penggunaan atau Reviu atau Evaluasi",
+          "isCorrect": true,
+          "rationale": "Tahap terakhir dalam 5 tahapan adalah memastikan sistem berjalan dan melakukan evaluasi/pemeliharaan (AK14)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 13,
+      "question": "Normalisasi adalah sebuah teknik dalam membangun logical design basis data yang bertujuan untuk...",
+      "answerOptions": [
+        {
+          "text": "Mengintegrasikan basis data dari berbagai lokasi yang berbeda.",
+          "isCorrect": false,
+          "rationale": "Ini adalah konsep Basis Data Terdistribusi."
+        },
+        {
+          "text": "Meningkatkan kecepatan query dengan mengurangi jumlah tabel yang terlibat.",
+          "isCorrect": false,
+          "rationale": "Ini adalah tujuan dari De-Normalisasi."
+        },
+        {
+          "text": "Membentuk struktur relasi yang baik (tanpa redundansi) dengan menghilangkan/meminimalisasi anomali.",
+          "isCorrect": true,
+          "rationale": "Normalisasi adalah proses untuk mengoptimalkan struktur tabel dan mengurangi masalah seperti anomali dan redundansi data (AK05)."
+        },
+        {
+          "text": "Mengubah tabel yang tidak normal menjadi bentuk tidak normal untuk efisiensi.",
+          "isCorrect": false,
+          "rationale": "Normalisasi mengubah dari tidak normal menjadi normal."
+        }
+      ]
+    },
+    {
+      "questionNumber": 14,
+      "question": "Kesalahan yang terjadi sebagai akibat operasi peremajaan/perubahan data pada satu record tetapi data yang sama di record lain tidak ikut berubah, disebut...",
+      "answerOptions": [
+        {
+          "text": "Anomali Penyisipan (Insertion Anomaly)",
+          "isCorrect": false,
+          "rationale": "Anomali Penyisipan terjadi saat data tidak dapat dimasukkan karena ketergantungan pada data lain."
+        },
+        {
+          "text": "Anomali Penghapusan (Deletion Anomaly)",
+          "isCorrect": false,
+          "rationale": "Anomali Penghapusan terjadi ketika menghapus satu data juga menghilangkan data penting lain."
+        },
+        {
+          "text": "Anomali Peremajaan (Update Anomaly)",
+          "isCorrect": true,
+          "rationale": "Anomali Peremajaan terjadi karena redundansi yang menyebabkan perubahan data di satu tempat tidak tercermin di tempat lain, menimbulkan inkonsistensi (AK05)."
+        },
+        {
+          "text": "Ketergantungan Transitif (Transitive Dependency)",
+          "isCorrect": false,
+          "rationale": "Ketergantungan Transitif adalah kondisi yang menyebabkan Anomali, bukan Anomali itu sendiri."
+        }
+      ]
+    },
+    {
+      "questionNumber": 15,
+      "question": "Anomali yang terjadi ketika data tidak dapat dimasukkan ke dalam basis data karena belum adanya nilai untuk atribut tertentu (misalnya data barang tidak bisa dimasukkan sebelum ada kode supplier), disebut...",
+      "answerOptions": [
+        {
+          "text": "Anomali Peremajaan (Update Anomaly)",
+          "isCorrect": false,
+          "rationale": "Anomali Peremajaan berkaitan dengan perubahan data yang inkonsisten."
+        },
+        {
+          "text": "Anomali Penyisipan (Insertion Anomaly)",
+          "isCorrect": true,
+          "rationale": "Anomali Penyisipan terjadi ketika menyisipkan baris data baru mengharuskan data lain juga dimasukkan, atau tidak mungkin menyisipkan sebagian data."
+        },
+        {
+          "text": "Anomali Penghapusan (Deletion Anomaly)",
+          "isCorrect": false,
+          "rationale": "Anomali Penghapusan berkaitan dengan kehilangan data terkait saat satu baris dihapus."
+        },
+        {
+          "text": "Redundansi data",
+          "isCorrect": false,
+          "rationale": "Redundansi adalah penyebab, bukan jenis Anomali itu sendiri."
+        }
+      ]
+    },
+    {
+      "questionNumber": 16,
+      "question": "Syarat utama sebuah tabel dikatakan berada dalam Bentuk Normal Pertama (1NF) adalah...",
+      "answerOptions": [
+        {
+          "text": "Setiap atribut non-kunci bergantung penuh pada kunci utama.",
+          "isCorrect": false,
+          "rationale": "Ini adalah syarat utama untuk 2NF."
+        },
+        {
+          "text": "Tidak boleh ada ketergantungan transitif antar atribut non-kunci.",
+          "isCorrect": false,
+          "rationale": "Ini adalah syarat utama untuk 3NF."
+        },
+        {
+          "text": "Setiap atribut dalam tabel harus bernilai atomik (tidak ada pengulangan grup atau nilai ganda).",
+          "isCorrect": true,
+          "rationale": "1NF mensyaratkan tidak boleh ada repeating groups dan semua atribut harus memiliki nilai tunggal (atomik) (AK05)."
+        },
+        {
+          "text": "Setiap atribut kunci tidak boleh memiliki nilai NULL.",
+          "isCorrect": false,
+          "rationale": "Ini adalah syarat untuk Primary Key, yang harus ada di setiap Bentuk Normal."
+        }
+      ]
+    },
+    {
+      "questionNumber": 17,
+      "question": "Bentuk Normal Kedua (2NF) memiliki syarat harus sudah dalam 1NF dan...",
+      "answerOptions": [
+        {
+          "text": "Setiap atribut non-kunci harus bergantung penuh (fully functional dependency) pada kunci utama (Primary Key).",
+          "isCorrect": true,
+          "rationale": "2NF berfokus pada penghapusan ketergantungan parsial (partial dependency), di mana atribut non-kunci hanya bergantung pada sebagian kunci komposit (AK05)."
+        },
+        {
+          "text": "Tidak boleh ada ketergantungan transitif antar atribut non-kunci.",
+          "isCorrect": false,
+          "rationale": "Ini adalah syarat utama untuk 3NF."
+        },
+        {
+          "text": "Setiap atribut dalam tabel harus bernilai atomik.",
+          "isCorrect": false,
+          "rationale": "Ini adalah syarat utama untuk 1NF."
+        },
+        {
+          "text": "Semua field kunci harus ditentukan.",
+          "isCorrect": false,
+          "rationale": "Penentuan kunci adalah bagian dari 1NF."
+        }
+      ]
+    },
+    {
+      "questionNumber": 18,
+      "question": "Bentuk Normal Ketiga (3NF) memiliki syarat harus sudah dalam 2NF dan...",
+      "answerOptions": [
+        {
+          "text": "Setiap atribut non-kunci harus bergantung penuh pada kunci utama.",
+          "isCorrect": false,
+          "rationale": "Ini adalah syarat utama untuk 2NF."
+        },
+        {
+          "text": "Tidak boleh ada ketergantungan parsial pada kunci komposit.",
+          "isCorrect": false,
+          "rationale": "Ini adalah syarat utama untuk 2NF."
+        },
+        {
+          "text": "Tidak boleh ada ketergantungan transitif (transitive dependency) antar atribut non-kunci.",
+          "isCorrect": true,
+          "rationale": "3NF menghilangkan ketergantungan di mana atribut non-kunci bergantung pada atribut non-kunci lainnya, yang bukan Primary Key (AK05)."
+        },
+        {
+          "text": "Memenuhi syarat Boyce-Codd Normal Form (BCNF).",
+          "isCorrect": false,
+          "rationale": "BCNF adalah bentuk normal yang lebih ketat dari 3NF."
+        }
+      ]
+    },
+    {
+      "questionNumber": 19,
+      "question": "Dalam basis data relasional, redundansi tidak bisa dihilangkan sama sekali. Salah satu alasan mengapa redundansi data (duplikasi data) diizinkan atau bahkan diperlukan adalah...",
+      "answerOptions": [
+        {
+          "text": "Untuk menciptakan atribut turunan yang nilainya dihitung dari atribut lain.",
+          "isCorrect": false,
+          "rationale": "Ini adalah bentuk De-Normalisasi, bukan alasan utama redundansi Kunci."
+        },
+        {
+          "text": "Atribut-atribut berfungsi sebagai key primer untuk keterhubungan antara tabel yang satu dengan yang lain (Kunci Tamu).",
+          "isCorrect": true,
+          "rationale": "Kunci Tamu (Foreign Key), yang merupakan duplikasi dari Kunci Primer di tabel lain, sangat diperlukan untuk menghubungkan relasi antar tabel (AK06)."
+        },
+        {
+          "text": "Agar data tetap berada dalam bentuk tidak normal (Unnormalized Form).",
+          "isCorrect": false,
+          "rationale": "Normalisasi dilakukan untuk mengoptimalkan redundansi."
+        },
+        {
+          "text": "Untuk mempermudah operasi UPDATE dan DELETE data.",
+          "isCorrect": false,
+          "rationale": "Redundansi justru menyulitkan operasi UPDATE dan DELETE karena memicu anomali."
+        }
+      ]
+    },
+    {
+      "questionNumber": 20,
+      "question": "Tujuan utama dari dilakukannya De-Normalisasi (proses pengembalian tabel yang tadinya normal menjadi tidak normal) adalah untuk...",
+      "answerOptions": [
+        {
+          "text": "Menghilangkan semua bentuk anomali dan redundansi data.",
+          "isCorrect": false,
+          "rationale": "Ini adalah tujuan dari Normalisasi, De-Normalisasi justru menambah redundansi yang terkontrol."
+        },
+        {
+          "text": "Memastikan data berada pada Bentuk Normal Ketiga (3NF).",
+          "isCorrect": false,
+          "rationale": "De-Normalisasi mengembalikan tabel ke bentuk yang kurang normal."
+        },
+        {
+          "text": "Meningkatkan performa basis data, khususnya dalam operasi query (pengambilan data).",
+          "isCorrect": true,
+          "rationale": "Dengan menggabungkan data yang terpisah, De-Normalisasi mengurangi kebutuhan JOIN yang intensif, sehingga meningkatkan kecepatan query (AK06)."
+        },
+        {
+          "text": "Memperkenalkan Ketergantungan Transitif antar atribut.",
+          "isCorrect": false,
+          "rationale": "Ini adalah efek samping yang diizinkan, bukan tujuan utamanya."
+        }
+      ]
+    },
+    {
+      "questionNumber": 21,
+      "question": "Salah satu bentuk De-Normalisasi yang dilakukan untuk menghindari perhitungan berulang setiap kali data diminta adalah dengan menciptakan...",
+      "answerOptions": [
+        {
+          "text": "Partisi Horizontal",
+          "isCorrect": false,
+          "rationale": "Ini adalah strategi untuk Basis Data Terdistribusi."
+        },
+        {
+          "text": "Kunci Tamu",
+          "isCorrect": false,
+          "rationale": "Kunci Tamu adalah elemen relasi dalam normalisasi."
+        },
+        {
+          "text": "Atribut Turunan (Derived Attribute)",
+          "isCorrect": true,
+          "rationale": "Atribut Turunan (misalnya, total harga, usia) disimpan secara fisik di tabel untuk menghindari perhitungan saat query berulang kali (AK06)."
+        },
+        {
+          "text": "Tabel Rekapitulasi",
+          "isCorrect": false,
+          "rationale": "Tabel Rekapitulasi adalah bentuk De-Normalisasi, tetapi Atribut Turunan lebih spesifik ke penghindaran perhitungan (AK06)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 22,
+      "question": "SQL (Structured Query Language) adalah bahasa khusus yang digunakan untuk...",
+      "answerOptions": [
+        {
+          "text": "Membuat aplikasi basis data secara keseluruhan.",
+          "isCorrect": false,
+          "rationale": "SQL hanya untuk interaksi data/skema, bukan membuat aplikasi secara keseluruhan."
+        },
+        {
+          "text": "Merancang Diagram ER dan model data konseptual.",
+          "isCorrect": false,
+          "rationale": "Diagram ER adalah alat perancangan, bukan bagian dari SQL."
+        },
+        {
+          "text": "Mengakses dan mengelola DBMS.",
+          "isCorrect": true,
+          "rationale": "SQL adalah bahasa standar untuk berinteraksi dengan basis data relasional, termasuk definisi dan manipulasi data (AK07)."
+        },
+        {
+          "text": "Mengelola jaringan komunikasi data antar server.",
+          "isCorrect": false,
+          "rationale": "Ini adalah fungsi sistem operasi atau perangkat lunak jaringan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 23,
+      "question": "Perintah SQL yang termasuk dalam kategori DDL (Data Definition Language), yang digunakan untuk mendefinisikan/mengubah struktur basis data, adalah...",
+      "answerOptions": [
+        {
+          "text": "SELECT, INSERT, UPDATE",
+          "isCorrect": false,
+          "rationale": "Ini adalah perintah DML (Data Manipulation Language)."
+        },
+        {
+          "text": "CREATE TABLE, ALTER TABLE, DROP INDEX",
+          "isCorrect": true,
+          "rationale": "DDL berurusan dengan definisi objek skema seperti tabel, indeks, dan basis data itu sendiri. ALTER TABLE dan CREATE/DROP adalah DDL (AK07)."
+        },
+        {
+          "text": "GRANT, REVOKE, COMMIT",
+          "isCorrect": false,
+          "rationale": "Ini adalah perintah DCL (Data Control Language) dan TCL (Transaction Control Language)."
+        },
+        {
+          "text": "DELETE, ALTER TABLE, CREATE DATABASE",
+          "isCorrect": false,
+          "rationale": "DELETE adalah perintah DML, bukan DDL."
+        }
+      ]
+    },
+    {
+      "questionNumber": 24,
+      "question": "Perintah SQL yang termasuk dalam kategori DML (Data Manipulation Language), yang digunakan untuk memanipulasi data (mengambil, menyisipkan, mengubah, menghapus) di dalam tabel, adalah...",
+      "answerOptions": [
+        {
+          "text": "CREATE, ALTER, DROP",
+          "isCorrect": false,
+          "rationale": "Ini adalah perintah DDL (Data Definition Language) yang fokus pada struktur."
+        },
+        {
+          "text": "SELECT, INSERT, UPDATE, DELETE",
+          "isCorrect": true,
+          "rationale": "DML berurusan dengan manipulasi data di dalam tabel (AK07)."
+        },
+        {
+          "text": "GRANT, REVOKE",
+          "isCorrect": false,
+          "rationale": "Ini adalah perintah DCL (Data Control Language) yang fokus pada hak akses."
+        },
+        {
+          "text": "COMMIT, ROLLBACK",
+          "isCorrect": false,
+          "rationale": "Ini adalah perintah TCL (Transaction Control Language) yang fokus pada transaksi."
+        }
+      ]
+    },
+    {
+      "questionNumber": 25,
+      "question": "Perintah DDL yang digunakan secara spesifik untuk menambahkan kolom baru pada tabel yang sudah ada adalah...",
+      "answerOptions": [
+        {
+          "text": "INSERT INTO",
+          "isCorrect": false,
+          "rationale": "INSERT INTO adalah DML untuk menyisipkan baris data, bukan kolom."
+        },
+        {
+          "text": "UPDATE",
+          "isCorrect": false,
+          "rationale": "UPDATE adalah DML untuk mengubah nilai data, bukan struktur kolom."
+        },
+        {
+          "text": "ALTER TABLE",
+          "isCorrect": true,
+          "rationale": "ALTER TABLE digunakan untuk mengubah struktur tabel, termasuk menambah, menghapus, atau memodifikasi kolom (AK07)."
+        },
+        {
+          "text": "CREATE INDEX",
+          "isCorrect": false,
+          "rationale": "CREATE INDEX digunakan untuk membuat indeks, bukan mengubah tabel."
+        }
+      ]
+    },
+    {
+      "questionNumber": 26,
+      "question": "Fungsi basis data yang berkaitan dengan otorisasi pengguna untuk mengakses atau memodifikasi data adalah...",
+      "answerOptions": [
+        {
+          "text": "Manajemen Transaksi",
+          "isCorrect": false,
+          "rationale": "Manajemen Transaksi berkaitan dengan menjaga konsistensi data selama proses baca/tulis."
+        },
+        {
+          "text": "Transformasi dan Penyajian Data",
+          "isCorrect": false,
+          "rationale": "Ini berkaitan dengan format output data."
+        },
+        {
+          "text": "Keamanan Data",
+          "isCorrect": true,
+          "rationale": "Keamanan Data berfungsi untuk melindungi basis data dari pengguna tidak sah dan memastikan otorisasi (AK02)."
+        },
+        {
+          "text": "Penyimpanan Data (Data Storage Management)",
+          "isCorrect": false,
+          "rationale": "Ini berkaitan dengan pengelolaan media penyimpanan data fisik."
+        }
+      ]
+    },
+    {
+      "questionNumber": 27,
+      "question": "Salah satu keistimewaan utama dari DBMS Oracle yang membedakannya dengan MySQL yang sederhana adalah...",
+      "answerOptions": [
+        {
+          "text": "Bersifat Open-source dan gratis.",
+          "isCorrect": false,
+          "rationale": "Ini adalah sifat MySQL."
+        },
+        {
+          "text": "Sangat kuat dalam urusan relasi dan integritas data.",
+          "isCorrect": false,
+          "rationale": "Ini adalah keunggulan PostgreSQL."
+        },
+        {
+          "text": "Memisahkan proses antara basis data klien dan aplikasi, mendukung basis data yang besar.",
+          "isCorrect": true,
+          "rationale": "Oracle memisahkan proses antara basis data klien dan aplikasi, serta mendukung ukuran basis data yang besar (AK13)."
+        },
+        {
+          "text": "Menggunakan struktur data hirarki.",
+          "isCorrect": false,
+          "rationale": "Oracle menggunakan model basis data relasional."
+        }
+      ]
+    },
+    {
+      "questionNumber": 28,
+      "question": "Dibandingkan MySQL, DBMS PostgreSQL dikenal karena keunggulannya dalam urusan...",
+      "answerOptions": [
+        {
+          "text": "Kemudahan penggunaan untuk pemula.",
+          "isCorrect": false,
+          "rationale": "MySQL sering dianggap lebih ramah untuk pemula."
+        },
+        {
+          "text": "Ringan dan cepat untuk proyek kecil.",
+          "isCorrect": false,
+          "rationale": "MySQL sering dipilih untuk kebutuhan ini."
+        },
+        {
+          "text": "Kekuatan dan kehandalan dalam relasi, integritas data, dan akurasi data.",
+          "isCorrect": true,
+          "rationale": "PostgreSQL terkenal kuat dan handal dalam urusan relasi dan integritas data (AK13)."
+        },
+        {
+          "text": "Sangat terintegrasi dengan produk Microsoft Office.",
+          "isCorrect": false,
+          "rationale": "Ini lebih merujuk pada MS Access atau SQL Server."
+        }
+      ]
+    },
+    {
+      "questionNumber": 29,
+      "question": "Dalam model 3 tahapan pengembangan aplikasi basis data, fase yang terletak setelah Analisis dan sebelum Implementasi adalah...",
+      "answerOptions": [
+        {
+          "text": "Perencanaan",
+          "isCorrect": false,
+          "rationale": "Perencanaan adalah tahapan awal pada model 5 tahapan."
+        },
+        {
+          "text": "Penggunaan",
+          "isCorrect": false,
+          "rationale": "Penggunaan adalah tahapan akhir pada model 5 tahapan."
+        },
+        {
+          "text": "Desain dan Perancangan",
+          "isCorrect": true,
+          "rationale": "Model 3 tahapan terdiri dari Analisis, Desain dan Perancangan, dan Implementasi (AK14)."
+        },
+        {
+          "text": "Reviu",
+          "isCorrect": false,
+          "rationale": "Reviu adalah nama lain dari tahapan akhir."
+        }
+      ]
+    },
+    {
+      "questionNumber": 30,
+      "question": "Tahapan pengembangan basis data yang ke-3 dalam urutan model 5 tahapan adalah...",
+      "answerOptions": [
+        {
+          "text": "Perencanaan (Tahap 1)",
+          "isCorrect": false,
+          "rationale": "Perencanaan adalah tahap pertama dalam model 5 tahapan."
+        },
+        {
+          "text": "Analisis (Tahap 2)",
+          "isCorrect": false,
+          "rationale": "Analisis adalah tahap kedua dalam model 5 tahapan."
+        },
+        {
+          "text": "Desain atau Perancangan",
+          "isCorrect": true,
+          "rationale": "Model 5 tahapan adalah Perencanaan, Analisis, Desain/Perancangan, Implementasi, dan Penggunaan/Reviu (AK14)."
+        },
+        {
+          "text": "Implementasi (Tahap 4)",
+          "isCorrect": false,
+          "rationale": "Implementasi adalah tahap keempat dalam model 5 tahapan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 31,
+      "question": "Dalam ERM, atribut yang digunakan untuk mengidentifikasi entitas secara unik dalam sebuah tabel adalah...",
+      "answerOptions": [
+        {
+          "text": "Atribut Derivatif",
+          "isCorrect": false,
+          "rationale": "Atribut Derivatif nilainya diturunkan dari atribut lain."
+        },
+        {
+          "text": "Atribut Komposit",
+          "isCorrect": false,
+          "rationale": "Atribut Komposit adalah atribut yang terbagi menjadi sub-atribut."
+        },
+        {
+          "text": "Atribut Kunci (Key Attribute) atau Kunci Primer",
+          "isCorrect": true,
+          "rationale": "Atribut Kunci adalah atribut yang nilainya unik dan dapat mengidentifikasi setiap entitas/baris (AK03)."
+        },
+        {
+          "text": "Atribut Multivalued",
+          "isCorrect": false,
+          "rationale": "Atribut Multivalued memiliki banyak nilai untuk satu entitas."
+        }
+      ]
+    },
+    {
+      "questionNumber": 32,
+      "question": "Atribut yang memungkinkan satu entitas memiliki lebih dari satu nilai (misalnya, seorang pegawai memiliki lebih dari satu nomor telepon) disebut...",
+      "answerOptions": [
+        {
+          "text": "Atribut Komposit",
+          "isCorrect": false,
+          "rationale": "Atribut Komposit terdiri dari sub-atribut."
+        },
+        {
+          "text": "Atribut Tunggal",
+          "isCorrect": false,
+          "rationale": "Atribut Tunggal hanya memiliki satu nilai untuk satu entitas."
+        },
+        {
+          "text": "Atribut Multivalued",
+          "isCorrect": true,
+          "rationale": "Atribut Multivalued adalah atribut yang memiliki lebih dari satu nilai untuk satu entitas (misalnya: hobi, nomor telepon)."
+        },
+        {
+          "text": "Atribut Turunan",
+          "isCorrect": false,
+          "rationale": "Atribut Turunan nilainya dihitung/diturunkan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 33,
+      "question": "Ketergantungan transitif yang menjadi masalah utama yang harus dihilangkan pada 3NF adalah kondisi di mana...",
+      "answerOptions": [
+        {
+          "text": "Atribut non-kunci bergantung parsial pada kunci komposit.",
+          "isCorrect": false,
+          "rationale": "Ini adalah masalah yang dihilangkan pada 2NF (Ketergantungan Parsial)."
+        },
+        {
+          "text": "Atribut non-kunci bergantung pada atribut non-kunci lainnya.",
+          "isCorrect": true,
+          "rationale": "Ketergantungan transitif adalah ketergantungan di antara atribut non-kunci (AK05)."
+        },
+        {
+          "text": "Semua atribut kunci bergantung pada atribut non-kunci.",
+          "isCorrect": false,
+          "rationale": "Hal ini tidak mungkin terjadi dalam struktur relasional yang benar."
+        },
+        {
+          "text": "Atribut memiliki nilai ganda (repeating groups).",
+          "isCorrect": false,
+          "rationale": "Ini adalah masalah yang dihilangkan pada 1NF."
+        }
+      ]
+    },
+    {
+      "questionNumber": 34,
+      "question": "Bentuk Normal yang lebih ketat dari 3NF yang mensyaratkan setiap *determinan* harus menjadi kunci kandidat adalah...",
+      "answerOptions": [
+        {
+          "text": "1NF",
+          "isCorrect": false,
+          "rationale": "1NF adalah bentuk normal paling dasar."
+        },
+        {
+          "text": "2NF",
+          "isCorrect": false,
+          "rationale": "2NF lebih rendah dari 3NF."
+        },
+        {
+          "text": "3NF",
+          "isCorrect": false,
+          "rationale": "3NF lebih rendah dari BCNF."
+        },
+        {
+          "text": "Boyce-Codd Normal Form (BCNF)",
+          "isCorrect": true,
+          "rationale": "BCNF adalah bentuk normal yang lebih ketat dari 3NF dan menghapus anomali yang masih mungkin terjadi pada 3NF."
+        }
+      ]
+    },
+    {
+      "questionNumber": 35,
+      "question": "Salah satu alasan utama penerapan Basis Data Terdistribusi yang memastikan ketersediaan data meskipun terjadi kegagalan pada salah satu lokasi adalah...",
+      "answerOptions": [
+        {
+          "text": "Sinkronisasi Data",
+          "isCorrect": false,
+          "rationale": "Sinkronisasi adalah tantangan dalam basis data terdistribusi."
+        },
+        {
+          "text": "Database Recovery (Pemulihan Basis Data)",
+          "isCorrect": true,
+          "rationale": "Basis data terdistribusi meningkatkan keandalan dan pemulihan (Recovery) karena data tersedia di berbagai lokasi (AK10)."
+        },
+        {
+          "text": "Unit Bisnis yang Terdistribusi",
+          "isCorrect": false,
+          "rationale": "Ini adalah alasan logistik, bukan teknis keamanan data."
+        },
+        {
+          "text": "Berbagi Data",
+          "isCorrect": false,
+          "rationale": "Berbagi data adalah manfaat umum, bukan yang utama terkait keandalan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 36,
+      "question": "Pilihan pada Basis Data Terdistribusi di mana salinan data yang sama disimpan di beberapa lokasi yang berbeda disebut...",
+      "answerOptions": [
+        {
+          "text": "Partisi Vertikal",
+          "isCorrect": false,
+          "rationale": "Partisi Vertikal membagi kolom tabel dan menyimpannya di lokasi berbeda."
+        },
+        {
+          "text": "Partisi Horizontal",
+          "isCorrect": false,
+          "rationale": "Partisi Horizontal membagi baris tabel dan menyimpannya di lokasi berbeda."
+        },
+        {
+          "text": "Replikasi Data (Data Replication)",
+          "isCorrect": true,
+          "rationale": "Replikasi data adalah menyimpan salinan (copy) data yang sama di berbagai lokasi (AK10)."
+        },
+        {
+          "text": "De-Normalisasi",
+          "isCorrect": false,
+          "rationale": "De-Normalisasi adalah proses desain logis, bukan strategi terdistribusi."
+        }
+      ]
+    },
+    {
+      "questionNumber": 37,
+      "question": "Pilihan pada Basis Data Terdistribusi di mana baris data (record) dipisah dan disimpan di lokasi yang berbeda berdasarkan kriteria tertentu disebut...",
+      "answerOptions": [
+        {
+          "text": "Replikasi Data",
+          "isCorrect": false,
+          "rationale": "Replikasi adalah duplikasi, bukan pemisahan baris."
+        },
+        {
+          "text": "Partisi Vertikal",
+          "isCorrect": false,
+          "rationale": "Partisi Vertikal membagi data berdasarkan kolom."
+        },
+        {
+          "text": "Partisi Horizontal",
+          "isCorrect": true,
+          "rationale": "Partisi Horizontal membagi data berdasarkan baris atau record (AK10)."
+        },
+        {
+          "text": "Partisi Komposit",
+          "isCorrect": false,
+          "rationale": "Bukan istilah standar dalam konteks ini."
+        }
+      ]
+    },
+    {
+      "questionNumber": 38,
+      "question": "Sifat transaksi Atomicity (Atomik) memastikan bahwa operasi dalam transaksi akan...",
+      "answerOptions": [
+        {
+          "text": "Berjalan secara berurutan dan terisolasi dari transaksi lain.",
+          "isCorrect": false,
+          "rationale": "Ini adalah sifat Isolation."
+        },
+        {
+          "text": "Setelah transaksi selesai, semua perubahannya harus permanen.",
+          "isCorrect": false,
+          "rationale": "Ini adalah sifat Durability."
+        },
+        {
+          "text": "Transaksil harus dimulai dari kondisi konsisten dan berakhir dengan kondisi konsisten.",
+          "isCorrect": false,
+          "rationale": "Ini adalah sifat Consistency."
+        },
+        {
+          "text": "Selesai seluruhnya atau gagal seluruhnya (all or nothing).",
+          "isCorrect": true,
+          "rationale": "Atomicity memastikan bahwa transaksi adalah unit tunggal, harus berhasil sepenuhnya atau tidak sama sekali (AK09)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 39,
+      "question": "Sifat transaksi Consistency (Konsistensi) memastikan bahwa transaksi akan...",
+      "answerOptions": [
+        {
+          "text": "Selesai seluruhnya atau gagal seluruhnya.",
+          "isCorrect": false,
+          "rationale": "Ini adalah sifat Atomicity."
+        },
+        {
+          "text": "Setelah transaksi selesai, semua perubahannya harus permanen.",
+          "isCorrect": false,
+          "rationale": "Ini adalah sifat Durability."
+        },
+        {
+          "text": "Membawa basis data dari satu keadaan konsisten ke keadaan konsisten lainnya.",
+          "isCorrect": true,
+          "rationale": "Consistency menjamin bahwa basis data tetap valid setelah transaksi selesai, mematuhi semua batasan (AK09)."
+        },
+        {
+          "text": "Berjalan seolah-olah transaksi lain tidak ada.",
+          "isCorrect": false,
+          "rationale": "Ini adalah sifat Isolation."
+        }
+      ]
+    },
+    {
+      "questionNumber": 40,
+      "question": "Sifat transaksi Isolation (Isolasi) memastikan bahwa...",
+      "answerOptions": [
+        {
+          "text": "Basis data dapat kembali ke kondisi sebelum transaksi.",
+          "isCorrect": false,
+          "rationale": "Ini terkait dengan Recovery (Rollback)."
+        },
+        {
+          "text": "Semua transaksi berjalan secara bersamaan dengan cepat.",
+          "isCorrect": false,
+          "rationale": "Tujuan utamanya adalah kebenaran data, bukan hanya kecepatan."
+        },
+        {
+          "text": "Transaksi berjalan seolah-olah tidak ada transaksi lain yang berjalan bersamaan.",
+          "isCorrect": true,
+          "rationale": "Isolation memastikan hasil dari transaksi yang bersamaan harus sama dengan jika transaksi tersebut berjalan secara berurutan (AK09)."
+        },
+        {
+          "text": "Data yang disimpan bersifat atomik.",
+          "isCorrect": false,
+          "rationale": "Ini adalah sifat Atomicity."
+        }
+      ]
+    },
+    {
+      "questionNumber": 41,
+      "question": "Sifat transaksi Durability (Ketahanan) memastikan bahwa...",
+      "answerOptions": [
+        {
+          "text": "Setelah transaksi berhasil (COMMIT), perubahannya di basis data harus permanen dan tidak hilang meskipun terjadi kegagalan sistem.",
+          "isCorrect": true,
+          "rationale": "Durability menjamin bahwa hasil transaksi yang berhasil dicatat secara permanen (AK09)."
+        },
+        {
+          "text": "Transaksi dapat diulang dari awal jika terjadi kegagalan.",
+          "isCorrect": false,
+          "rationale": "Ini terkait dengan Recovery atau Atomicity."
+        },
+        {
+          "text": "Data tidak mudah rusak.",
+          "isCorrect": false,
+          "rationale": "Ini terlalu umum, Durability fokus pada hasil transaksi yang permanen."
+        },
+        {
+          "text": "Transaksil dapat diselesaikan dengan cepat.",
+          "isCorrect": false,
+          "rationale": "Ini terkait dengan Performance/Optimization."
+        }
+      ]
+    },
+    {
+      "questionNumber": 42,
+      "question": "Dalam manajemen transaksi, ketika terjadi deadlock, perintah yang harus dilaksanakan untuk mengembalikan basis data ke kondisi waktu paling mendekati deadlock adalah...",
+      "answerOptions": [
+        {
+          "text": "COMMIT",
+          "isCorrect": false,
+          "rationale": "COMMIT digunakan untuk menyimpan perubahan secara permanen."
+        },
+        {
+          "text": "ROLLBACK",
+          "isCorrect": true,
+          "rationale": "ROLLBACK digunakan untuk membatalkan semua perubahan yang dilakukan oleh transaksi dan mengembalikan basis data ke kondisi sebelumnya (AK09)."
+        },
+        {
+          "text": "UPDATE",
+          "isCorrect": false,
+          "rationale": "UPDATE adalah perintah DML."
+        },
+        {
+          "text": "CHECKPOINT",
+          "isCorrect": false,
+          "rationale": "CHECKPOINT digunakan dalam proses pemulihan, bukan perintah pembatalan transaksi."
+        }
+      ]
+    },
+    {
+      "questionNumber": 43,
+      "question": "Perintah SQL yang termasuk dalam kategori TCL (Transaction Control Language) yang digunakan untuk menyimpan perubahan secara permanen di basis data adalah...",
+      "answerOptions": [
+        {
+          "text": "ROLLBACK",
+          "isCorrect": false,
+          "rationale": "ROLLBACK digunakan untuk membatalkan transaksi."
+        },
+        {
+          "text": "COMMIT",
+          "isCorrect": true,
+          "rationale": "COMMIT digunakan untuk mengakhiri transaksi dan membuat semua perubahan permanen."
+        },
+        {
+          "text": "SAVEPOINT",
+          "isCorrect": false,
+          "rationale": "SAVEPOINT digunakan untuk menandai titik di dalam transaksi yang dapat di-ROLLBACK."
+        },
+        {
+          "text": "GRANT",
+          "isCorrect": false,
+          "rationale": "GRANT adalah perintah DCL."
+        }
+      ]
+    },
+    {
+      "questionNumber": 44,
+      "question": "Perintah SQL yang termasuk dalam kategori DCL (Data Control Language) yang digunakan untuk memberikan hak akses kepada pengguna adalah...",
+      "answerOptions": [
+        {
+          "text": "SELECT",
+          "isCorrect": false,
+          "rationale": "SELECT adalah perintah DML."
+        },
+        {
+          "text": "ALTER",
+          "isCorrect": false,
+          "rationale": "ALTER adalah perintah DDL."
+        },
+        {
+          "text": "GRANT",
+          "isCorrect": true,
+          "rationale": "GRANT digunakan untuk memberikan (grant) izin atau hak akses kepada pengguna."
+        },
+        {
+          "text": "REVOKE",
+          "isCorrect": false,
+          "rationale": "REVOKE digunakan untuk mencabut izin."
+        }
+      ]
+    },
+    {
+      "questionNumber": 45,
+      "question": "Menurut Gordon C. Everest, DBMS didefinisikan sebagai sebuah aplikasi...",
+      "answerOptions": [
+        {
+          "text": "Yang dapat menangani akses pengguna kepada basis data.",
+          "isCorrect": false,
+          "rationale": "Ini adalah definisi dari C.J. Date."
+        },
+        {
+          "text": "Manajemen sumber daya data.",
+          "isCorrect": true,
+          "rationale": "Gordon C. Everest mengemukakan bahwa DBMS adalah sebuah aplikasi manajemen sumber daya data (AK13)."
+        },
+        {
+          "text": "Yang mengolah dan menyimpan data.",
+          "isCorrect": false,
+          "rationale": "Ini adalah kesimpulan umum dari fungsi DBMS."
+        },
+        {
+          "text": "Yang memodelkan data secara konseptual.",
+          "isCorrect": false,
+          "rationale": "Ini adalah fungsi dari perancang basis data."
+        }
+      ]
+    },
+    {
+      "questionNumber": 46,
+      "question": "Tujuan utama dari Normalisasi adalah...",
+      "answerOptions": [
+        {
+          "text": "Meningkatkan kecepatan query (akses data).",
+          "isCorrect": false,
+          "rationale": "Ini adalah tujuan dari De-Normalisasi."
+        },
+        {
+          "text": "Mengelompokkan atribut untuk membentuk struktur relasi yang baik tanpa redundansi/anomali.",
+          "isCorrect": true,
+          "rationale": "Normalisasi adalah teknik untuk membentuk struktur relasi yang baik dengan menghilangkan/meminimalisasi masalah data (AK05)."
+        },
+        {
+          "text": "Menyimpan data secara terpusat.",
+          "isCorrect": false,
+          "rationale": "Penyimpanan terpusat adalah pilihan arsitektur, bukan tujuan normalisasi."
+        },
+        {
+          "text": "Mengubah model konseptual menjadi model fisik.",
+          "isCorrect": false,
+          "rationale": "Normalisasi adalah bagian dari desain logis."
+        }
+      ]
+    },
+    {
+      "questionNumber": 47,
+      "question": "Masalah utama yang ingin dihilangkan pada Bentuk Normal Pertama (1NF) adalah...",
+      "answerOptions": [
+        {
+          "text": "Ketergantungan parsial.",
+          "isCorrect": false,
+          "rationale": "Ini dihilangkan pada 2NF."
+        },
+        {
+          "text": "Ketergantungan transitif.",
+          "isCorrect": false,
+          "rationale": "Ini dihilangkan pada 3NF."
+        },
+        {
+          "text": "*Repeating Groups* atau atribut yang nilainya tidak atomik.",
+          "isCorrect": true,
+          "rationale": "1NF mensyaratkan setiap kolom harus bernilai atomik dan tidak ada grup data yang berulang (AK05)."
+        },
+        {
+          "text": "Anomali Peremajaan.",
+          "isCorrect": false,
+          "rationale": "Ini adalah gejala yang dapat disebabkan oleh pelanggaran 2NF atau 3NF."
+        }
+      ]
+    },
+    {
+      "questionNumber": 48,
+      "question": "Level abstraksi data yang menjelaskan data apa yang disimpan dalam basis data dan hubungan antar data secara keseluruhan (skema keseluruhan), tetapi bukan rincian fisik penyimpanan, disebut...",
+      "answerOptions": [
+        {
+          "text": "Physical Level",
+          "isCorrect": false,
+          "rationale": "Physical Level menjelaskan detail penyimpanan fisik."
+        },
+        {
+          "text": "View Level",
+          "isCorrect": false,
+          "rationale": "View Level hanya menampilkan sebagian data kepada pengguna."
+        },
+        {
+          "text": "Logical Level (Level Konseptual)",
+          "isCorrect": true,
+          "rationale": "Level Konseptual mendeskripsikan struktur basis data secara keseluruhan dan hubungan antar data."
+        },
+        {
+          "text": "External Level",
+          "isCorrect": false,
+          "rationale": "External Level adalah nama lain dari View Level."
+        }
+      ]
+    },
+    {
+      "questionNumber": 49,
+      "question": "Alasan utama dilakukannya De-Normalisasi adalah untuk...",
+      "answerOptions": [
+        {
+          "text": "Menghilangkan semua anomali data.",
+          "isCorrect": false,
+          "rationale": "Ini adalah tujuan Normalisasi."
+        },
+        {
+          "text": "Memperkenalkan Kunci Tamu untuk relasi.",
+          "isCorrect": false,
+          "rationale": "Kunci Tamu adalah bagian dari desain relasional yang normal."
+        },
+        {
+          "text": "Meningkatkan performa query dengan mengurangi join tabel yang intensif.",
+          "isCorrect": true,
+          "rationale": "De-Normalisasi bertujuan meningkatkan performance basis data, terutama untuk query (AK06)."
+        },
+        {
+          "text": "Memastikan data berada pada Bentuk Normal Ketiga (3NF).",
+          "isCorrect": false,
+          "rationale": "De-Normalisasi mengembalikan tabel ke bentuk yang kurang normal."
+        }
+      ]
+    },
+    {
+      "questionNumber": 50,
+      "question": "Dalam Entity Relationship Model (ERM), objek yang mewakili sesuatu di dunia nyata yang harus disimpan informasinya (misalnya: Mahasiswa, Dosen, Buku) disebut...",
+      "answerOptions": [
+        {
+          "text": "Atribut",
+          "isCorrect": false,
+          "rationale": "Atribut adalah ciri/karakteristik dari entitas (misalnya: Nama, NIM)."
+        },
+        {
+          "text": "Relasi",
+          "isCorrect": false,
+          "rationale": "Relasi adalah hubungan antara dua entitas (misalnya: Mengajar, Meminjam)."
+        },
+        {
+          "text": "Entitas",
+          "isCorrect": true,
+          "rationale": "Entitas adalah objek dasar dalam ERM yang merepresentasikan objek di dunia nyata (AK03)."
+        },
+        {
+          "text": "Derajat Kardinalitas",
+          "isCorrect": false,
+          "rationale": "Derajat kardinalitas menjelaskan jumlah hubungan yang dapat dimiliki oleh entitas."
+        }
+      ]
+    }
+  ];
+
+
+  function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal UO Statistika 1 UT</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #ffffff;
+      margin: 0;
+      padding: 0 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 22px;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .jawaban button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      background: #e0e0e0;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .jawaban button:hover {
+      background: #d5d5d5;
+    }
+    .jawaban button.benar {
+      background-color: #c8e6c9;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+    }
+    .penjelasan {
+      background: #e3f2fd;
+      padding: 10px;
+      border-left: 5px solid #1976d2;
+      margin-top: 10px;
+      display: none;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .counter {
+      background: #fff3cd;
+      padding: 10px;
+      border-left: 5px solid #ffa000;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+    @media screen and (max-width: 480px) {
+      h1 { font-size: 18px; }
+      .jawaban button { font-size: 15px; padding: 12px; }
+    }
+
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal Metode Statistika 1 UT</h1>
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+
+function updateCounter() {
+  document.getElementById("benar").textContent = totalBenar;
+  document.getElementById("salah").textContent = totalSalah;
+  }
+  const soalList = [
+    {
+  soal: "1. Ilmu yang mempelajari cara pengumpulan, penyajian, analisis, dan penarikan kesimpulan dari data disebut...",
+  pilihan: ["Matematika", "Statistika", "Ekonomi", "Logika"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Matematika adalah dasar perhitungan tetapi tidak fokus pada data.",
+    "Benar. Statistika adalah ilmu tentang data, mulai dari pengumpulan hingga interpretasi.",
+    "Salah. Ekonomi mempelajari kegiatan ekonomi, bukan fokus pada data secara umum.",
+    "Salah. Logika adalah ilmu berpikir, bukan ilmu data."
+  ]
+},
+{
+  soal: "2. Salah satu tujuan utama statistika deskriptif adalah...",
+  pilihan: ["Menarik kesimpulan dari populasi", "Menghitung probabilitas", "Menyajikan data dengan ringkas", "Menentukan hipotesis"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Ini adalah tujuan statistika inferensial.",
+    "Salah. Probabilitas bagian dari teori peluang.",
+    "Benar. Statistika deskriptif menyajikan data dengan tabel, grafik, dan ukuran ringkasan.",
+    "Salah. Hipotesis berkaitan dengan statistika inferensial."
+  ]
+},
+{
+  soal: "3. Data tinggi badan (dalam cm) siswa adalah contoh dari data...",
+  pilihan: ["Kualitatif nominal", "Kuantitatif diskrit", "Kuantitatif kontinu", "Kualitatif ordinal"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Tinggi badan tidak termasuk kategori.",
+    "Salah. Diskrit adalah bilangan yang bisa dihitung, seperti jumlah orang.",
+    "Benar. Tinggi badan adalah data kuantitatif yang bisa memiliki desimal, termasuk data kontinu.",
+    "Salah. Tinggi badan bukan data kategori berurutan."
+  ]
+},
+{
+  soal: "4. Diketahui data: 10, 20, 30, 40, 50. Berapa rata-ratanya?",
+  pilihan: ["25", "30", "40", "50"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Total = 150 → rata-rata = 150 ÷ 5 = 30, bukan 25.",
+    "Benar. Jumlah 10+20+30+40+50 = 150. Dibagi 5 = 30.",
+    "Salah. 40 adalah nilai ke-empat, bukan rata-rata.",
+    "Salah. 50 adalah nilai maksimum."
+  ]
+},
+{
+  soal: "5. Ukuran pemusatan data berikut ini, kecuali...",
+  pilihan: ["Mean", "Median", "Modus", "Range"],
+  kunci: 3,
+  penjelasan: [
+    "Salah. Mean adalah rata-rata, termasuk ukuran pemusatan.",
+    "Salah. Median adalah nilai tengah, ukuran pemusatan.",
+    "Salah. Modus adalah nilai yang paling sering muncul.",
+    "Benar. Range adalah ukuran penyebaran, bukan pemusatan."
+  ]
+},
+{
+  soal: "6. Data: 5, 10, 10, 15, 20. Modus dari data tersebut adalah...",
+  pilihan: ["5", "10", "15", "20"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. 5 muncul hanya satu kali.",
+    "Benar. 10 muncul dua kali, paling sering.",
+    "Salah. 15 hanya sekali.",
+    "Salah. 20 hanya muncul sekali."
+  ]
+},
+{
+  soal: "7. Berikut ini yang merupakan variabel kualitatif adalah...",
+  pilihan: ["Tinggi badan", "Berat badan", "Jenis kelamin", "Jumlah kendaraan"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Tinggi badan adalah kuantitatif.",
+    "Salah. Berat badan termasuk kuantitatif.",
+    "Benar. Jenis kelamin adalah kategori, tidak bisa dihitung secara numerik.",
+    "Salah. Jumlah kendaraan adalah kuantitatif diskrit."
+  ]
+},
+{
+  soal: "8. Data: 12, 18, 15, 20, 25. Median dari data tersebut adalah...",
+  pilihan: ["15", "18", "20", "25"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. 15 adalah urutan kedua.",
+    "Benar. Urutkan: 12,15,18,20,25 → median = nilai ke-3 = 18.",
+    "Salah. 20 adalah urutan keempat.",
+    "Salah. 25 adalah nilai maksimum."
+  ]
+},
+{
+  soal: "9. Ukuran penyebaran yang menggunakan nilai maksimum dan minimum adalah...",
+  pilihan: ["Median", "Range", "Modus", "Rata-rata"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Median adalah nilai tengah, bukan penyebaran.",
+    "Benar. Range = nilai maksimum – nilai minimum.",
+    "Salah. Modus adalah nilai yang sering muncul.",
+    "Salah. Rata-rata adalah ukuran pemusatan."
+  ]
+},
+{
+  soal: "10. Jenis data berdasarkan cara memperolehnya dibedakan menjadi...",
+  pilihan: ["Primer dan sekunder", "Diskrit dan kontinu", "Nominal dan ordinal", "Interval dan rasio"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Data primer dikumpulkan langsung, sekunder dari pihak lain.",
+    "Salah. Itu jenis data berdasarkan bentuk.",
+    "Salah. Itu skala pengukuran.",
+    "Salah. Itu skala pengukuran juga."
+  ]
+},
+{
+  soal: "11. Jika modus = 20, median = 25, dan mean = 30, distribusi data bersifat...",
+  pilihan: ["Simetris", "Miring ke kiri", "Miring ke kanan", "Tidak terdefinisi"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Simetris jika mean = median = modus.",
+    "Salah. Miring kiri jika mean < median < modus.",
+    "Benar. Miring kanan jika mean > median > modus.",
+    "Salah. Semua nilai sudah tersedia, bisa didefinisikan."
+  ]
+},
+{
+  soal: "12. Langkah pertama dalam menyusun tabel distribusi frekuensi adalah...",
+  pilihan: ["Menentukan banyak kelas", "Menghitung panjang kelas", "Menentukan data terkecil dan terbesar", "Menentukan tepi kelas"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Banyak kelas ditentukan setelah mengetahui rentang data.",
+    "Salah. Panjang kelas ditentukan setelah banyak kelas ditentukan.",
+    "Benar. Data terkecil dan terbesar dibutuhkan untuk menentukan rentang data.",
+    "Salah. Tepi kelas ditentukan di akhir proses."
+  ]
+},
+{
+  soal: "13. Jika data: 4, 8, 6, 10, maka nilai rata-ratanya adalah...",
+  pilihan: ["6", "7", "8", "9"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. (4+8+6+10) = 28, 28 ÷ 4 = 7.",
+    "Benar. Jumlah 4+8+6+10 = 28 → rata-rata = 7.",
+    "Salah. 8 adalah nilai kedua terbesar.",
+    "Salah. 9 terlalu tinggi."
+  ]
+},
+{
+  soal: "14. Contoh skala pengukuran interval adalah...",
+  pilihan: ["Suhu dalam Celcius", "Umur", "Jenis pekerjaan", "Pendapatan"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Skala interval memiliki jarak tetap tapi tidak memiliki nol mutlak.",
+    "Salah. Umur termasuk skala rasio karena ada nol mutlak.",
+    "Salah. Jenis pekerjaan berskala nominal.",
+    "Salah. Pendapatan berskala rasio."
+  ]
+},
+{
+  soal: "15. Dalam pengolahan data, simbol n menyatakan...",
+  pilihan: ["Jumlah data populasi", "Rata-rata", "Jumlah data sampel", "Simpangan baku"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Jumlah populasi biasanya dilambangkan dengan N.",
+    "Salah. Simbol rata-rata adalah x̄.",
+    "Benar. n menunjukkan jumlah elemen dalam sampel.",
+    "Salah. Simpangan baku dilambangkan dengan s (sampel) atau σ (populasi)."
+  ]
+},
+{
+  soal: "16. Yang termasuk data berkelompok adalah...",
+  pilihan: [
+    "70, 72, 74, 76",
+    "70–74, 75–79, 80–84",
+    "Data tinggi badan siswa satu kelas",
+    "Angka ulangan matematika siswa"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Itu adalah data tunggal (tidak dikelompokkan).",
+    "Benar. Data dalam bentuk interval termasuk data berkelompok.",
+    "Salah. Masih harus dilihat bentuk penyajiannya.",
+    "Salah. Angka ulangan bisa tunggal, bukan otomatis berkelompok."
+  ]
+},
+{
+  soal: "17. Nilai tengah dari kelas interval disebut...",
+  pilihan: ["Median", "Titik tengah", "Modus", "Frekuensi"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Median adalah nilai tengah semua data.",
+    "Benar. Titik tengah kelas (class mark) = (batas bawah + batas atas)/2.",
+    "Salah. Modus adalah nilai yang paling sering muncul.",
+    "Salah. Frekuensi menunjukkan jumlah data, bukan titik tengah."
+  ]
+},
+{
+  soal: "18. Jika suatu data dikelompokkan dalam interval 10–14, 15–19, 20–24, maka lebar kelasnya adalah...",
+  pilihan: ["4", "5", "10", "14"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. 4 adalah selisih biasa, bukan lebar kelas.",
+    "Benar. Lebar kelas = 15 – 10 = 5 (batas bawah kelas berikut – batas bawah kelas sekarang).",
+    "Salah. 10 terlalu besar.",
+    "Salah. 14 adalah batas atas kelas pertama."
+  ]
+},
+{
+  soal: "19. Fungsi histogram adalah untuk menyajikan...",
+  pilihan: [
+    "Data kualitatif",
+    "Distribusi frekuensi data berkelompok",
+    "Distribusi data nominal",
+    "Data diskrit"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Data kualitatif tidak disajikan dalam histogram.",
+    "Benar. Histogram menyajikan data berkelompok dalam bentuk batang tanpa jarak.",
+    "Salah. Data nominal disajikan dengan diagram batang.",
+    "Salah. Histogram untuk data kontinu, bukan diskrit."
+  ]
+},
+{
+  soal: "20. Poligon frekuensi dibuat dengan cara...",
+  pilihan: [
+    "Menghubungkan titik tengah kelas dengan frekuensi",
+    "Menggunakan tepi bawah kelas",
+    "Menggunakan garis patah dengan frekuensi kumulatif",
+    "Membuat persegi panjang pada tiap kelas"
+  ],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Poligon frekuensi menghubungkan titik tengah setiap kelas dengan frekuensinya.",
+    "Salah. Tepi bawah kelas digunakan dalam ogive.",
+    "Salah. Itu ogive, bukan poligon.",
+    "Salah. Persegi panjang adalah ciri histogram."
+  ]
+},
+{
+  soal: "21. Ogive digunakan untuk menyajikan...",
+  pilihan: [
+    "Distribusi data tunggal",
+    "Distribusi frekuensi kumulatif",
+    "Hubungan antar variabel",
+    "Data kualitatif"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Ogive tidak digunakan untuk data tunggal.",
+    "Benar. Ogive menyajikan distribusi frekuensi kumulatif (naik atau turun).",
+    "Salah. Hubungan antar variabel digambarkan dengan scatter plot.",
+    "Salah. Data kualitatif tidak disajikan dalam ogive."
+  ]
+},
+{
+  soal: "22. Jika diketahui data berkelompok dengan Σfx = 420 dan Σf = 20, maka rata-ratanya adalah...",
+  pilihan: ["20", "21", "22", "24"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. 420/20 = 21, bukan 20.",
+    "Salah. Hasilnya adalah 21, bukan 22.",
+    "Benar. Rata-rata = Σfx / Σf = 420 ÷ 20 = 21.",
+    "Salah. 24 terlalu tinggi."
+  ]
+},
+{
+  soal: "23. Kuartil ke-2 pada data berkelompok sama dengan...",
+  pilihan: ["Q1", "Median", "Modus", "Persentil ke-75"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Q1 adalah kuartil pertama.",
+    "Benar. Kuartil ke-2 adalah median.",
+    "Salah. Modus berbeda konsep dengan kuartil.",
+    "Salah. Persentil ke-75 = Q3."
+  ]
+},
+{
+  soal: "24. Dalam tabel distribusi frekuensi, kolom frekuensi kumulatif naik ditentukan dengan...",
+  pilihan: [
+    "Menjumlahkan frekuensi dari atas ke bawah",
+    "Mengurangi frekuensi dari total",
+    "Mengalikan frekuensi dengan kelas",
+    "Menjumlahkan frekuensi dari bawah ke atas"
+  ],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Frekuensi kumulatif naik diperoleh dengan penjumlahan dari atas ke bawah.",
+    "Salah. Ini untuk frekuensi kumulatif menurun.",
+    "Salah. Tidak relevan dalam distribusi frekuensi.",
+    "Salah. Dari bawah ke atas menghasilkan kumulatif menurun."
+  ]
+},
+{
+  soal: "25. Fungsi dari titik tengah kelas dalam statistik adalah...",
+  pilihan: [
+    "Menentukan median data",
+    "Sebagai nilai representatif dalam kelas interval",
+    "Menentukan frekuensi relatif",
+    "Menghitung luas histogram"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Median ditentukan melalui frekuensi kumulatif.",
+    "Benar. Titik tengah dianggap mewakili nilai seluruh kelas.",
+    "Salah. Frekuensi relatif = frekuensi/total.",
+    "Salah. Luas histogram tidak ditentukan oleh titik tengah."
+  ]
+},
+{
+  soal: "26. Rumus median data berkelompok adalah...",
+  pilihan: [
+    "L + ((n/2 - F)/f) × p",
+    "L + ((n - F)/f) × p",
+    "f + ((n/2) - F) × L",
+    "L + ((f - F)/n) × p"
+  ],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Rumus median = L + ((n/2 – F)/f) × p.",
+    "Salah. Rumus ini tidak sesuai format standar.",
+    "Salah. F dan L salah penempatan.",
+    "Salah. F/f seharusnya ditempatkan berbeda."
+  ]
+},
+{
+  soal: "27. Nilai dari Q3 pada data berkelompok terletak di kelas keberapa?",
+  pilihan: [
+    "Kelas ke-1",
+    "Kelas ke-2",
+    "Kelas yang memuat n × 3/4",
+    "Kelas tengah"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Tergantung jumlah data.",
+    "Salah. Tidak selalu di kelas ke-2.",
+    "Benar. Q3 = kelas di mana frekuensi kumulatif ≥ 3/4n.",
+    "Salah. Median adalah kelas tengah, bukan Q3."
+  ]
+},
+{
+  soal: "28. Jika pada data berkelompok terdapat dua kelas dengan frekuensi tertinggi yang sama, maka...",
+  pilihan: [
+    "Data tidak memiliki modus",
+    "Data memiliki dua modus",
+    "Data memiliki satu modus",
+    "Data memiliki tiga modus"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Jika dua nilai frekuensi sama tertinggi, maka bimodal.",
+    "Benar. Dua modus berarti bimodal.",
+    "Salah. Satu modus jika hanya satu frekuensi tertinggi.",
+    "Salah. Tiga modus disebut trimodal, jarang terjadi."
+  ]
+},
+{
+  soal: "29. Desil ke-5 (D5) memotong data pada persentase keberapa?",
+  pilihan: ["10%", "25%", "50%", "75%"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. D1 = 10%.",
+    "Salah. D3 = 30%.",
+    "Benar. D5 = 50% = median.",
+    "Salah. D7 = 70%."
+  ]
+},
+{
+  soal: "30. Perbedaan utama antara data diskrit dan kontinu terletak pada...",
+  pilihan: [
+    "Bentuk tabelnya",
+    "Kemampuan menerima pecahan",
+    "Sifat kategori",
+    "Jenis grafiknya"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Diskrit dan kontinu bisa disajikan dalam tabel sama.",
+    "Benar. Diskrit hanya menerima bilangan bulat, kontinu bisa pecahan.",
+    "Salah. Kategori tidak relevan.",
+    "Salah. Grafik bisa sama, tergantung jenis data."
+  ]
+},
+{
+  soal: "31. Jika diketahui data: 5, 7, 8, 10, 10, maka variansinya adalah...",
+  pilihan: ["3", "3.5", "4", "4.5"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Rata-rata = 8. Variansi = [(5-8)² + (7-8)² + (8-8)² + (10-8)² + (10-8)²]/5 = (9+1+0+4+4)/5 = 18/5 = 3.6 dibulatkan ke 3.",
+    "Salah. 3.5 terlalu tinggi dari nilai sebenarnya.",
+    "Salah. 4 terlalu tinggi.",
+    "Salah. 4.5 berasal dari salah asumsi pembagian."
+  ]
+},
+{
+  soal: "32. Standar deviasi adalah...",
+  pilihan: [
+    "Rata-rata dari data",
+    "Akar kuadrat dari variansi",
+    "Selisih data tertinggi dan terendah",
+    "Nilai tengah data"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Itu adalah mean.",
+    "Benar. Standar deviasi = √(variansi).",
+    "Salah. Itu adalah range.",
+    "Salah. Itu adalah median."
+  ]
+},
+{
+  soal: "33. Jika variansi data = 16, maka standar deviasi = ...",
+  pilihan: ["2", "4", "8", "16"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. √16 = 4, bukan 2.",
+    "Benar. √16 = 4.",
+    "Salah. 8 terlalu tinggi.",
+    "Salah. 16 adalah variansi, bukan deviasi."
+  ]
+},
+{
+  soal: "34. Jika standar deviasi = 5 dan mean = 25, maka koefisien variasi (dalam %) adalah...",
+  pilihan: ["5%", "20%", "25%", "30%"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. CV = (5/25)×100 = 20%, bukan 5%.",
+    "Benar. CV = (5/25) × 100 = 20%.",
+    "Salah. 25% berasal dari salah pembilang.",
+    "Salah. 30% terlalu besar."
+  ]
+},
+{
+  soal: "35. Jika sebuah distribusi memiliki kemiringan (skewness) negatif, maka bentuk distribusinya adalah...",
+  pilihan: [
+    "Simetris",
+    "Condong ke kiri",
+    "Condong ke kanan",
+    "Normal"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Simetris berarti skewness = 0.",
+    "Benar. Skewness negatif → condong ke kiri.",
+    "Salah. Skewness positif berarti condong ke kanan.",
+    "Salah. Distribusi normal memiliki skewness 0."
+  ]
+},
+{
+  soal: "36. Data: 10, 20, 20, 30, 30, 30, 40. Modus dari data tersebut adalah...",
+  pilihan: ["20", "30", "25", "40"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. 20 muncul 2 kali.",
+    "Benar. 30 muncul paling banyak (3 kali).",
+    "Salah. 25 bukan nilai yang muncul.",
+    "Salah. 40 hanya muncul sekali."
+  ]
+},
+{
+  soal: "37. Probabilitas dari suatu kejadian A adalah 0.3 dan kejadian B adalah 0.5. Jika A dan B saling lepas, berapa P(A ∪ B)?",
+  pilihan: ["0.2", "0.3", "0.5", "0.8"],
+  kunci: 3,
+  penjelasan: [
+    "Salah. 0.2 adalah kemungkinan dari P(A ∩ B) jika tidak lepas.",
+    "Salah. 0.3 hanya P(A).",
+    "Salah. 0.5 adalah P(B).",
+    "Benar. Jika A dan B saling lepas, P(A ∪ B) = P(A) + P(B) = 0.3 + 0.5 = 0.8."
+  ]
+},
+{
+  soal: "38. Jika dua kejadian A dan B tidak saling lepas, maka P(A ∪ B) = ...",
+  pilihan: [
+    "P(A) + P(B)",
+    "P(A) + P(B) − P(A ∩ B)",
+    "P(A ∩ B)",
+    "P(A) × P(B)"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Rumus ini hanya untuk kejadian saling lepas.",
+    "Benar. Untuk kejadian tidak saling lepas, harus dikurangi P(A ∩ B).",
+    "Salah. Ini hanya bagian dari P(A ∪ B).",
+    "Salah. Ini digunakan untuk kejadian independen."
+  ]
+},
+{
+  soal: "39. Dari satu set kartu angka 1 sampai 10, peluang terambil angka genap adalah...",
+  pilihan: ["0.2", "0.4", "0.5", "0.6"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Genap ada 5 dari 10 → bukan 0.2.",
+    "Salah. 0.4 jika hanya 4 angka genap.",
+    "Benar. Angka genap: 2, 4, 6, 8, 10 → total 5 → P = 5/10 = 0.5.",
+    "Salah. 0.6 terlalu besar."
+  ]
+},
+{
+  soal: "40. Sebuah dadu dilempar sekali. Peluang muncul angka lebih dari 4 adalah...",
+  pilihan: ["1/6", "2/6", "3/6", "4/6"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Hanya satu angka bukan lebih dari 4.",
+    "Benar. Angka lebih dari 4 = 5 dan 6 → total 2 angka → 2/6 = 1/3.",
+    "Salah. 3 angka > 4 tidak ada.",
+    "Salah. 4 angka > 4 juga tidak benar."
+  ]
+},
+{
+  soal: "41. Jika peluang sukses suatu percobaan adalah 0.6, maka peluang gagal adalah...",
+  pilihan: ["0.3", "0.4", "0.5", "0.6"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. P(sukses) + P(gagal) harus = 1 → 0.6 + 0.3 = 0.9.",
+    "Benar. 1 – 0.6 = 0.4 → peluang gagal.",
+    "Salah. 0.5 jika peluang sukses 0.5.",
+    "Salah. Itu peluang sukses, bukan gagal."
+  ]
+},
+{
+  soal: "42. Dalam distribusi binomial B(n=4, p=0.5), peluang mendapatkan 2 sukses adalah...",
+  pilihan: ["0.375", "0.500", "0.625", "0.750"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Gunakan rumus: P(X=2) = C(4,2) * (0.5)^2 * (0.5)^2 = 6 × 0.25 × 0.25 = 0.375.",
+    "Salah. 0.5 hanya untuk nilai rata-rata.",
+    "Salah. Nilai terlalu besar.",
+    "Salah. Bukan hasil dari distribusi binomial."
+  ]
+},
+{
+  soal: "43. Distribusi normal memiliki ciri utama yaitu...",
+  pilihan: [
+    "Berbentuk sembarang",
+    "Asimetris",
+    "Simetris berbentuk lonceng",
+    "Miring ke kiri"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Distribusi normal berbentuk khas.",
+    "Salah. Distribusi normal justru simetris.",
+    "Benar. Distribusi normal = simetris, berbentuk lonceng.",
+    "Salah. Itu ciri distribusi skew kiri."
+  ]
+},
+{
+  soal: "44. Dalam distribusi normal standar, nilai rata-rata (μ) dan simpangan baku (σ) adalah...",
+  pilihan: [
+    "μ = 1, σ = 0",
+    "μ = 0, σ = 1",
+    "μ = 0, σ = 0",
+    "μ = 1, σ = 1"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Rata-rata standar adalah 0.",
+    "Benar. Distribusi normal standar: μ = 0, σ = 1.",
+    "Salah. σ tidak mungkin 0.",
+    "Salah. μ = 1 bukan distribusi standar."
+  ]
+},
+{
+  soal: "45. Dalam distribusi normal, peluang total seluruh kejadian adalah...",
+  pilihan: ["0", "0.5", "1", "2"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Mustahil peluang total = 0.",
+    "Salah. 0.5 hanya untuk satu sisi kurva.",
+    "Benar. Total seluruh peluang = 1.",
+    "Salah. Peluang tidak pernah lebih dari 1."
+  ]
+},
+{
+  soal: "46. Jika distribusi normal memiliki μ = 50 dan σ = 5, maka Z-score untuk X = 60 adalah...",
+  pilihan: ["1", "2", "2.5", "3"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. (60−50)/5 = 10/5 = 2.",
+    "Benar. Z = (X − μ) / σ = (60 − 50)/5 = 2.",
+    "Salah. 2.5 terlalu besar.",
+    "Salah. 3 hanya jika X = 65."
+  ]
+},
+{
+  soal: "47. Fungsi distribusi sampling digunakan untuk...",
+  pilihan: [
+    "Menentukan ukuran populasi",
+    "Menaksir parameter populasi dari sampel",
+    "Menghitung rata-rata populasi",
+    "Mencari data tunggal"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Ukuran populasi ditentukan langsung.",
+    "Benar. Distribusi sampling menaksir nilai populasi melalui statistik sampel.",
+    "Salah. Rata-rata populasi biasanya tidak diketahui.",
+    "Salah. Data tunggal bukan bagian distribusi sampling."
+  ]
+},
+{
+  soal: "48. Distribusi t digunakan saat...",
+  pilihan: [
+    "Jumlah sampel besar (n > 30)",
+    "Standar deviasi populasi diketahui",
+    "Jumlah sampel kecil dan σ tidak diketahui",
+    "Data berskala nominal"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Sampel besar → pakai Z.",
+    "Salah. Jika σ diketahui → pakai Z.",
+    "Benar. Distribusi t digunakan jika n < 30 dan σ tidak diketahui.",
+    "Salah. Skala nominal tidak dianalisis dengan distribusi t."
+  ]
+},
+{
+  soal: "49. Jika nilai uji t berada di luar daerah penerimaan, maka keputusan uji adalah...",
+  pilihan: [
+    "Terima H0",
+    "Tolak H0",
+    "Tunda H0",
+    "Tidak ada keputusan"
+  ],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Nilai uji di luar daerah penerimaan → H0 ditolak.",
+    "Benar. Jika nilai uji lebih ekstrem dari nilai kritis, H0 ditolak.",
+    "Salah. Tidak ada istilah tunda H0.",
+    "Salah. Uji hipotesis harus ambil keputusan."
+  ]
+},
+{
+  soal: "50. Nilai p-value menunjukkan...",
+  pilihan: [
+    "Probabilitas H0 benar",
+    "Probabilitas kesalahan tipe I",
+    "Probabilitas memperoleh hasil seperti data jika H0 benar",
+    "Batas kritis pengambilan keputusan"
+  ],
+  kunci: 2,
+  penjelasan: [
+    "Salah. P-value tidak menunjukkan probabilitas H0 benar.",
+    "Salah. Itu adalah alpha (tingkat signifikansi), bukan p-value.",
+    "Benar. P-value = probabilitas memperoleh data seperti hasil pengamatan jika H0 benar.",
+    "Salah. Batas kritis ditentukan oleh α, bukan p-value."
+  ]
+}
+  ];
+
+   const container = document.getElementById("container");
+
+  soalList.forEach((s, idx) => {
+    const div = document.createElement("div");
+    div.className = "soal";
+    div.innerHTML = `<p><b>${s.soal}</b></p>`;
+    const jawabanDiv = document.createElement("div");
+    jawabanDiv.className = "jawaban";
+    s.pilihan.forEach((j, jIdx) => {
+      const btn = document.createElement("button");
+      btn.innerText = j;
+      btn.onclick = () => {
+        if (btn.clicked) return;
+        btn.clicked = true;
+        [...jawabanDiv.children].forEach(b => b.disabled = true);
+        if (jIdx === s.kunci) {
+        btn.classList.add("benar");
+        totalBenar++;
+        } else {
+        btn.classList.add("salah");
+        jawabanDiv.children[s.kunci].classList.add("benar");
+        totalSalah++;
+        }
+        updateCounter();
+
+        const penjelasanDiv = document.createElement("div");
+        penjelasanDiv.className = "penjelasan";
+        penjelasanDiv.innerText = "Penjelasan: " + s.penjelasan[jIdx];
+        div.appendChild(penjelasanDiv);
+        penjelasanDiv.style.display = "block";
+      };
+      jawabanDiv.appendChild(btn);
+    });
+    div.appendChild(jawabanDiv);
+    container.appendChild(div);
+  });
+</script>
+
+</body>
+</html>

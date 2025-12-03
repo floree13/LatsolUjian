@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal UO Struktur Data UT</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #ffffff;
+      margin: 0;
+      padding: 0 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 20px 0;
+      font-size: 22px;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .jawaban button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      background: #e0e0e0;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .jawaban button:hover {
+      background: #d5d5d5;
+    }
+    .jawaban button.benar {
+      background-color: #c8e6c9;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+    }
+    .penjelasan {
+      background: #e3f2fd;
+      padding: 10px;
+      border-left: 5px solid #1976d2;
+      margin-top: 10px;
+      display: none;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .counter {
+      background: #fff3cd;
+      padding: 10px;
+      border-left: 5px solid #ffa000;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      font-size: 16px;
+    }
+    @media screen and (max-width: 480px) {
+      h1 { font-size: 18px; }
+      .jawaban button { font-size: 15px; padding: 12px; }
+    }
+
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal Struktur Data UT</h1>
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+
+function updateCounter() {
+  document.getElementById("benar").textContent = totalBenar;
+  document.getElementById("salah").textContent = totalSalah;
+  }
+
+  const soalList = [
+    {
+      soal: "1. Struktur data yang bersifat LIFO adalah...",
+      pilihan: ["Queue", "Stack", "Linked List", "Tree"],
+      kunci: 1,
+      penjelasan: [
+        "Queue bersifat FIFO, bukan LIFO.",
+        "Benar. Stack menggunakan prinsip Last In First Out (LIFO).",
+        "Linked list tidak memiliki urutan LIFO atau FIFO secara langsung.",
+        "Tree adalah struktur hierarki, bukan LIFO."
+      ]
+    },
+    {
+      soal: "2. Struktur data yang cocok untuk antrian di bank adalah...",
+      pilihan: ["Stack", "Queue", "Tree", "Graph"],
+      kunci: 1,
+      penjelasan: [
+        "Stack tidak cocok untuk antrian karena bersifat LIFO.",
+        "Benar. Queue mengikuti prinsip FIFO yang cocok untuk sistem antrian.",
+        "Tree tidak cocok untuk model antrian linear.",
+        "Graph digunakan untuk hubungan antar simpul, bukan antrian."
+      ]
+    },
+    {
+      soal: "3. Operasi untuk menambah elemen ke dalam stack disebut...",
+      pilihan: ["Pop", "Push", "Insert", "Add"],
+      kunci: 1,
+      penjelasan: [
+        "Pop adalah operasi untuk menghapus elemen dari stack.",
+        "Benar. Push adalah operasi untuk menambahkan elemen ke dalam stack.",
+        "Insert bukan istilah khusus dalam stack.",
+        "Add lebih umum, tidak spesifik untuk stack."
+      ]
+    },
+    {
+  soal: "4. Linked List adalah struktur data yang terdiri dari...",
+  pilihan: ["Node yang saling terhubung", "Array tetap", "Matrix", "Stack bertingkat"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Linked list terdiri dari node yang saling terhubung melalui pointer.",
+    "Array tetap bersifat statis, tidak seperti linked list yang dinamis.",
+    "Matrix adalah array dua dimensi, bukan struktur node seperti linked list.",
+    "Stack bertingkat bukan istilah dalam struktur data dasar."
+  ]
+},
+{
+  soal: "5. Binary tree maksimal memiliki berapa cabang per node?",
+  pilihan: ["1", "2", "3", "Tak terbatas"],
+  kunci: 1,
+  penjelasan: [
+    "1 hanya berlaku untuk unary tree, bukan binary tree.",
+    "Benar. Binary tree memiliki maksimal 2 anak: kiri dan kanan.",
+    "3 cabang berlaku pada ternary tree, bukan binary tree.",
+    "Binary tree dibatasi hanya 2 cabang per node."
+  ]
+},
+{
+  soal: "6. Operasi pencarian pada binary search tree memiliki kompleksitas waktu rata-rata...",
+  pilihan: ["O(n)", "O(log n)", "O(n log n)", "O(1)"],
+  kunci: 1,
+  penjelasan: [
+    "O(n) hanya terjadi pada kasus terburuk (pohon tidak seimbang).",
+    "Benar. Pada kondisi ideal, BST memiliki kompleksitas rata-rata O(log n).",
+    "O(n log n) adalah kompleksitas algoritma sorting seperti merge sort.",
+    "O(1) berarti konstan, hanya berlaku pada hash table."
+  ]
+},
+{
+  soal: "7. Dalam Queue, operasi dequeue dilakukan pada...",
+  pilihan: ["Depan", "Belakang", "Sembarang", "Tengah"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Dequeue (hapus) dilakukan di depan, sedangkan enqueue (tambah) di belakang.",
+    "Belakang adalah tempat untuk enqueue, bukan dequeue.",
+    "Queue tidak memungkinkan penghapusan dari sembarang posisi.",
+    "Tidak ada operasi dequeue dari tengah pada queue."
+  ]
+},
+{
+  soal: "8. Circular Queue adalah...",
+  pilihan: ["Queue berbentuk melingkar", "Stack khusus", "Tree linear", "Graph Queue"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Circular Queue adalah queue yang ujung akhirnya menyambung ke awal.",
+    "Stack tidak memiliki konsep circular, melainkan LIFO.",
+    "Tree tidak linear dan tidak digunakan sebagai queue.",
+    "Tidak ada istilah 'Graph Queue' dalam struktur data standar."
+  ]
+},
+{
+  soal: "9. Dalam linked list, node terakhir menunjuk ke...",
+  pilihan: ["Node pertama", "NULL", "Root", "Random"],
+  kunci: 1,
+  penjelasan: [
+    "Node pertama hanya ditunjuk oleh node pertama pada circular linked list.",
+    "Benar. Node terakhir dalam linked list menunjuk ke NULL sebagai akhir daftar.",
+    "Root adalah istilah untuk tree, bukan linked list.",
+    "Node terakhir tidak menunjuk ke node acak ('random')."
+  ]
+},
+{
+  soal: "10. Apa keuntungan utama menggunakan linked list dibanding array?",
+  pilihan: ["Akses acak lebih cepat", "Penggunaan memori tetap", "Mudah menambah/menghapus elemen", "Ukuran tetap"],
+  kunci: 2,
+  penjelasan: [
+    "Linked list tidak mendukung akses acak cepat seperti array.",
+    "Memori pada linked list bersifat dinamis, bukan tetap.",
+    "Benar. Linked list memudahkan penambahan/penghapusan elemen tanpa pergeseran.",
+    "Ukuran linked list fleksibel, tidak tetap."
+  ]
+},
+{
+  soal: "11. Struktur data yang efisien untuk menyimpan pasangan kunci-nilai adalah...",
+  pilihan: ["Stack", "Queue", "Hash Table", "Linked List"],
+  kunci: 2,
+  penjelasan: [
+    "Stack tidak menyimpan data dalam bentuk pasangan kunci-nilai.",
+    "Queue hanya menyimpan data secara berurutan, bukan berdasarkan kunci.",
+    "Benar. Hash Table menyimpan data dalam bentuk pasangan kunci-nilai dengan waktu akses cepat.",
+    "Linked list menyimpan elemen secara berurutan, tidak berdasarkan kunci."
+  ]
+},
+{
+  soal: "12. Traversal inorder pada Binary Search Tree (BST) akan menghasilkan...",
+  pilihan: ["Urutan acak", "Post-order", "Pre-order", "Urutan menaik"],
+  kunci: 3,
+  penjelasan: [
+    "Traversal inorder tidak menghasilkan urutan acak.",
+    "Post-order mengunjungi anak kiri, kanan, lalu root.",
+    "Pre-order mengunjungi root, lalu kiri dan kanan.",
+    "Benar. Inorder traversal pada BST menghasilkan urutan menaik (ascending)."
+  ]
+},
+{
+  soal: "13. Apa itu fungsi rekursif (recursive function)?",
+  pilihan: ["Fungsi yang hanya dipanggil sekali", "Fungsi yang memanggil dirinya sendiri", "Fungsi dalam main", "Fungsi yang dijalankan bersamaan"],
+  kunci: 1,
+  penjelasan: [
+    "Fungsi rekursif dapat dipanggil berulang kali, bukan hanya sekali.",
+    "Benar. Fungsi rekursif memanggil dirinya sendiri untuk menyelesaikan masalah.",
+    "Fungsi dalam main bukan definisi dari fungsi rekursif.",
+    "Fungsi yang dijalankan bersamaan disebut paralel, bukan rekursif."
+  ]
+},
+{
+  soal: "14. Apa itu depth pada binary tree?",
+  pilihan: ["Jumlah anak pada root", "Jarak antara root dan node terdalam", "Jumlah simpul", "Jumlah daun"],
+  kunci: 1,
+  penjelasan: [
+    "Jumlah anak pada root disebut degree, bukan depth.",
+    "Benar. Depth adalah kedalaman dari root ke node terdalam.",
+    "Jumlah simpul disebut size, bukan depth.",
+    "Jumlah daun disebut leaf nodes, bukan depth."
+  ]
+},
+{
+  soal: "15. Double linked list memiliki...",
+  pilihan: ["1 pointer", "2 pointer", "3 pointer", "Tidak ada pointer"],
+  kunci: 1,
+  penjelasan: [
+    "Single linked list yang memiliki 1 pointer per node.",
+    "Benar. Double linked list memiliki dua pointer: ke depan dan ke belakang.",
+    "Tiga pointer tidak umum, biasanya dua cukup untuk navigasi.",
+    "Tanpa pointer, tidak bisa disebut linked list."
+  ]
+},
+{
+  soal: "16. Apa itu array dinamis?",
+  pilihan: ["Array tetap", "Array yang ukurannya tidak bisa berubah", "Array yang ukurannya bisa berubah", "Linked list"],
+  kunci: 2,
+  penjelasan: [
+    "Array tetap adalah array statis, bukan dinamis.",
+    "Array dinamis justru memiliki ukuran yang bisa berubah.",
+    "Benar. Array dinamis dapat bertambah ukurannya saat program berjalan.",
+    "Linked list berbeda dengan array karena berbasis pointer."
+  ]
+},
+{
+  soal: "17. Heap adalah struktur data yang digunakan dalam...",
+  pilihan: ["Quick sort", "Bubble sort", "Heap sort", "Insertion sort"],
+  kunci: 2,
+  penjelasan: [
+    "Quick sort menggunakan pivot, bukan heap.",
+    "Bubble sort tidak menggunakan heap, hanya swapping berulang.",
+    "Benar. Heap sort menggunakan heap sebagai dasar pengurutan.",
+    "Insertion sort hanya menyisipkan data tanpa struktur heap."
+  ]
+},
+{
+  soal: "18. Graph adalah struktur data yang terdiri dari...",
+  pilihan: ["Node dan list", "Simpul dan sisi", "Array dan node", "Stack dan Queue"],
+  kunci: 1,
+  penjelasan: [
+    "Node dan list adalah komponen pada linked list, bukan graph.",
+    "Benar. Graph terdiri dari simpul (nodes) dan sisi (edges).",
+    "Array dan node bukan definisi tepat untuk graph.",
+    "Stack dan queue adalah struktur data lain, bukan bagian dari graph."
+  ]
+},
+{
+  soal: "19. Breadth-First Search (BFS) menggunakan struktur data...",
+  pilihan: ["Stack", "Queue", "Tree", "Hash"],
+  kunci: 1,
+  penjelasan: [
+    "Stack digunakan untuk Depth-First Search (DFS), bukan BFS.",
+    "Benar. BFS menggunakan queue untuk menelusuri level demi level.",
+    "Tree adalah struktur, bukan mekanisme penelusuran BFS.",
+    "Hash bukan digunakan untuk traversing seperti BFS."
+  ]
+},
+{
+  soal: "20. Depth-First Search (DFS) menggunakan struktur data...",
+  pilihan: ["Queue", "Hash Map", "Stack", "Array"],
+  kunci: 2,
+  penjelasan: [
+    "Queue digunakan untuk BFS, bukan DFS.",
+    "Hash map digunakan untuk pencarian, bukan penelusuran mendalam.",
+    "Benar. DFS menggunakan stack untuk menjelajahi node secara mendalam.",
+    "Array tidak mewakili logika traversal DFS secara spesifik."
+  ]
+},
+{
+  soal: "21. Apa itu leaf node dalam binary tree?",
+  pilihan: ["Node yang memiliki satu anak", "Node dengan dua anak", "Node tanpa anak", "Node akar"],
+  kunci: 2,
+  penjelasan: [
+    "Node dengan satu anak disebut unary node.",
+    "Node dengan dua anak bukan leaf node.",
+    "Benar. Leaf node tidak memiliki anak (child).",
+    "Node akar adalah root, bukan leaf."
+  ]
+},
+{
+  soal: "22. Apa itu pointer dalam struktur data?",
+  pilihan: ["Variabel untuk menyimpan karakter", "Penanda untuk array", "Variabel yang menyimpan alamat memori", "Fungsi dalam array"],
+  kunci: 2,
+  penjelasan: [
+    "Pointer bukan untuk menyimpan karakter.",
+    "Penanda array bisa menggunakan index, bukan pointer saja.",
+    "Benar. Pointer menyimpan alamat memori variabel lain.",
+    "Fungsi dalam array bukan pointer."
+  ]
+},
+{
+  soal: "23. Stack overflow terjadi ketika...",
+  pilihan: ["Stack kosong", "Stack terlalu besar", "Stack penuh dan ada push lagi", "Stack tidak digunakan"],
+  kunci: 2,
+  penjelasan: [
+    "Stack kosong disebut underflow, bukan overflow.",
+    "Stack besar tidak masalah selama tidak melampaui batas memori.",
+    "Benar. Overflow terjadi saat push dilakukan ke stack yang sudah penuh.",
+    "Stack yang tidak digunakan tidak menyebabkan overflow."
+  ]
+},
+{
+  soal: "24. Queue digunakan dalam...",
+  pilihan: ["Undo/Redo", "Antrian printer", "Tree traversal", "Fungsi rekursif"],
+  kunci: 1,
+  penjelasan: [
+    "Undo/Redo lebih cocok menggunakan stack.",
+    "Benar. Queue cocok untuk antrian printer karena prinsip FIFO.",
+    "Tree traversal biasanya menggunakan stack atau rekursi.",
+    "Rekursi tidak memerlukan queue."
+  ]
+},
+{
+  soal: "25. Fungsi utama dari linked list adalah...",
+  pilihan: ["Akses data acak", "Penyimpanan elemen tetap", "Kemudahan manipulasi data", "Pencarian cepat"],
+  kunci: 2,
+  penjelasan: [
+    "Linked list tidak mendukung akses data acak secepat array.",
+    "Ukurannya dinamis, tidak tetap.",
+    "Benar. Linked list unggul dalam penambahan dan penghapusan elemen.",
+    "Pencarian pada linked list justru lebih lambat dari array/hash table."
+  ]
+},
+{
+  soal: "26. Jenis linked list yang memungkinkan traversal dua arah adalah...",
+  pilihan: ["Single linked list", "Circular linked list", "Double linked list", "Static linked list"],
+  kunci: 2,
+  penjelasan: [
+    "Single linked list hanya memiliki satu arah (maju).",
+    "Circular linked list menghubungkan akhir ke awal, tapi tidak menjamin dua arah.",
+    "Benar. Double linked list memiliki dua pointer: next dan prev.",
+    "Static linked list bukan istilah umum dalam struktur data."
+  ]
+},
+{
+  soal: "27. Operasi yang menghapus elemen pertama pada linked list disebut...",
+  pilihan: ["DeleteLast", "InsertFirst", "DeleteFirst", "Pop"],
+  kunci: 2,
+  penjelasan: [
+    "DeleteLast menghapus elemen terakhir.",
+    "InsertFirst adalah operasi penambahan, bukan penghapusan.",
+    "Benar. DeleteFirst menghapus elemen pertama.",
+    "Pop adalah istilah umum untuk stack, bukan linked list."
+  ]
+},
+{
+  soal: "28. Apa perbedaan utama antara array dan linked list?",
+  pilihan: ["Linked list lebih cepat diakses", "Array tidak bisa diiterasi", "Array memiliki ukuran tetap", "Array menggunakan pointer"],
+  kunci: 2,
+  penjelasan: [
+    "Linked list lebih lambat dalam akses karena tidak langsung.",
+    "Array dapat diiterasi menggunakan indeks.",
+    "Benar. Ukuran array tetap, sedangkan linked list dinamis.",
+    "Array tidak menggunakan pointer seperti linked list."
+  ]
+},
+{
+  soal: "29. Fungsi utama dari stack dalam pemrograman adalah...",
+  pilihan: ["Menyimpan grafik", "Mengelola antrian", "Menyimpan state pemanggilan fungsi", "Traversal pohon"],
+  kunci: 2,
+  penjelasan: [
+    "Stack bukan untuk menyimpan struktur grafik.",
+    "Antrian menggunakan queue, bukan stack.",
+    "Benar. Stack digunakan dalam call stack untuk menyimpan state fungsi.",
+    "Traversal pohon bisa menggunakan stack, tapi bukan fungsi utamanya."
+  ]
+},
+{
+  soal: "30. Dalam algoritma DFS, node terakhir yang dikunjungi akan...",
+  pilihan: ["Keluar paling awal", "Masuk ke queue", "Tetap paling atas", "Keluar paling akhir"],
+  kunci: 3,
+  penjelasan: [
+    "Itu prinsip FIFO, bukan DFS.",
+    "Queue digunakan di BFS, bukan DFS.",
+    "Stack bersifat LIFO, node terakhir akan di-pop terakhir.",
+    "Benar. Dalam DFS, node terakhir yang masuk akan keluar paling akhir."
+  ]
+},
+{
+  soal: "31. Queue statis memiliki keterbatasan dalam hal...",
+  pilihan: ["Menambah data", "Menghapus data", "Ukuran tetap", "Traversal"],
+  kunci: 2,
+  penjelasan: [
+    "Menambah data tetap bisa jika belum penuh.",
+    "Penghapusan tetap bisa dilakukan.",
+    "Benar. Ukuran queue statis tetap, tidak bisa diperbesar.",
+    "Traversal tidak umum dilakukan pada queue."
+  ]
+},
+{
+  soal: "32. Operasi enqueue dalam queue berarti...",
+  pilihan: ["Menghapus data", "Menambahkan data", "Menyalin data", "Mengosongkan queue"],
+  kunci: 1,
+  penjelasan: [
+    "Enqueue bukan untuk menghapus, tapi menambah.",
+    "Benar. Enqueue adalah proses memasukkan data ke dalam queue.",
+    "Enqueue tidak berarti menyalin.",
+    "Mengosongkan queue disebut clear atau reset."
+  ]
+},
+{
+  soal: "33. Circular linked list memiliki karakteristik unik yaitu...",
+  pilihan: ["Node terakhir menunjuk NULL", "Node terakhir menunjuk node pertama", "Pointer tidak digunakan", "Tidak memiliki head"],
+  kunci: 1,
+  penjelasan: [
+    "NULL hanya digunakan pada singly/double linked list biasa.",
+    "Benar. Circular linked list menghubungkan node terakhir ke node pertama.",
+    "Circular linked list tetap menggunakan pointer.",
+    "Circular linked list tetap memiliki node head (awal)."
+  ]
+},
+{
+  soal: "34. Traversal postorder pada tree mengunjungi node dalam urutan...",
+  pilihan: ["Root - Left - Right", "Left - Root - Right", "Left - Right - Root", "Right - Left - Root"],
+  kunci: 2,
+  penjelasan: [
+    "Itu adalah pre-order traversal.",
+    "Itu adalah in-order traversal.",
+    "Benar. Postorder mengunjungi kiri, kanan, baru root.",
+    "Bukan urutan postorder yang standar."
+  ]
+},
+{
+  soal: "35. Algoritma pengurutan dengan membandingkan elemen berdekatan dan menukarnya adalah...",
+  pilihan: ["Merge sort", "Selection sort", "Bubble sort", "Insertion sort"],
+  kunci: 2,
+  penjelasan: [
+    "Merge sort membagi dan menggabungkan, bukan menukar elemen berdekatan.",
+    "Selection sort memilih elemen terkecil/besar dan menukarnya di posisi tertentu.",
+    "Benar. Bubble sort membandingkan dan menukar elemen berdekatan.",
+    "Insertion sort menyisipkan elemen ke posisi yang benar, bukan menukar berurutan."
+  ]
+},
+{
+  soal: "36. Dalam binary tree, node yang tidak memiliki anak disebut...",
+  pilihan: ["Root", "Parent", "Leaf", "Node internal"],
+  kunci: 2,
+  penjelasan: [
+    "Root adalah node paling atas.",
+    "Parent adalah node yang punya anak.",
+    "Benar. Node tanpa anak disebut leaf.",
+    "Node internal adalah node yang memiliki anak."
+  ]
+},
+{
+  soal: "37. Struktur data yang digunakan dalam fungsi rekursif adalah...",
+  pilihan: ["Array", "Queue", "Stack", "Graph"],
+  kunci: 2,
+  penjelasan: [
+    "Array tidak menyimpan state fungsi.",
+    "Queue tidak digunakan untuk stack frame.",
+    "Benar. Stack menyimpan informasi pemanggilan fungsi (call stack).",
+    "Graph tidak terkait langsung dengan eksekusi rekursi."
+  ]
+},
+{
+  soal: "38. Kelebihan utama dari tree dibanding array adalah...",
+  pilihan: ["Akses lebih cepat", "Struktur hierarki", "Penggunaan memori tetap", "Lebih sederhana"],
+  kunci: 1,
+  penjelasan: [
+    "Array lebih cepat untuk akses acak.",
+    "Benar. Tree memungkinkan representasi data secara hierarki (bertingkat).",
+    "Memori tree tidak tetap karena node bisa bertambah.",
+    "Tree lebih kompleks daripada array."
+  ]
+},
+{
+  soal: "39. Struktur data yang digunakan dalam compiler untuk evaluasi ekspresi adalah...",
+  pilihan: ["Queue", "Stack", "Linked list", "Hash table"],
+  kunci: 1,
+  penjelasan: [
+    "Queue tidak cocok untuk ekspresi infix/postfix.",
+    "Benar. Stack digunakan untuk evaluasi ekspresi seperti postfix.",
+    "Linked list tidak cocok untuk perhitungan ekspresi.",
+    "Hash table tidak digunakan untuk evaluasi ekspresi."
+  ]
+},
+{
+  soal: "40. Traversal pre-order pada tree mengunjungi node dalam urutan...",
+  pilihan: ["Root - Left - Right", "Left - Root - Right", "Left - Right - Root", "Right - Left - Root"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Pre-order: root, lalu anak kiri, lalu anak kanan.",
+    "Itu adalah in-order traversal.",
+    "Itu adalah post-order traversal.",
+    "Itu bukan urutan traversal yang umum."
+  ]
+},
+{
+  soal: "41. Operasi `push` dan `pop` berkaitan dengan struktur data...",
+  pilihan: ["Queue", "Stack", "Tree", "Linked List"],
+  kunci: 1,
+  penjelasan: [
+    "Queue menggunakan operasi `enqueue` dan `dequeue`, bukan `push` dan `pop`.",
+    "Benar. Stack menggunakan `push` untuk menambahkan dan `pop` untuk menghapus data.",
+    "Tree tidak menggunakan `push` dan `pop` sebagai operasi dasar.",
+    "Linked List menggunakan operasi `insert` dan `delete`, bukan `push` dan `pop`."
+  ]
+},
+{
+  soal: "42. Struktur data yang paling efisien untuk mengimplementasikan antrian dengan banyak proses adalah...",
+  pilihan: ["Array", "Circular Queue", "Stack", "Tree"],
+  kunci: 1,
+  penjelasan: [
+    "Array memiliki keterbatasan jika head tidak bergerak, menyebabkan wasted space.",
+    "Benar. Circular Queue mengatasi wasted space dan efisien untuk antrian proses.",
+    "Stack menggunakan LIFO, tidak cocok untuk antrian.",
+    "Tree digunakan untuk hierarki, bukan antrian."
+  ]
+},
+{
+  soal: "43. Algoritma pencarian biner (binary search) hanya bisa digunakan jika data dalam array...",
+  pilihan: ["Acak", "Sudah diurutkan", "Berisi string", "Berisi bilangan genap"],
+  kunci: 1,
+  penjelasan: [
+    "Data acak tidak bisa digunakan untuk binary search.",
+    "Benar. Binary search memerlukan array yang sudah terurut.",
+    "Binary search bisa digunakan untuk string jika diurutkan.",
+    "Isi bilangan tidak relevan selama data tidak terurut."
+  ]
+},
+{
+  soal: "44. Metode pengurutan `merge sort` menggunakan pendekatan...",
+  pilihan: ["Divide and conquer", "Brute force", "Dynamic programming", "Greedy"],
+  kunci: 0,
+  penjelasan: [
+    "Benar. Merge sort membagi masalah, menyelesaikannya, lalu menggabungkan hasilnya.",
+    "Brute force tidak efisien untuk sorting besar.",
+    "Dynamic programming cocok untuk masalah optimal substruktur.",
+    "Greedy digunakan pada masalah optimisasi, bukan sorting."
+  ]
+},
+{
+  soal: "45. Apa itu simpul (node) dalam graph?",
+  pilihan: ["Garis penghubung", "Elemen pengurutan", "Titik yang mewakili entitas", "Nilai dalam array"],
+  kunci: 2,
+  penjelasan: [
+    "Garis penghubung disebut edge, bukan node.",
+    "Elemen pengurutan bukan istilah dalam graph.",
+    "Benar. Node mewakili entitas seperti kota, komputer, dll.",
+    "Node bukan nilai dalam array."
+  ]
+},
+{
+  soal: "46. Dalam heap, elemen paling atas disebut...",
+  pilihan: ["Leaf", "Parent", "Root", "Child"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Leaf adalah node paling bawah.",
+    "Salah. Parent adalah node yang memiliki anak.",
+    "Benar. Root adalah elemen paling atas dalam heap.",
+    "Salah. Child adalah node di bawah parent."
+  ]
+},
+{
+  soal: "47. Struktur data yang cocok untuk pencarian cepat berdasarkan kunci unik adalah...",
+  pilihan: ["Stack", "Queue", "Hash Table", "Linked List"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Stack tidak menggunakan kunci untuk pencarian.",
+    "Salah. Queue hanya mendukung akses FIFO.",
+    "Benar. Hash table menyediakan pencarian cepat berdasarkan kunci unik.",
+    "Salah. Linked list memerlukan pencarian linear."
+  ]
+},
+{
+  soal: "48. Operasi traversal digunakan untuk...",
+  pilihan: ["Menghapus node", "Menambah node", "Menelusuri semua node", "Menyalin node"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Traversal tidak digunakan untuk menghapus.",
+    "Salah. Traversal bukan proses penambahan node.",
+    "Benar. Traversal digunakan untuk menelusuri semua node dalam struktur seperti tree/graph.",
+    "Salah. Traversal bukan untuk penyalinan."
+  ]
+},
+{
+  soal: "49. Algoritma `selection sort` bekerja dengan cara...",
+  pilihan: ["Menyisipkan elemen pada posisi tepat", "Memilih elemen terkecil dan menempatkannya di awal", "Menukar berulang antar elemen", "Membagi dan menggabung data"],
+  kunci: 1,
+  penjelasan: [
+    "Salah. Itu cara kerja insertion sort.",
+    "Benar. Selection sort memilih elemen terkecil dan menukarnya dengan elemen di posisi saat ini.",
+    "Salah. Itu mirip dengan bubble sort.",
+    "Salah. Merge sort-lah yang membagi dan menggabung."
+  ]
+},
+{
+  soal: "50. Perbedaan utama antara tree dan graph adalah...",
+  pilihan: ["Tree memiliki loop, graph tidak", "Graph selalu seimbang", "Tree tidak memiliki siklus, graph bisa", "Tree adalah array khusus"],
+  kunci: 2,
+  penjelasan: [
+    "Salah. Justru graph bisa memiliki loop, tree tidak.",
+    "Salah. Graph tidak selalu seimbang, tergantung strukturnya.",
+    "Benar. Tree adalah graph khusus yang tidak memiliki siklus (acyclic).",
+    "Salah. Tree bukan array khusus, tapi struktur hierarki."
+  ]
+}
+  ];
+
+   const container = document.getElementById("container");
+
+  soalList.forEach((s, idx) => {
+    const div = document.createElement("div");
+    div.className = "soal";
+    div.innerHTML = `<p><b>${s.soal}</b></p>`;
+    const jawabanDiv = document.createElement("div");
+    jawabanDiv.className = "jawaban";
+    s.pilihan.forEach((j, jIdx) => {
+      const btn = document.createElement("button");
+      btn.innerText = j;
+      btn.onclick = () => {
+        if (btn.clicked) return;
+        btn.clicked = true;
+        [...jawabanDiv.children].forEach(b => b.disabled = true);
+        if (jIdx === s.kunci) {
+        btn.classList.add("benar");
+        totalBenar++;
+        } else {
+        btn.classList.add("salah");
+        jawabanDiv.children[s.kunci].classList.add("benar");
+        totalSalah++;
+        }
+        updateCounter();
+
+        const penjelasanDiv = document.createElement("div");
+        penjelasanDiv.className = "penjelasan";
+        penjelasanDiv.innerText = "Penjelasan: " + s.penjelasan[jIdx];
+        div.appendChild(penjelasanDiv);
+        penjelasanDiv.style.display = "block";
+      };
+      jawabanDiv.appendChild(btn);
+    });
+    div.appendChild(jawabanDiv);
+    container.appendChild(div);
+  });
+</script>
+
+</body>
+</html>

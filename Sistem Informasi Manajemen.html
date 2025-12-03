@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UTM Sistem Informasi Manajemen UT</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList = [
+    {
+      "questionNumber": 1,
+      "question": "Menurut Bertalanffy dan Checkland, kata kunci penting dalam definisi 'sistem' adalah sekumpulan komponen yang memiliki karakteristik utama...",
+      "answerOptions": [
+        {
+          "text": "Beroperasi secara independen dengan tujuan masing-masing.",
+          "isCorrect": false,
+          "rationale": "Sistem mengharuskan komponen untuk saling berinteraksi dan bekerja sama, bukan secara independen."
+        },
+        {
+          "text": "Saling berinteraksi dan bekerja sama untuk mencapai tujuan yang sama.",
+          "isCorrect": true,
+          "rationale": "Definisi sistem berpusat pada komponen yang berinteraksi dan bekerja sama untuk mencapai satu tujuan yang telah ditetapkan. (Inisiasi 1, hal. 2)"
+        },
+        {
+          "text": "Hanya terdiri dari perangkat keras dan perangkat lunak yang canggih.",
+          "isCorrect": false,
+          "rationale": "Ini terlalu spesifik pada teknologi, padahal sistem bisa berupa konsep yang lebih luas."
+        },
+        {
+          "text": "Dapat beradaptasi dengan semua jenis lingkungan tanpa perlu penyesuaian.",
+          "isCorrect": false,
+          "rationale": "Adaptasi adalah fungsi, bukan kata kunci dalam definisi sistem."
+        }
+      ]
+    },
+    {
+      "questionNumber": 2,
+      "question": "Dalam hierarki struktural, subsistem, sistem, dan supra sistem memiliki hubungan di mana...",
+      "answerOptions": [
+        {
+          "text": "Sistem hanya dapat terdiri dari satu subsistem.",
+          "isCorrect": false,
+          "rationale": "Suatu sistem umumnya terdiri dari beberapa subsistem yang saling terkait."
+        },
+        {
+          "text": "Supra sistem merupakan kumpulan dari beberapa subsistem.",
+          "isCorrect": false,
+          "rationale": "Supra sistem adalah kumpulan dari beberapa sistem, bukan langsung dari subsistem."
+        },
+        {
+          "text": "Beberapa subsistem membentuk sistem, dan beberapa sistem membentuk supra sistem.",
+          "isCorrect": true,
+          "rationale": "Hubungan hirarkis yang benar adalah subsistem $\\to$ sistem $\\to$ supra sistem. (Inisiasi 1, hal. 2)"
+        },
+        {
+          "text": "Sistem harus bekerja secara independen dari supra sistem.",
+          "isCorrect": false,
+          "rationale": "Sistem merupakan bagian dari supra sistem dan tetap memiliki keterkaitan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 3,
+      "question": "Apa definisi yang paling tepat untuk 'informasi' dalam konteks Sistem Informasi Manajemen?",
+      "answerOptions": [
+        {
+          "text": "Fakta mentah yang belum diolah dan memiliki nilai historis.",
+          "isCorrect": false,
+          "rationale": "Ini adalah definisi dari data mentah, bukan informasi."
+        },
+        {
+          "text": "Data yang sudah mengalami pengolahan sedemikian rupa sehingga dapat digunakan oleh penggunanya dalam membuat keputusan.",
+          "isCorrect": true,
+          "rationale": "Informasi adalah data yang telah diolah dan memiliki makna serta relevansi untuk mendukung pengambilan keputusan. (Inisiasi 1, hal. 4)"
+        },
+        {
+          "text": "Sistem yang mengumpulkan, menyimpan, dan menyebarkan data.",
+          "isCorrect": false,
+          "rationale": "Ini adalah deskripsi dari proses atau fungsi Sistem Informasi, bukan definisi dari informasi itu sendiri."
+        },
+        {
+          "text": "Kumpulan dari perangkat keras dan perangkat lunak untuk analisis data.",
+          "isCorrect": false,
+          "rationale": "Ini adalah bagian dari infrastruktur teknologi, bukan definisi informasi."
+        }
+      ]
+    },
+    {
+      "questionNumber": 4,
+      "question": "Menurut Thomas Friedman, pendorong utama munculnya konsep 'dunia menjadi datar' (the world is flat) adalah...",
+      "answerOptions": [
+        {
+          "text": "Peningkatan jumlah organisasi birokrasi di seluruh dunia.",
+          "isCorrect": false,
+          "rationale": "Fokus utama Friedman adalah pada aspek teknologi dan dampaknya terhadap kesenjangan antar negara."
+        },
+        {
+          "text": "Adopsi teknologi informasi, khususnya Internet dan telekomunikasi.",
+          "isCorrect": true,
+          "rationale": "Teknologi informasi, terutama Internet dan telekomunikasi, memungkinkan kolaborasi global dan mengurangi keunggulan geografis. (Inisiasi 1, hal. 9)"
+        },
+        {
+          "text": "Peningkatan biaya produksi dan operasi di negara maju.",
+          "isCorrect": false,
+          "rationale": "Meskipun merupakan konsekuensi, ini bukan pendorong utamanya."
+        },
+        {
+          "text": "Berkurangnya populasi di negara-negara industri besar.",
+          "isCorrect": false,
+          "rationale": "Faktor demografi tidak disebutkan sebagai pendorong utama konsep 'dunia datar'."
+        }
+      ]
+    },
+    {
+      "questionNumber": 5,
+      "question": "Sistem informasi dan investasi di bidang teknologi informasi digunakan perusahaan untuk mencapai enam tujuan strategis usaha. Tujuan yang mengacu pada kemampuan perusahaan untuk unggul dan memenangkan persaingan adalah...",
+      "answerOptions": [
+        {
+          "text": "Keunggulan operasional.",
+          "isCorrect": false,
+          "rationale": "Keunggulan operasional berfokus pada efisiensi dan proses yang lebih baik, bukan langsung memenangkan persaingan."
+        },
+        {
+          "text": "Pengembangan produk, jasa, dan model bisnis baru.",
+          "isCorrect": false,
+          "rationale": "Ini adalah salah satu tujuan, namun bukan yang secara spesifik mendefinisikan kemenangan persaingan secara umum."
+        },
+        {
+          "text": "Kedekatan konsumen dan pemasok.",
+          "isCorrect": false,
+          "rationale": "Ini berfokus pada hubungan, bukan keunggulan relatif terhadap pesaing secara langsung."
+        },
+        {
+          "text": "Keunggulan kompetitif.",
+          "isCorrect": true,
+          "rationale": "Keunggulan kompetitif (competitive advantage) adalah posisi yang membuat perusahaan unggul dan sulit ditiru oleh pesaing. (Inisiasi 1, hal. 11)"
+        }
+      ]
+    },
+    {
+      "questionNumber": 6,
+      "question": "Pendekatan dalam Sistem Informasi Manajemen yang mulai digunakan pada dekade 1970-an sebagai jalan tengah antara pendekatan teknis dan perilaku, dengan cara mengoptimalkan sisi sosial dan teknikal secara bersama-sama, adalah...",
+      "answerOptions": [
+        {
+          "text": "Pendekatan Teknis (Hard Approach).",
+          "isCorrect": false,
+          "rationale": "Pendekatan teknis fokus pada pemodelan matematis dan kapasitas sistem."
+        },
+        {
+          "text": "Pendekatan Ilmu Perilaku.",
+          "isCorrect": false,
+          "rationale": "Ini berfokus pada perubahan sikap dan tindakan personil, bukan pada gabungan teknis dan sosial."
+        },
+        {
+          "text": "Pendekatan Sosio-teknikal.",
+          "isCorrect": true,
+          "rationale": "Pendekatan Sosio-teknikal mengakui bahwa sistem informasi melibatkan interaksi kompleks antara manusia dan teknologi, sehingga kedua sisi harus dioptimalkan. (Inisiasi 1, hal. 17-18)"
+        },
+        {
+          "text": "Pendekatan Ilmu Ekonomi.",
+          "isCorrect": false,
+          "rationale": "Ilmu ekonomi mempelajari proses produksi digital dan dinamika pasar digital."
+        }
+      ]
+    },
+    {
+      "questionNumber": 7,
+      "question": "Dengan memperhatikan definisi organisasi secara teknis, sistem informasi akan berfokus pada bagaimana implementasi teknologi baru akan mempengaruhi...",
+      "answerOptions": [
+        {
+          "text": "Pengurangan jumlah karyawan secara drastis.",
+          "isCorrect": false,
+          "rationale": "Meskipun bisa terjadi, fokus utamanya bukan hanya pada pengurangan karyawan."
+        },
+        {
+          "text": "Penciptaan model bisnis yang sepenuhnya digital.",
+          "isCorrect": false,
+          "rationale": "Tidak semua organisasi harus memiliki model bisnis sepenuhnya digital."
+        },
+        {
+          "text": "Pengolahan masukan (sumber daya) yang diambil dari lingkungan menjadi keluaran (produk/jasa).",
+          "isCorrect": true,
+          "rationale": "Secara teknis, organisasi adalah struktur yang mengolah input (sumber daya) menjadi output, dan SI memengaruhi proses ini. (Inisiasi 2, hal. 2)"
+        },
+        {
+          "text": "Penyelarasan semua kebijakan etika dan sosial perusahaan.",
+          "isCorrect": false,
+          "rationale": "Ini adalah fokus dari inisiasi yang lain, bukan fokus teknis SI pada organisasi."
+        }
+      ]
+    },
+    {
+      "questionNumber": 8,
+      "question": "Dampak ekonomi teknologi informasi pada organisasi yang paling utama dan langsung adalah pada...",
+      "answerOptions": [
+        {
+          "text": "Biaya, dengan menurunkan biaya produksi dan operasi.",
+          "isCorrect": true,
+          "rationale": "Dampak ekonomi utama TI adalah menurunkan biaya transaksi dan biaya agensi, yang secara umum menurunkan biaya produksi dan operasi. (Inisiasi 2, hal. 4)"
+        },
+        {
+          "text": "Peningkatan hirarki manajemen.",
+          "isCorrect": false,
+          "rationale": "TI cenderung meratakan hirarki (flattening organization), bukan meningkatkannya."
+        },
+        {
+          "text": "Keterbatasan komunikasi antar departemen.",
+          "isCorrect": false,
+          "rationale": "TI seharusnya meningkatkan, bukan membatasi, komunikasi."
+        },
+        {
+          "text": "Pergeseran paradigma bisnis yang total.",
+          "isCorrect": false,
+          "rationale": "Pergeseran paradigma adalah dampak perubahan organisasi yang lebih dalam, bukan dampak ekonomi yang paling utama."
+        }
+      ]
+    },
+    {
+      "questionNumber": 9,
+      "question": "Konsep struktural organisasi yang terjadi akibat penerapan teknologi informasi, di mana jumlah tingkatan dalam hirarki organisasi berkurang, disebut...",
+      "answerOptions": [
+        {
+          "text": "Spreading organization.",
+          "isCorrect": false,
+          "rationale": "Istilah ini tidak relevan dengan struktur organisasi."
+        },
+        {
+          "text": "Organisasi piramida.",
+          "isCorrect": false,
+          "rationale": "Organisasi piramida adalah struktur tradisional dengan banyak tingkatan."
+        },
+        {
+          "text": "Vertical organization.",
+          "isCorrect": false,
+          "rationale": "Ini mengacu pada struktur hierarkis tradisional."
+        },
+        {
+          "text": "Organisasi datar (flattening organization).",
+          "isCorrect": true,
+          "rationale": "TI mengurangi kebutuhan akan manajer menengah, yang secara struktural meratakan organisasi (flattening organization). (Inisiasi 2, hal. 4)"
+        }
+      ]
+    },
+    {
+      "questionNumber": 10,
+      "question": "Kondisi di mana suatu perusahaan dikatakan unggul, berkembang, dan memenangkan persaingan secara konsisten dibandingkan dengan pesaingnya adalah...",
+      "answerOptions": [
+        {
+          "text": "Keunggulan produk.",
+          "isCorrect": false,
+          "rationale": "Keunggulan produk hanya salah satu dimensi, bukan kondisi kemenangan persaingan secara menyeluruh."
+        },
+        {
+          "text": "Keunggulan kompetitif.",
+          "isCorrect": true,
+          "rationale": "Keunggulan kompetitif (competitive advantage) adalah keunggulan strategis yang memungkinkan perusahaan memenangkan persaingan. (Inisiasi 2, hal. 6)"
+        },
+        {
+          "text": "Keunggulan operasional.",
+          "isCorrect": false,
+          "rationale": "Ini berfokus pada efisiensi internal, bukan keunggulan relatif di pasar."
+        },
+        {
+          "text": "Keunggulan eksekusi.",
+          "isCorrect": false,
+          "rationale": "Istilah ini bukan merupakan salah satu tujuan strategis utama dalam konteks ini."
+        }
+      ]
+    },
+    {
+      "questionNumber": 11,
+      "question": "Michael E. Porter mengembangkan dua alat utama untuk menganalisis persaingan dan menentukan strategi bisnis, yaitu...",
+      "answerOptions": [
+        {
+          "text": "Model Jaringan Nilai dan Model Kekuatan Pesaing.",
+          "isCorrect": false,
+          "rationale": "Istilah yang benar yang dikembangkan Porter adalah 'Model Rantai Nilai Bisnis' dan 'Model Kekuatan Persaingan'."
+        },
+        {
+          "text": "Model Rantai Nilai dan Model Analisis SWOT.",
+          "isCorrect": false,
+          "rationale": "Analisis SWOT adalah alat lain, bukan satu dari dua model utama Porter dalam konteks ini."
+        },
+        {
+          "text": "Model Kekuatan Persaingan dan Model Rantai Nilai Bisnis.",
+          "isCorrect": true,
+          "rationale": "Kedua model ini adalah kerangka kerja klasik Porter untuk menganalisis lingkungan industri dan aktivitas internal perusahaan. (Inisiasi 2, hal. 6)"
+        },
+        {
+          "text": "Model Lima Kekuatan dan Model Kompetensi Inti.",
+          "isCorrect": false,
+          "rationale": "Model lima kekuatan adalah nama lain untuk Model Kekuatan Persaingan, namun 'Model Kompetensi Inti' bukan model Porter."
+        }
+      ]
+    },
+    {
+      "questionNumber": 12,
+      "question": "Tantangan strategis kedua yang dihadapi oleh Sistem Informasi Strategis adalah...",
+      "answerOptions": [
+        {
+          "text": "Mendapatkan pendanaan yang cukup untuk proyek TI yang besar.",
+          "isCorrect": false,
+          "rationale": "Ini lebih merupakan tantangan operasional/investasi, bukan tantangan strategis utama."
+        },
+        {
+          "text": "Menjaga keunggulan kompetitif agar tidak mudah ditiru oleh pesaing.",
+          "isCorrect": false,
+          "rationale": "Ini adalah tantangan pertama Sistem Informasi Strategis. (Inisiasi 2, hal. 7)"
+        },
+        {
+          "text": "Menyelaraskan strategi sistem informasi dengan strategi bisnis secara keseluruhan.",
+          "isCorrect": true,
+          "rationale": "Keselarasan strategis (strategic alignment) antara TI dan bisnis adalah tantangan kedua yang sangat penting untuk mencapai tujuan organisasi. (Inisiasi 2, hal. 8)"
+        },
+        {
+          "text": "Mengelola data yang semakin besar dan tidak terstruktur (Big Data).",
+          "isCorrect": false,
+          "rationale": "Ini adalah tantangan terkait infrastruktur atau manajemen data, bukan strategi secara langsung."
+        }
+      ]
+    },
+    {
+      "questionNumber": 13,
+      "question": "Etika didefinisikan sebagai prinsip tentang hal yang baik dan salah di mana prinsip tersebut digunakan oleh seseorang dengan kehendak bebas untuk...",
+      "answerOptions": [
+        {
+          "text": "Mencapai keuntungan finansial sebesar-besarnya tanpa batas.",
+          "isCorrect": false,
+          "rationale": "Tujuan etika adalah panduan perilaku yang baik dan benar, bukan keuntungan semata."
+        },
+        {
+          "text": "Mengidentifikasi risiko dan melakukan mitigasi proyek.",
+          "isCorrect": false,
+          "rationale": "Ini adalah bagian dari manajemen proyek, bukan definisi etika."
+        },
+        {
+          "text": "Membuat keputusan dan membimbing perilakunya.",
+          "isCorrect": true,
+          "rationale": "Etika adalah pedoman moral yang memengaruhi proses pengambilan keputusan dan tindakan seseorang. (Inisiasi 3, hal. 3)"
+        },
+        {
+          "text": "Mengimplementasikan teknologi baru pada suatu sistem informasi.",
+          "isCorrect": false,
+          "rationale": "Ini adalah fokus dari pengembangan sistem informasi."
+        }
+      ]
+    },
+    {
+      "questionNumber": 14,
+      "question": "Tiga konsep dasar yang mendasari pembuatan keputusan etis adalah...",
+      "answerOptions": [
+        {
+          "text": "Inovasi, efisiensi, dan akuntabilitas.",
+          "isCorrect": false,
+          "rationale": "Inovasi dan efisiensi adalah tujuan bisnis, bukan konsep etika dasar."
+        },
+        {
+          "text": "Tanggung jawab, akuntabilitas, dan liabilitas.",
+          "isCorrect": true,
+          "rationale": "Tiga konsep ini membentuk kerangka kerja untuk memastikan bahwa pembuat keputusan mempertimbangkan dampak dan konsekuensi dari tindakan mereka. (Inisiasi 3, hal. 4)"
+        },
+        {
+          "text": "Privasi, hak cipta, dan paten.",
+          "isCorrect": false,
+          "rationale": "Ini adalah isu dalam etika sistem informasi (Hak Informasi), bukan konsep dasar pembuatan keputusan etis."
+        },
+        {
+          "text": "Keunggulan, biaya, dan waktu.",
+          "isCorrect": false,
+          "rationale": "Ini adalah variabel dalam manajemen proyek."
+        }
+      ]
+    },
+    {
+      "questionNumber": 15,
+      "question": "Hak privasi didefinisikan sebagai hak individu untuk bebas dari...",
+      "answerOptions": [
+        {
+          "text": "Keharusan untuk menggunakan perangkat keras tertentu.",
+          "isCorrect": false,
+          "rationale": "Hak privasi tidak terkait dengan pilihan perangkat keras."
+        },
+        {
+          "text": "Pengawasan atau gangguan dari pihak lain.",
+          "isCorrect": true,
+          "rationale": "Hak privasi adalah hak untuk dibiarkan sendiri, bebas dari pengawasan, atau intervensi pihak lain. (Inisiasi 3, hal. 6)"
+        },
+        {
+          "text": "Redundansi data dalam sistem informasi.",
+          "isCorrect": false,
+          "rationale": "Ini adalah masalah manajemen data."
+        },
+        {
+          "text": "Tuntutan untuk meningkatkan kompetensi dan keahlian.",
+          "isCorrect": false,
+          "rationale": "Ini adalah isu pengembangan sumber daya manusia."
+        }
+      ]
+    },
+    {
+      "questionNumber": 16,
+      "question": "Perlindungan hukum yang memberikan hak eksklusif kepada pencipta atas ide atau karyanya selama jangka waktu tertentu adalah...",
+      "answerOptions": [
+        {
+          "text": "Paten.",
+          "isCorrect": false,
+          "rationale": "Paten melindungi penemuan, bukan ekspresi ide."
+        },
+        {
+          "text": "Merek dagang.",
+          "isCorrect": false,
+          "rationale": "Merek dagang melindungi nama, simbol, atau tanda yang membedakan produk."
+        },
+        {
+          "text": "Hak cipta (Copyright).",
+          "isCorrect": true,
+          "rationale": "Hak cipta melindungi bentuk ekspresi ide, seperti buku, perangkat lunak, musik, atau karya seni lainnya. (Inisiasi 3, hal. 9)"
+        },
+        {
+          "text": "Rahasia dagang.",
+          "isCorrect": false,
+          "rationale": "Rahasia dagang adalah formula, alat, atau informasi yang memiliki nilai ekonomi."
+        }
+      ]
+    },
+    {
+      "questionNumber": 17,
+      "question": "Salah satu dampak negatif penggunaan teknologi informasi pada lingkungan adalah...",
+      "answerOptions": [
+        {
+          "text": "Peningkatan adopsi teknologi berbasis komputasi awan.",
+          "isCorrect": false,
+          "rationale": "Komputasi awan dapat menjadi solusi untuk mengurangi konsumsi energi pribadi."
+        },
+        {
+          "text": "Terjadinya fenomena kelebihan informasi bagi manajer.",
+          "isCorrect": false,
+          "rationale": "Ini adalah dampak pada pembuatan keputusan, bukan lingkungan fisik."
+        },
+        {
+          "text": "Konsumsi energi listrik yang tinggi dan penggunaan bahan berbahaya/beracun seperti timah hitam dalam perangkat keras.",
+          "isCorrect": true,
+          "rationale": "Komputer mengonsumsi banyak energi, dan komponennya mengandung bahan berbahaya yang menimbulkan masalah lingkungan. (Inisiasi 3, hal. 13)"
+        },
+        {
+          "text": "Terciptanya organisasi datar (flattening organization).",
+          "isCorrect": false,
+          "rationale": "Ini adalah dampak struktural pada organisasi."
+        }
+      ]
+    },
+    {
+      "questionNumber": 18,
+      "question": "Dampak teknologi informasi pada kualitas kehidupan yang mengacu pada adanya kesenjangan antara pihak yang memiliki akses ke teknologi informasi dan mereka yang tidak memilikinya disebut...",
+      "answerOptions": [
+        {
+          "text": "Ketergantungan pada sistem informasi.",
+          "isCorrect": false,
+          "rationale": "Ini adalah dampak lain yang berbeda dari isu kesenjangan akses."
+        },
+        {
+          "text": "Kesenjangan digital (digital divide).",
+          "isCorrect": true,
+          "rationale": "Kesenjangan digital adalah perbedaan akses, keterampilan, dan kesempatan dalam menggunakan teknologi informasi. (Inisiasi 3, hal. 12)"
+        },
+        {
+          "text": "Otomatisasi proses bisnis.",
+          "isCorrect": false,
+          "rationale": "Ini adalah perubahan organisasi yang dibawa oleh SI, bukan dampak sosial."
+        },
+        {
+          "text": "Pengaburan batas antara kehidupan profesional dan pribadi.",
+          "isCorrect": false,
+          "rationale": "Ini adalah dampak lain yang disebabkan oleh konektivitas yang terus-menerus."
+        }
+      ]
+    },
+    {
+      "questionNumber": 19,
+      "question": "Infrastruktur teknologi informasi didefinisikan sebagai sumber daya teknologi yang digunakan bersama dan menjadi dasar bagi...",
+      "answerOptions": [
+        {
+          "text": "Perekrutan sumber daya manusia yang kompeten.",
+          "isCorrect": false,
+          "rationale": "Infrastruktur TI adalah sumber daya fisik dan logis, bukan proses perekrutan."
+        },
+        {
+          "text": "Penentuan strategi bisnis secara keseluruhan.",
+          "isCorrect": false,
+          "rationale": "Infrastruktur TI adalah pendukung, bukan penentu strategi bisnis utama."
+        },
+        {
+          "text": "Aplikasi sistem informasi spesifik untuk suatu perusahaan.",
+          "isCorrect": true,
+          "rationale": "Infrastruktur TI adalah fondasi teknologi yang mendukung semua aplikasi dan sistem informasi perusahaan. (Inisiasi 4, hal. 2)"
+        },
+        {
+          "text": "Perancangan ulang proses bisnis dari hulu ke hilir.",
+          "isCorrect": false,
+          "rationale": "Ini adalah dampak implementasi SI, bukan definisi infrastruktur TI."
+        }
+      ]
+    },
+    {
+      "questionNumber": 20,
+      "question": "Komponen utama yang termasuk dalam Infrastruktur Teknologi Informasi meliputi...",
+      "answerOptions": [
+        {
+          "text": "Manajemen data, keamanan data, dan Big Data.",
+          "isCorrect": false,
+          "rationale": "Ini adalah aspek dari manajemen dan pengolahan data."
+        },
+        {
+          "text": "Perangkat keras, perangkat lunak, dan layanan teknologi informasi.",
+          "isCorrect": true,
+          "rationale": "Infrastruktur TI mencakup elemen fisik (hardware), program (software), dan dukungan manusia/operasional (layanan). (Inisiasi 4, hal. 2)"
+        },
+        {
+          "text": "Tanggung jawab, akuntabilitas, dan liabilitas.",
+          "isCorrect": false,
+          "rationale": "Ini adalah konsep dasar etika."
+        },
+        {
+          "text": "Mainframe, komputer personal, dan Client/Server.",
+          "isCorrect": false,
+          "rationale": "Ini adalah tahapan evolusi infrastruktur, bukan komponen utamanya."
+        }
+      ]
+    },
+    {
+      "questionNumber": 21,
+      "question": "Tahapan perkembangan infrastruktur teknologi informasi yang ditandai dengan satu komputer atau lebih dengan kekuatan komputasi besar menjadi server, dan memberikan layanan pada komputer client adalah...",
+      "answerOptions": [
+        {
+          "text": "Mainframe dan Mini Computer.",
+          "isCorrect": false,
+          "rationale": "Ini adalah tahapan paling awal yang terpusat pada satu komputer besar."
+        },
+        {
+          "text": "Komputer Personal (PC).",
+          "isCorrect": false,
+          "rationale": "Tahap PC berfokus pada komputasi lokal dan individual."
+        },
+        {
+          "text": "Komputasi Perusahaan.",
+          "isCorrect": false,
+          "rationale": "Ini adalah tahap integrasi yang lebih luas setelah Client/Server."
+        },
+        {
+          "text": "Client/Server.",
+          "isCorrect": true,
+          "rationale": "Arsitektur Client/Server memisahkan fungsi komputasi antara server yang menyimpan sumber daya dan client yang mengaksesnya. (Inisiasi 4, hal. 4)"
+        }
+      ]
+    },
+    {
+      "questionNumber": 22,
+      "question": "Dalam klasifikasi jaringan komputer berdasarkan topologi, topologi yang setiap node terhubung dengan node di sekelilingnya dan data dapat dilewatkan dari satu node ke node lain secara berurutan adalah...",
+      "answerOptions": [
+        {
+          "text": "Topologi Mesh.",
+          "isCorrect": false,
+          "rationale": "Topologi Mesh menghubungkan setiap node secara langsung dengan semua node lain."
+        },
+        {
+          "text": "Topologi Bus.",
+          "isCorrect": false,
+          "rationale": "Topologi Bus menghubungkan semua node pada satu kabel utama."
+        },
+        {
+          "text": "Topologi Ring.",
+          "isCorrect": true,
+          "rationale": "Topologi Ring membentuk jalur tertutup di mana data mengalir dari satu komputer ke komputer berikutnya dalam satu arah. (Inisiasi 4, hal. 7)"
+        },
+        {
+          "text": "Topologi Star.",
+          "isCorrect": false,
+          "rationale": "Topologi Star menghubungkan semua node ke satu titik pusat (hub atau switch)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 23,
+      "question": "Protokol standar yang merupakan aturan untuk berkomunikasi antar komputer dalam jaringan Internet adalah...",
+      "answerOptions": [
+        {
+          "text": "HTTP (Hypertext Transfer Protocol).",
+          "isCorrect": false,
+          "rationale": "HTTP adalah protokol untuk mentransfer dokumen web, bukan standar komunikasi jaringan secara keseluruhan."
+        },
+        {
+          "text": "DNS (Domain Name Systems).",
+          "isCorrect": false,
+          "rationale": "DNS menerjemahkan nama domain ke alamat IP."
+        },
+        {
+          "text": "TCP/IP (Transmission Control Protocol/Internet Protocol).",
+          "isCorrect": true,
+          "rationale": "TCP/IP adalah sekumpulan protokol komunikasi yang menjadi tulang punggung Internet. (Inisiasi 4, hal. 8)"
+        },
+        {
+          "text": "FTP (File Transfer Protocol).",
+          "isCorrect": false,
+          "rationale": "FTP adalah protokol untuk transfer file, bukan standar komunikasi dasar Internet."
+        }
+      ]
+    },
+    {
+      "questionNumber": 24,
+      "question": "Salah satu tantangan besar dalam pengelolaan infrastruktur teknologi informasi yang berkaitan dengan biaya pengadaan dan keputusan antara menyelenggarakan sendiri atau menggunakan jasa alih daya adalah...",
+      "answerOptions": [
+        {
+          "text": "Menghadapi perubahan yang terjadi pada teknologi.",
+          "isCorrect": false,
+          "rationale": "Ini terkait dengan risiko teknologi, bukan langsung pada biaya penyelenggaraan."
+        },
+        {
+          "text": "Tata kelola infrastruktur teknologi informasi.",
+          "isCorrect": false,
+          "rationale": "Ini terkait dengan tanggung jawab dan pengambilan keputusan, bukan biaya investasi."
+        },
+        {
+          "text": "Penentuan investasi yang bijak.",
+          "isCorrect": true,
+          "rationale": "Karena biaya investasi TI yang besar, keputusan untuk berinvestasi atau memilih outsourcing (alih daya) menjadi tantangan penting dalam pengelolaan TI. (Inisiasi 4, hal. 11)"
+        },
+        {
+          "text": "Pengurangan jumlah karyawan di departemen TI.",
+          "isCorrect": false,
+          "rationale": "Ini adalah konsekuensi potensial, bukan tantangan utama pengelolaan TI."
+        }
+      ]
+    },
+    {
+      "questionNumber": 25,
+      "question": "Kelemahan pertama pada sistem informasi yang dapat disalahgunakan oleh pihak yang tidak bertanggung jawab adalah melalui jalur...",
+      "answerOptions": [
+        {
+          "text": "Basis data yang tidak terenkripsi.",
+          "isCorrect": false,
+          "rationale": "Ini adalah kelemahan spesifik pada penyimpanan data, bukan jalur akses utama."
+        },
+        {
+          "text": "Sistem operasi yang sudah usang.",
+          "isCorrect": false,
+          "rationale": "Ini adalah kerentanan perangkat lunak, bukan jalur akses utama."
+        },
+        {
+          "text": "Telekomunikasi yang menghubungkan berbagai komputer dalam satu jaringan.",
+          "isCorrect": true,
+          "rationale": "Akses jarak jauh melalui jaringan (telekomunikasi) adalah jalur kelemahan pertama yang sulit dipastikan keamanannya. (Inisiasi 5, hal. 2)"
+        },
+        {
+          "text": "Penggunaan Enterprise Resource Planning (ERP).",
+          "isCorrect": false,
+          "rationale": "ERP adalah sistem yang memiliki risiko, tetapi bukan 'kelemahan pertama' secara umum."
+        }
+      ]
+    },
+    {
+      "questionNumber": 26,
+      "question": "Jenis serangan siber yang dilakukan dengan membuat situs palsu yang menyerupai situs asli untuk mengumpulkan data pribadi dari pengguna situs asli adalah...",
+      "answerOptions": [
+        {
+          "text": "Phishing.",
+          "isCorrect": false,
+          "rationale": "Phishing adalah upaya mendapatkan informasi sensitif melalui email atau komunikasi palsu, bukan pembuatan situs palsu."
+        },
+        {
+          "text": "Sniffing.",
+          "isCorrect": false,
+          "rationale": "Sniffing adalah penyadapan informasi melalui jaringan."
+        },
+        {
+          "text": "Spoofing.",
+          "isCorrect": true,
+          "rationale": "Spoofing adalah teknik membuat situs palsu (atau identitas palsu) untuk mengelabui pengguna dan mencuri data mereka. (Inisiasi 5, hal. 5)"
+        },
+        {
+          "text": "Malware.",
+          "isCorrect": false,
+          "rationale": "Malware adalah perangkat lunak jahat (virus, trojan, dll.) secara umum."
+        }
+      ]
+    },
+    {
+      "questionNumber": 27,
+      "question": "Serangan siber yang membanjiri server yang dituju dengan permintaan data berlebihan dari banyak sumber, sehingga server kewalahan dan berhenti bekerja, dikenal sebagai...",
+      "answerOptions": [
+        {
+          "text": "SQL Injection.",
+          "isCorrect": false,
+          "rationale": "SQL Injection adalah serangan untuk memanipulasi basis data melalui input form."
+        },
+        {
+          "text": "DDOS Attack (Distributed Denial of Service).",
+          "isCorrect": true,
+          "rationale": "DDOS Attack bertujuan untuk melumpuhkan layanan dengan membanjiri server target dengan lalu lintas. (Inisiasi 5, hal. 6)"
+        },
+        {
+          "text": "Sniffing.",
+          "isCorrect": false,
+          "rationale": "Sniffing adalah penyadapan data yang lewat di jaringan, bukan melumpuhkan server."
+        },
+        {
+          "text": "Vandalisme.",
+          "isCorrect": false,
+          "rationale": "Vandalisme adalah pengubahan data tanpa ijin, bukan membanjiri server."
+        }
+      ]
+    },
+    {
+      "questionNumber": 28,
+      "question": "Metode, kebijakan, dan prosedur organisasi yang memastikan keamanan aset organisasi, akurasi dan keandalan catatan akuntansinya, serta kepatuhan operasional terhadap standar manajemen, secara umum disebut...",
+      "answerOptions": [
+        {
+          "text": "Disaster Recovery Planning (DRP).",
+          "isCorrect": false,
+          "rationale": "DRP adalah rencana spesifik untuk pemulihan bencana, bukan istilah umum."
+        },
+        {
+          "text": "Pengendalian (Controls).",
+          "isCorrect": true,
+          "rationale": "Pengendalian (Controls) adalah definisi umum untuk mekanisme yang menjaga keamanan dan integritas sistem. (Inisiasi 5, hal. 11)"
+        },
+        {
+          "text": "Penetration Testing.",
+          "isCorrect": false,
+          "rationale": "Penetration Testing adalah teknik pengujian keamanan, bukan kebijakan dan prosedur umum."
+        },
+        {
+          "text": "General Audit.",
+          "isCorrect": false,
+          "rationale": "Audit adalah proses pemeriksaan, bukan kebijakan dan prosedur itu sendiri."
+        }
+      ]
+    },
+    {
+      "questionNumber": 29,
+      "question": "Pengendalian yang mengatur perancangan, keamanan, dan penggunaan perangkat teknologi informasi dan keamanan data di **seluruh tingkatan organisasi** adalah...",
+      "answerOptions": [
+        {
+          "text": "Pengendalian aplikasi.",
+          "isCorrect": false,
+          "rationale": "Pengendalian aplikasi bersifat spesifik untuk tiap aplikasi berbasis komputer."
+        },
+        {
+          "text": "Pengendalian umum (General Controls).",
+          "isCorrect": true,
+          "rationale": "Pengendalian umum memiliki cakupan yang luas dan berlaku untuk seluruh infrastruktur dan proses organisasi. (Inisiasi 5, hal. 12)"
+        },
+        {
+          "text": "Pengendalian operasional.",
+          "isCorrect": false,
+          "rationale": "Istilah ini kurang tepat; klasifikasi utama adalah umum dan aplikasi."
+        },
+        {
+          "text": "Pengendalian manajemen.",
+          "isCorrect": false,
+          "rationale": "Ini adalah bagian dari pengendalian umum, tetapi bukan klasifikasi utamanya."
+        }
+      ]
+    },
+    {
+      "questionNumber": 30,
+      "question": "Panduan langkah-langkah yang harus dilakukan untuk memulihkan layanan sistem informasi jika terganggu oleh bencana atau risiko lain adalah...",
+      "answerOptions": [
+        {
+          "text": "Business Continuity Planning (BCP).",
+          "isCorrect": false,
+          "rationale": "BCP berfokus pada kelangsungan proses bisnis kritis, bukan hanya pemulihan sistem informasi."
+        },
+        {
+          "text": "Penetration Testing.",
+          "isCorrect": false,
+          "rationale": "Penetration Testing adalah teknik pengujian untuk menemukan kelemahan, bukan rencana pemulihan."
+        },
+        {
+          "text": "Disaster Recovery Planning (DRP).",
+          "isCorrect": true,
+          "rationale": "DRP (Disaster Recovery Planning) secara spesifik berurusan dengan pemulihan infrastruktur dan layanan teknologi informasi pasca bencana. (Inisiasi 5, hal. 13)"
+        },
+        {
+          "text": "System Development Life Cycle (SDLC).",
+          "isCorrect": false,
+          "rationale": "SDLC adalah metodologi pengembangan sistem."
+        }
+      ]
+    },
+    {
+      "questionNumber": 31,
+      "question": "Dalam hierarki organisasi data, unit data terkecil dalam bentuk bilangan biner atau bilangan berbasis 2 adalah...",
+      "answerOptions": [
+        {
+          "text": "Byte.",
+          "isCorrect": false,
+          "rationale": "Satu byte setara dengan 8 bit."
+        },
+        {
+          "text": "Bit (binary digit).",
+          "isCorrect": true,
+          "rationale": "Bit adalah unit dasar data yang hanya memiliki nilai 0 atau 1. (Inisiasi 6, hal. 2)"
+        },
+        {
+          "text": "Field.",
+          "isCorrect": false,
+          "rationale": "Field adalah kumpulan dari byte yang membentuk kata atau angka."
+        },
+        {
+          "text": "Record.",
+          "isCorrect": false,
+          "rationale": "Record adalah sekumpulan field yang berhubungan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 32,
+      "question": "Sekumpulan field yang berhubungan dalam hierarki organisasi data akan membentuk...",
+      "answerOptions": [
+        {
+          "text": "Byte.",
+          "isCorrect": false,
+          "rationale": "Byte adalah kumpulan dari bit."
+        },
+        {
+          "text": "File.",
+          "isCorrect": false,
+          "rationale": "File adalah sekumpulan record dengan tipe yang sama."
+        },
+        {
+          "text": "Basis data.",
+          "isCorrect": false,
+          "rationale": "Basis data adalah kumpulan dari file yang saling terkait."
+        },
+        {
+          "text": "Record.",
+          "isCorrect": true,
+          "rationale": "Record (catatan) mengelompokkan field-field yang saling berhubungan, seperti semua data tentang satu karyawan. (Inisiasi 6, hal. 3)"
+        }
+      ]
+    },
+    {
+      "questionNumber": 33,
+      "question": "Permasalahan dalam pengelolaan data di mana data yang sama disimpan dalam beberapa aplikasi secara berulang-ulang, yang dapat menyebabkan inkonsistensi, disebut...",
+      "answerOptions": [
+        {
+          "text": "Ketergantungan data.",
+          "isCorrect": false,
+          "rationale": "Ketergantungan data adalah keterbatasan data pada suatu aplikasi, bukan perulangan data."
+        },
+        {
+          "text": "Redundansi data.",
+          "isCorrect": true,
+          "rationale": "Redundansi data adalah duplikasi data di berbagai tempat, yang merupakan masalah klasik dalam pengelolaan data berbasis file. (Inisiasi 6, hal. 4)"
+        },
+        {
+          "text": "Integrasi data.",
+          "isCorrect": false,
+          "rationale": "Integrasi data adalah solusi, bukan masalah."
+        },
+        {
+          "text": "Kebocoran data.",
+          "isCorrect": false,
+          "rationale": "Kebocoran data adalah masalah keamanan, bukan pengulangan penyimpanan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 34,
+      "question": "Kumpulan file yang saling terkait dan disimpan serta dikelola secara terpusat menggunakan alat bantu komputer adalah definisi dari...",
+      "answerOptions": [
+        {
+          "text": "Sistem file tradisional.",
+          "isCorrect": false,
+          "rationale": "Sistem file tradisional tidak dikelola secara terpusat dan memiliki masalah redundansi data."
+        },
+        {
+          "text": "Basis data (Database).",
+          "isCorrect": true,
+          "rationale": "Basis data diciptakan untuk mengelola data secara terpusat dan memecahkan masalah redundansi dan ketergantungan data. (Inisiasi 6, hal. 3)"
+        },
+        {
+          "text": "Sistem pemrosesan transaksi.",
+          "isCorrect": false,
+          "rationale": "Ini adalah jenis sistem informasi, bukan struktur penyimpanan datanya."
+        },
+        {
+          "text": "Big Data.",
+          "isCorrect": false,
+          "rationale": "Big Data merujuk pada volume data yang sangat besar dan tidak terstruktur, bukan koleksi file yang terpusat."
+        }
+      ]
+    },
+    {
+      "questionNumber": 35,
+      "question": "Pengetahuan yang bersifat formal, terdokumentasi, dan mudah dipindahkan (dikonversi menjadi bentuk eksplisit) adalah...",
+      "answerOptions": [
+        {
+          "text": "Pengetahuan implisit.",
+          "isCorrect": false,
+          "rationale": "Pengetahuan implisit bersifat pribadi dan sulit untuk didokumentasikan atau dipindahkan."
+        },
+        {
+          "text": "Pengetahuan eksplisit.",
+          "isCorrect": true,
+          "rationale": "Pengetahuan eksplisit adalah pengetahuan yang telah diformalkan dan dapat diakses serta didistribusikan secara mudah. (Inisiasi 6, hal. 8)"
+        },
+        {
+          "text": "Pengetahuan terstruktur.",
+          "isCorrect": false,
+          "rationale": "Pengetahuan terstruktur adalah jenis pengetahuan eksplisit yang lebih spesifik."
+        },
+        {
+          "text": "Pengetahuan kontekstual.",
+          "isCorrect": false,
+          "rationale": "Pengetahuan kontekstual bersifat situasional dan sulit dipindahkan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 36,
+      "question": "Tools yang digunakan dalam manajemen pengetahuan untuk mengelola, menyampaikan, menjejak, dan menilai berbagai pelatihan dan pembelajaran adalah...",
+      "answerOptions": [
+        {
+          "text": "Enterprise Content Management (ECM).",
+          "isCorrect": false,
+          "rationale": "ECM digunakan untuk menangani pengetahuan yang bersifat terstruktur dan semi terstruktur."
+        },
+        {
+          "text": "Learning Management System (LMS).",
+          "isCorrect": true,
+          "rationale": "LMS (Learning Management System) adalah platform yang dirancang khusus untuk mengelola aspek pembelajaran dan pelatihan. (Inisiasi 6, hal. 11)"
+        },
+        {
+          "text": "Customer Relationship Management (CRM).",
+          "isCorrect": false,
+          "rationale": "CRM berfokus pada interaksi dan hubungan dengan konsumen."
+        },
+        {
+          "text": "Data Warehouse.",
+          "isCorrect": false,
+          "rationale": "Data Warehouse adalah penyimpanan data untuk analisis, bukan manajemen pelatihan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 37,
+      "question": "Sistem informasi yang mengintegrasikan berbagai macam software dengan fungsi yang berbeda-beda menggunakan satu basis data terpusat, dan sangat efektif dalam memudahkan komunikasi antar departemen perusahaan skala besar adalah...",
+      "answerOptions": [
+        {
+          "text": "Supply Chain Management (SCM).",
+          "isCorrect": false,
+          "rationale": "SCM berfokus pada rantai pasok dan mitra usaha eksternal."
+        },
+        {
+          "text": "Decision Support System (DSS).",
+          "isCorrect": false,
+          "rationale": "DSS berfokus pada dukungan keputusan, bukan integrasi fungsi bisnis internal."
+        },
+        {
+          "text": "Customer Relationship Management (CRM).",
+          "isCorrect": false,
+          "rationale": "CRM berfokus pada interaksi dengan konsumen."
+        },
+        {
+          "text": "Enterprise Resource Planning (ERP).",
+          "isCorrect": true,
+          "rationale": "ERP dirancang untuk mengintegrasikan dan mengotomatisasi proses bisnis utama di seluruh fungsi internal perusahaan melalui basis data terpusat. (Inisiasi 7, hal. 3)"
+        }
+      ]
+    },
+    {
+      "questionNumber": 38,
+      "question": "Sistem informasi yang membantu manajemen mengelola semua aktivitas dari hulu ke hilir terkait pasokan bahan baku, produksi, dan distribusi produk/jasa kepada konsumen adalah...",
+      "answerOptions": [
+        {
+          "text": "Enterprise System.",
+          "isCorrect": false,
+          "rationale": "Enterprise System adalah istilah yang lebih umum, mencakup ERP, SCM, dan CRM."
+        },
+        {
+          "text": "Supply Chain Management (SCM).",
+          "isCorrect": true,
+          "rationale": "SCM secara khusus mengelola aliran barang, informasi, dan keuangan yang terkait dengan rantai pasok, mulai dari pemasok hingga konsumen akhir. (Inisiasi 7, hal. 4)"
+        },
+        {
+          "text": "Knowledge Management System (KMS).",
+          "isCorrect": false,
+          "rationale": "KMS berfokus pada pengelolaan pengetahuan dan keahlian organisasi."
+        },
+        {
+          "text": "Balanced Scorecard (BSC).",
+          "isCorrect": false,
+          "rationale": "BSC adalah alat pengukuran kinerja strategis."
+        }
+      ]
+    },
+    {
+      "questionNumber": 39,
+      "question": "Tujuan utama dari Customer Relationship Management (CRM) yang dikelola dengan baik adalah...",
+      "answerOptions": [
+        {
+          "text": "Mengefisienkan proses produksi dan operasional internal.",
+          "isCorrect": false,
+          "rationale": "Ini adalah fokus utama dari Enterprise Resource Planning (ERP)."
+        },
+        {
+          "text": "Menjaga konsumen lama agar tidak beralih ke kompetitor dan menggaet konsumen baru.",
+          "isCorrect": true,
+          "rationale": "CRM bertujuan untuk meningkatkan loyalitas pelanggan dan pendapatan melalui pengelolaan hubungan pelanggan yang lebih baik. (Inisiasi 7, hal. 6)"
+        },
+        {
+          "text": "Mengelola semua aktivitas dari hulu ke hilir terkait pasokan bahan baku.",
+          "isCorrect": false,
+          "rationale": "Ini adalah fokus utama dari Supply Chain Management (SCM)."
+        },
+        {
+          "text": "Memastikan sistem pulih dengan cepat setelah terjadi bencana.",
+          "isCorrect": false,
+          "rationale": "Ini adalah tujuan dari Disaster Recovery Planning (DRP)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 40,
+      "question": "Tipe perdagangan elektronik (e-commerce) yang terjadi antara perusahaan dengan konsumen individual (pembeli eceran) adalah...",
+      "answerOptions": [
+        {
+          "text": "Consumer-to-Consumer (C2C).",
+          "isCorrect": false,
+          "rationale": "C2C adalah transaksi antara konsumen dengan konsumen."
+        },
+        {
+          "text": "Business-to-Business (B2B).",
+          "isCorrect": false,
+          "rationale": "B2B adalah transaksi antara perusahaan dengan perusahaan."
+        },
+        {
+          "text": "Business-to-Consumer (B2C).",
+          "isCorrect": true,
+          "rationale": "B2C adalah model e-commerce di mana perusahaan menjual barang atau jasa langsung ke pelanggan akhir. (Inisiasi 7, hal. 8)"
+        },
+        {
+          "text": "Consumer-to-Business (C2B).",
+          "isCorrect": false,
+          "rationale": "C2B adalah transaksi di mana konsumen menawarkan produk/jasa kepada perusahaan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 41,
+      "question": "Derajat produk perdagangan elektronik ditentukan oleh tingkat digitalisasi pada tiga aspek, yaitu...",
+      "answerOptions": [
+        {
+          "text": "Biaya, waktu, dan kualitas.",
+          "isCorrect": false,
+          "rationale": "Ini adalah variabel dalam manajemen proyek."
+        },
+        {
+          "text": "Proses bisnis, arsitektur, dan teknologi.",
+          "isCorrect": false,
+          "rationale": "Ini adalah komponen umum dalam sistem informasi."
+        },
+        {
+          "text": "Transaksi dan pembayaran, produk, dan distribusi.",
+          "isCorrect": true,
+          "rationale": "Tingkat digitalisasi pada tiga aspek ini menentukan seberapa 'elektronik' suatu perdagangan dilakukan. (Inisiasi 7, hal. 11)"
+        },
+        {
+          "text": "Karyawan, pemasok, dan konsumen.",
+          "isCorrect": false,
+          "rationale": "Ini adalah pihak yang terlibat dalam rantai nilai."
+        }
+      ]
+    },
+    {
+      "questionNumber": 42,
+      "question": "Pedagang elektronik yang mendapatkan pendapatan dari menyediakan barang informasi seperti musik, buku, film, dan berita, disebut...",
+      "answerOptions": [
+        {
+          "text": "Perantara transaksi.",
+          "isCorrect": false,
+          "rationale": "Perantara transaksi adalah makelar antara pengusaha dan konsumen."
+        },
+        {
+          "text": "Penyedia komunitas.",
+          "isCorrect": false,
+          "rationale": "Penyedia komunitas memungkinkan interaksi di dunia maya."
+        },
+        {
+          "text": "Penyedia konten.",
+          "isCorrect": true,
+          "rationale": "Penyedia konten (content providers) fokus pada penjualan informasi digital. (Inisiasi 7, hal. 12)"
+        },
+        {
+          "text": "Portal.",
+          "isCorrect": false,
+          "rationale": "Portal menyediakan berbagai layanan informasi pada satu situs."
+        }
+      ]
+    },
+    {
+      "questionNumber": 43,
+      "question": "Keputusan yang sudah jelas urutan prosedurnya dan apa yang harus dilakukan jika ada suatu kondisi yang dihadapi sudah digariskan secara tertulis disebut...",
+      "answerOptions": [
+        {
+          "text": "Keputusan tidak terstruktur.",
+          "isCorrect": false,
+          "rationale": "Keputusan tidak terstruktur mengharuskan pertimbangan dan tidak ada prosedur jelas."
+        },
+        {
+          "text": "Keputusan strategis.",
+          "isCorrect": false,
+          "rationale": "Keputusan strategis adalah klasifikasi berdasarkan level manajemen, bukan struktur prosedur."
+        },
+        {
+          "text": "Keputusan semi terstruktur.",
+          "isCorrect": false,
+          "rationale": "Keputusan semi terstruktur memiliki elemen terstruktur dan tidak terstruktur."
+        },
+        {
+          "text": "Keputusan terstruktur.",
+          "isCorrect": true,
+          "rationale": "Keputusan terstruktur memiliki prosedur dan aturan yang jelas, sehingga dapat diulang dan diotomatisasi. (Materi Inisiasi 8a, hal. 3)"
+        }
+      ]
+    },
+    {
+      "questionNumber": 44,
+      "question": "Keputusan yang memiliki elemen terstruktur (dapat diselesaikan dengan prosedur standar) dan elemen tidak terstruktur (memerlukan pertimbangan manajer) adalah...",
+      "answerOptions": [
+        {
+          "text": "Keputusan terstruktur.",
+          "isCorrect": false,
+          "rationale": "Keputusan terstruktur sepenuhnya didasarkan pada prosedur yang jelas."
+        },
+        {
+          "text": "Keputusan tidak terstruktur.",
+          "isCorrect": false,
+          "rationale": "Keputusan tidak terstruktur sepenuhnya memerlukan pertimbangan manajer."
+        },
+        {
+          "text": "Keputusan semi terstruktur.",
+          "isCorrect": true,
+          "rationale": "Keputusan semi terstruktur adalah kombinasi dari elemen yang dapat diprogram dan elemen yang memerlukan penilaian manusia. (Materi Inisiasi 8a, hal. 3)"
+        },
+        {
+          "text": "Keputusan operasional.",
+          "isCorrect": false,
+          "rationale": "Keputusan operasional adalah klasifikasi berdasarkan level manajemen."
+        }
+      ]
+    },
+    {
+      "questionNumber": 45,
+      "question": "Dalam proses pengambilan keputusan yang rasional, tahapan pertama yang harus dilakukan, termasuk identifikasi dan pemahaman masalah, adalah...",
+      "answerOptions": [
+        {
+          "text": "Perancangan (Design).",
+          "isCorrect": false,
+          "rationale": "Perancangan adalah tahap kedua, yaitu mencari dan mengembangkan alternatif solusi."
+        },
+        {
+          "text": "Pemilihan (Choice).",
+          "isCorrect": false,
+          "rationale": "Pemilihan adalah tahap ketiga, yaitu memilih alternatif terbaik."
+        },
+        {
+          "text": "Pencarian fakta (Intelligence).",
+          "isCorrect": true,
+          "rationale": "Tahap pertama adalah pencarian fakta (intelligence), yaitu memahami realitas dan masalah yang dihadapi. (Materi Inisiasi 8a, hal. 4 & 5)"
+        },
+        {
+          "text": "Implementasi (Implementation).",
+          "isCorrect": false,
+          "rationale": "Implementasi adalah tahap terakhir, yaitu menjalankan dan memantau keputusan."
+        }
+      ]
+    },
+    {
+      "questionNumber": 46,
+      "question": "Alat yang mendukung pembuatan keputusan semi terstruktur pada level manajer puncak dengan mengukur kinerja tiap-tiap dimensi menggunakan Key Performance Indicator (KPI) adalah...",
+      "answerOptions": [
+        {
+          "text": "Management Information System (MIS).",
+          "isCorrect": false,
+          "rationale": "MIS berfokus pada pelaporan kinerja terstruktur dan rutin untuk manajer menengah."
+        },
+        {
+          "text": "Decision Support System (DSS).",
+          "isCorrect": false,
+          "rationale": "DSS memprediksi perubahan pada variabel jika ada variabel lain yang berubah, biasanya untuk manajer menengah."
+        },
+        {
+          "text": "Executive Information System (EIS).",
+          "isCorrect": false,
+          "rationale": "EIS adalah sistem yang membantu eksekutif mengakses informasi, namun BSC adalah alat spesifik yang diukur."
+        },
+        {
+          "text": "Balanced Scorecard (BSC).",
+          "isCorrect": true,
+          "rationale": "BSC adalah alat manajemen strategis yang digunakan manajer puncak untuk menerjemahkan strategi menjadi metrik operasional yang terukur (KPI). (Materi Inisiasi 8a, hal. 11)"
+        }
+      ]
+    },
+    {
+      "questionNumber": 47,
+      "question": "Salah satu kriteria utama yang menunjukkan bahwa pengembangan sistem informasi dianggap berhasil adalah...",
+      "answerOptions": [
+        {
+          "text": "Biaya yang dikeluarkan melebihi anggaran yang telah ditentukan.",
+          "isCorrect": false,
+          "rationale": "Proyek dianggap berhasil jika biaya sesuai dengan yang dianggarkan atau kurang."
+        },
+        {
+          "text": "Sistem informasi yang dihasilkan memiliki fungsi, kinerja, dan fitur sesuai dengan yang diharapkan.",
+          "isCorrect": true,
+          "rationale": "Kriteria keberhasilan mencakup selesai tepat waktu, biaya sesuai anggaran, dan output yang memenuhi persyaratan fungsional/kualitas. (Materi Inisiasi 8b, hal. 2)"
+        },
+        {
+          "text": "Waktu penyelesaiannya melebihi rencana awal.",
+          "isCorrect": false,
+          "rationale": "Proyek harus selesai tepat waktu untuk dianggap berhasil."
+        },
+        {
+          "text": "Hanya melibatkan sedikit perubahan pada proses bisnis organisasi.",
+          "isCorrect": false,
+          "rationale": "Sistem baru sering kali menuntut perubahan organisasi (otomatisasi, rasionalisasi, dll.)."
+        }
+      ]
+    },
+    {
+      "questionNumber": 48,
+      "question": "Perubahan organisasi yang dibawa oleh sistem informasi baru yang berupa perbaikan proses bisnis menjadi lebih efisien dan terukur secara sistematis disebut...",
+      "answerOptions": [
+        {
+          "text": "Otomatisasi proses bisnis.",
+          "isCorrect": false,
+          "rationale": "Otomatisasi hanya mengganti tenaga manusia dengan mesin, bukan perbaikan sistematis."
+        },
+        {
+          "text": "Rasionalisasi proses bisnis.",
+          "isCorrect": true,
+          "rationale": "Rasionalisasi menyederhanakan dan merampingkan prosedur operasi standar sebelum diotomatisasi. (Materi Inisiasi 8b, hal. 3)"
+        },
+        {
+          "text": "Perancangan ulang proses bisnis (BPR).",
+          "isCorrect": false,
+          "rationale": "BPR adalah perubahan yang paling radikal, bukan perbaikan sistematis."
+        },
+        {
+          "text": "Pergeseran paradigma.",
+          "isCorrect": false,
+          "rationale": "Pergeseran paradigma adalah perubahan yang sangat mendasar dan strategis, bukan rasionalisasi."
+        }
+      ]
+    },
+    {
+      "questionNumber": 49,
+      "question": "Dalam metodologi Systems Development Life Cycle (SDLC), tahapan yang dilakukan setelah tahapan Perancangan Sistem dan sebelum Pengujian Sistem adalah...",
+      "answerOptions": [
+        {
+          "text": "Analisis sistem.",
+          "isCorrect": false,
+          "rationale": "Analisis sistem adalah tahap pertama, sebelum perancangan."
+        },
+        {
+          "text": "Pemrograman.",
+          "isCorrect": true,
+          "rationale": "Urutan SDLC adalah Analisis $\\to$ Perancangan $\\to$ Pemrograman $\\to$ Pengujian $\\to$ Konversi $\\to$ Penggunaan dan Perawatan. (Materi Inisiasi 8b, hal. 4)"
+        },
+        {
+          "text": "Konversi sistem.",
+          "isCorrect": false,
+          "rationale": "Konversi sistem adalah tahap kelima, setelah pengujian."
+        },
+        {
+          "text": "Penggunaan dan perawatan sistem.",
+          "isCorrect": false,
+          "rationale": "Ini adalah tahap terakhir dalam SDLC."
+        }
+      ]
+    },
+    {
+      "questionNumber": 50,
+      "question": "Terdapat lima variabel utama dalam menilai keberhasilan suatu proyek. Variabel tersebut adalah Ruang Lingkup Proyek, Waktu Pelaksanaan Proyek, Biaya Pelaksanaan Proyek, serta...",
+      "answerOptions": [
+        {
+          "text": "Manajemen Perubahan dan Pemasok.",
+          "isCorrect": false,
+          "rationale": "Ini adalah faktor keberhasilan pendukung, bukan variabel utama yang mengukur proyek."
+        },
+        {
+          "text": "Kualitas dan Risiko.",
+          "isCorrect": true,
+          "rationale": "Kelima variabel utama, yang sering disebut 'Segitiga Emas' ditambah Kualitas dan Risiko, harus dikelola untuk keberhasilan proyek. (Materi Inisiasi 8b, hal. 10)"
+        },
+        {
+          "text": "Pengalaman Teknologi dan Struktur Proyek.",
+          "isCorrect": false,
+          "rationale": "Ini adalah dimensi risiko proyek, bukan variabel keberhasilan utamanya."
+        },
+        {
+          "text": "Otomatisasi dan Rasionalisasi.",
+          "isCorrect": false,
+          "rationale": "Ini adalah jenis perubahan organisasi akibat SI."
+        }
+      ]
+    }
+  ]
+
+
+  function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>
