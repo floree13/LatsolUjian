@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UO Pemrograman berbasis Web UT</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList = [
+    {
+    "questionNumber": 1,
+    "question": "Istilah yang digunakan untuk proses menerima atau mengambil data/berkas dari server ke komputer lokal disebut...",
+    "answerOptions": [
+      { "text": "Browsing", "isCorrect": false, "rationale": "Browsing adalah aktivitas menjelajahi halaman web." },
+      { "text": "Upload", "isCorrect": false, "rationale": "Upload adalah mengirim data ke server." },
+      { "text": "Download", "isCorrect": true, "rationale": "Download adalah proses mengambil data dari server ke lokal. (Formatif 1)" },
+      { "text": "Hosting", "isCorrect": false, "rationale": "Hosting adalah tempat penyimpanan file website." }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Tag HTML yang digunakan untuk membuat daftar berurutan menggunakan angka atau abjad adalah...",
+    "answerOptions": [
+      { "text": "< ul >", "isCorrect": false, "rationale": "< ul > digunakan untuk Unordered List (simbol/bullet)." },
+      { "text": "< ol >", "isCorrect": true, "rationale": "< ol > adalah Ordered List untuk daftar berurutan. (Inisiasi 1)" },
+      { "text": "< li >", "isCorrect": false, "rationale": "< li > digunakan untuk isi item di dalam daftar." },
+      { "text": "< list >", "isCorrect": false, "rationale": "Tidak ada tag <list> standar di HTML." }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Siapakah tokoh utama di balik terciptanya CSS pada tahun 1994?",
+    "answerOptions": [
+      { "text": "Brendan Eich", "isCorrect": false, "rationale": "Brendan Eich adalah pencipta JavaScript." },
+      { "text": "Hakon Wium Lie", "isCorrect": true, "rationale": "Hakon Wium Lie mengusulkan CSS pertama kali tahun 1994. (Inisiasi 2)" },
+      { "text": "Evan You", "isCorrect": false, "rationale": "Evan You adalah pencipta Vue.js." },
+      { "text": "Tim Berners-Lee", "isCorrect": false, "rationale": "Tim Berners-Lee adalah penemu WWW dan HTML." }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Metode penulisan CSS yang diletakkan di dalam tag <head> menggunakan elemen <style> disebut...",
+    "answerOptions": [
+      { "text": "Inline CSS", "isCorrect": false, "rationale": "Inline ditulis langsung di atribut style elemen." },
+      { "text": "External CSS", "isCorrect": false, "rationale": "External menggunakan file .css terpisah." },
+      { "text": "Internal CSS", "isCorrect": true, "rationale": "Internal CSS ditulis di dalam tag <style> pada dokumen yang sama. (Inisiasi 2)" },
+      { "text": "Import CSS", "isCorrect": false, "rationale": "Import digunakan untuk memanggil file CSS eksternal." }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Manakah di bawah ini yang merupakan contoh penulisan variabel yang benar di JavaScript?",
+    "answerOptions": [
+      { "text": "var 1nama;", "isCorrect": false, "rationale": "Variabel tidak boleh diawali dengan angka." },
+      { "text": "var nama depan;", "isCorrect": false, "rationale": "Variabel tidak boleh mengandung spasi." },
+      { "text": "var nama_depan;", "isCorrect": true, "rationale": "Penggunaan underscore diperbolehkan dalam penamaan variabel. (Inisiasi 2)" },
+      { "text": "var nama-depan;", "isCorrect": false, "rationale": "Tanda hubung (-) dianggap sebagai operator pengurangan." }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Vue.js adalah framework JavaScript progresif yang fokus pada layer...",
+    "answerOptions": [
+      { "text": "Controller", "isCorrect": false, "rationale": "Meskipun menggunakan MVC, fokus utama Vue adalah View." },
+      { "text": "View", "isCorrect": true, "rationale": "Vue berfokus pada layer View untuk membangun UI. (Inisiasi 5)" },
+      { "text": "Model", "isCorrect": false, "rationale": "Model berkaitan dengan data, bukan fokus layer Vue." },
+      { "text": "Database", "isCorrect": false, "rationale": "Vue adalah framework front-end, bukan database." }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Directive yang digunakan untuk menampilkan data dengan interpretasi kode HTML di Vue.js adalah...",
+    "answerOptions": [
+      { "text": "v-text", "isCorrect": false, "rationale": "v-text hanya menampilkan teks polos." },
+      { "text": "{{ }}", "isCorrect": false, "rationale": "Mustache tag hanya untuk teks polos." },
+      { "text": "v-html", "isCorrect": true, "rationale": "v-html merender string sebagai kode HTML asli. (Inisiasi 5)" },
+      { "text": "v-bind", "isCorrect": false, "rationale": "v-bind digunakan untuk mengikat atribut elemen." }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Proses sinkronisasi antara data JavaScript dan objek DOM di Vue.js disebut...",
+    "answerOptions": [
+      { "text": "Data Binding", "isCorrect": true, "rationale": "Data binding adalah proses mengaitkan data dengan tampilan secara otomatis. (Inisiasi 6)" },
+      { "text": "Data Mining", "isCorrect": false, "rationale": "Data mining adalah proses penggalian informasi dari data besar." },
+      { "text": "Data Routing", "isCorrect": false, "rationale": "Routing berkaitan dengan navigasi halaman." },
+      { "text": "Data Collecting", "isCorrect": false, "rationale": "Pengumpulan data bukan istilah teknis untuk sinkronisasi Vue." }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Apa keunggulan utama dari 'Computed Property' dibandingkan 'Methods'?",
+    "answerOptions": [
+      { "text": "Bisa menerima argumen", "isCorrect": false, "rationale": "Hanya method yang secara alami menerima argumen." },
+      { "text": "Memiliki fitur caching", "isCorrect": true, "rationale": "Computed hanya dihitung ulang jika dependensinya berubah (caching). (Inisiasi 7)" },
+      { "text": "Dijalankan setiap kali render", "isCorrect": false, "rationale": "Ini adalah karakteristik Methods, bukan Computed." },
+      { "text": "Tidak memerlukan return value", "isCorrect": false, "rationale": "Computed justru harus mengembalikan nilai." }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Fasilitas untuk memantau perubahan data tertentu dan melakukan aksi sebagai responnya disebut...",
+    "answerOptions": [
+      { "text": "Methods", "isCorrect": false, "rationale": "Methods dipanggil secara manual melalui event." },
+      { "text": "Watcher", "isCorrect": true, "rationale": "Watcher digunakan untuk merespon perubahan data secara spesifik. (Inisiasi 8)" },
+      { "text": "Computed", "isCorrect": false, "rationale": "Computed digunakan untuk kalkulasi nilai baru dari data yang ada." },
+      { "text": "Template", "isCorrect": false, "rationale": "Template adalah struktur HTML-nya." }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Bagaimana cara mengakses elemen kedua dari array 'warna = [\"merah\", \"biru\", \"hijau\"]'?",
+    "answerOptions": [
+      { "text": "warna[0]", "isCorrect": false, "rationale": "Ini mengakses elemen pertama." },
+      { "text": "warna[1]", "isCorrect": true, "rationale": "Array menggunakan index mulai dari 0, maka elemen kedua ada di index 1. (Inisiasi 10)" },
+      { "text": "warna[2]", "isCorrect": false, "rationale": "Ini mengakses elemen ketiga." },
+      { "text": "warna.1", "isCorrect": false, "rationale": "Sintaks pengaksesan array menggunakan kurung siku." }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Directive v-for digunakan untuk iterasi data. Apa fungsi atribut ':key' yang disarankan?",
+    "answerOptions": [
+      { "text": "Sebagai penanda urutan", "isCorrect": false, "rationale": "Hanya membantu identifikasi unik, bukan pengurutan." },
+      { "text": "Membantu Vue melacak identitas setiap node DOM", "isCorrect": true, "rationale": "Key unik membantu Vue mengoptimalkan render ulang elemen. (Inisiasi 10)" },
+      { "text": "Menentukan warna elemen", "isCorrect": false, "rationale": "Key tidak berhubungan dengan styling." },
+      { "text": "Menghapus data duplikat", "isCorrect": false, "rationale": "Key tidak memvalidasi isi array." }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Fungsi JavaScript 'toUpperCase()' dalam filter Vue.js berguna untuk...",
+    "answerOptions": [
+      { "text": "Mengubah teks jadi huruf kecil", "isCorrect": false, "rationale": "Itu adalah fungsi toLowerCase()." },
+      { "text": "Mengubah teks jadi huruf kapital semua", "isCorrect": true, "rationale": "toUpperCase() membuat semua karakter menjadi huruf besar. (Inisiasi 11)" },
+      { "text": "Menghitung jumlah karakter", "isCorrect": false, "rationale": "Itu menggunakan property .length." },
+      { "text": "Membalikkan urutan teks", "isCorrect": false, "rationale": "Itu butuh kombinasi split, reverse, dan join." }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Modifier pada v-on yang digunakan agar event hanya dipicu satu kali saja adalah...",
+    "answerOptions": [
+      { "text": ".prevent", "isCorrect": false, "rationale": "Untuk mencegah aksi default browser (seperti submit form)." },
+      { "text": ".once", "isCorrect": true, "rationale": "Modifier .once memastikan event handler hanya jalan satu kali. (Inisiasi 11)" },
+      { "text": ".stop", "isCorrect": false, "rationale": "Untuk menghentikan event propagation (bubbling)." },
+      { "text": ".self", "isCorrect": false, "rationale": "Hanya memicu jika event berasal dari elemen itu sendiri." }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Apa yang membedakan Vue Component dengan instance Vue root?",
+    "answerOptions": [
+      { "text": "Component tidak punya data property", "isCorrect": false, "rationale": "Component tetap punya data property." },
+      { "text": "Component tidak memiliki opsi 'el'", "isCorrect": true, "rationale": "Component didefinisikan secara global/lokal tanpa 'el' karena dipanggil di DOM. (Inisiasi 12)" },
+      { "text": "Component tidak bisa pakai computed", "isCorrect": false, "rationale": "Component mendukung semua fitur instance Vue." },
+      { "text": "Component hanya bisa dipakai satu kali", "isCorrect": false, "rationale": "Kelebihan utama component adalah reusability (bisa dipakai berulang)." }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Elemen khusus pada component yang berfungsi sebagai 'placeholder' untuk memasukkan konten dari luar disebut...",
+    "answerOptions": [
+      { "text": "Props", "isCorrect": false, "rationale": "Props untuk mengirim data ke dalam component." },
+      { "text": "Slot", "isCorrect": true, "rationale": "Slot memungkinkan distribusi konten ke dalam template component. (Inisiasi 12)" },
+      { "text": "Filter", "isCorrect": false, "rationale": "Filter untuk format teks." },
+      { "text": "Directive", "isCorrect": false, "rationale": "Directive adalah instruksi khusus HTML." }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Elemen HTML5 yang digunakan untuk keperluan grafis, animasi, dan video secara dinamis adalah...",
+    "answerOptions": [
+      { "text": "<svg>", "isCorrect": false, "rationale": "SVG untuk grafis vektor berbasis XML." },
+      { "text": "<canvas>", "isCorrect": true, "rationale": "Canvas menyediakan area gambar berbasis pixel melalui JavaScript. (Inisiasi 13)" },
+      { "text": "<graph>", "isCorrect": false, "rationale": "Tidak ada tag <graph> standar." },
+      { "text": "<art>", "isCorrect": false, "rationale": "Tidak ada tag <art> standar." }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Metode pada context canvas untuk menggambar persegi panjang yang memiliki isi (warna) adalah...",
+    "answerOptions": [
+      { "text": "strokeRect()", "isCorrect": false, "rationale": "Ini hanya menggambar garis tepi (outline)." },
+      { "text": "fillRect()", "isCorrect": true, "rationale": "fillRect() menggambar persegi panjang padat dengan warna. (Inisiasi 13)" },
+      { "text": "drawRect()", "isCorrect": false, "rationale": "Bukan nama metode standar di Canvas API." },
+      { "text": "clearRect()", "isCorrect": false, "rationale": "Digunakan untuk menghapus area persegi panjang." }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Library JavaScript yang umum digunakan untuk melakukan HTTP Request (mengambil data dari API/Database) adalah...",
+    "answerOptions": [
+      { "text": "Bootstrap", "isCorrect": false, "rationale": "Bootstrap adalah framework CSS." },
+      { "text": "Axios", "isCorrect": true, "rationale": "Axios adalah library populer untuk menangani request AJAX/HTTP. (Inisiasi 14)" },
+      { "text": "JQuery UI", "isCorrect": false, "rationale": "Fokus pada interaksi UI, bukan khusus HTTP request modern." },
+      { "text": "Animate.css", "isCorrect": false, "rationale": "Library untuk animasi CSS." }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Format data yang paling sering digunakan saat bertukar informasi antara PHP (Server) dan Vue.js (Client) adalah...",
+    "answerOptions": [
+      { "text": "XML", "isCorrect": false, "rationale": "XML lebih berat dan jarang digunakan di modern web dibanding JSON." },
+      { "text": "JSON", "isCorrect": true, "rationale": "JSON ringan dan mudah dibaca oleh JavaScript secara native. (Inisiasi 14)" },
+      { "text": "CSV", "isCorrect": false, "rationale": "Biasanya digunakan untuk ekspor data tabel, bukan interaksi API." },
+      { "text": "TXT", "isCorrect": false, "rationale": "Teks polos sulit diolah jika datanya kompleks." }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Struktur dasar dokumen HTML dimulai dengan deklarasi...",
+    "answerOptions": [
+      { "text": "<html>", "isCorrect": false, "rationale": "Ini adalah root element, tapi bukan deklarasi tipe." },
+      { "text": "<!DOCTYPE html>", "isCorrect": true, "rationale": "Deklarasi ini memberi tahu browser bahwa ini dokumen HTML5. (Inisiasi 1)" },
+      { "text": "<head>", "isCorrect": false, "rationale": "Head berisi metadata." },
+      { "text": "<body>", "isCorrect": false, "rationale": "Body berisi konten visual." }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Bagian dari tag yang memiliki nilai atau informasi tambahan (misal: src pada <img>) disebut...",
+    "answerOptions": [
+      { "text": "Element", "isCorrect": false, "rationale": "Element adalah keseluruhan tag pembuka sampai penutup." },
+      { "text": "Attribute", "isCorrect": true, "rationale": "Attribute memberikan informasi tambahan pada elemen. (Inisiasi 1)" },
+      { "text": "Selector", "isCorrect": false, "rationale": "Selector digunakan di CSS." },
+      { "text": "Value", "isCorrect": false, "rationale": "Value adalah nilai di dalam atribut." }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Property CSS yang digunakan untuk mengubah warna latar belakang sebuah elemen adalah...",
+    "answerOptions": [
+      { "text": "color", "isCorrect": false, "rationale": "Property color digunakan untuk warna teks." },
+      { "text": "background-color", "isCorrect": true, "rationale": "Inilah property untuk warna latar belakang. (Inisiasi 2)" },
+      { "text": "font-color", "isCorrect": false, "rationale": "Tidak ada property font-color di CSS." },
+      { "text": "bgcolor", "isCorrect": false, "rationale": "bgcolor adalah atribut HTML lama, bukan property CSS." }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Di JavaScript, operator '===' (strict equality) berbeda dengan '==' karena...",
+    "answerOptions": [
+      { "text": "Hanya membandingkan nilai", "isCorrect": false, "rationale": "Ini fungsi dari '=='." },
+      { "text": "Membandingkan nilai dan tipe data sekaligus", "isCorrect": true, "rationale": "Strict equality memastikan nilai dan tipe data harus sama. (Inisiasi 2)" },
+      { "text": "Digunakan untuk assignment", "isCorrect": false, "rationale": "Assignment menggunakan '='." },
+      { "text": "Hanya untuk angka", "isCorrect": false, "rationale": "Bisa untuk semua tipe data." }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Pencipta Vue.js, Evan You, sebelumnya bekerja di perusahaan...",
+    "answerOptions": [
+      { "text": "Facebook", "isCorrect": false, "rationale": "Facebook menciptakan React." },
+      { "text": "Google", "isCorrect": true, "rationale": "Evan You terinspirasi saat bekerja dengan Angular di Google. (Inisiasi 5)" },
+      { "text": "Microsoft", "isCorrect": false, "rationale": "Microsoft mengembangkan TypeScript." },
+      { "text": "Netscape", "isCorrect": false, "rationale": "Netscape adalah tempat lahirnya JavaScript." }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Tag yang digunakan untuk menghubungkan file CSS eksternal ke dalam HTML adalah...",
+    "answerOptions": [
+      { "text": "<style>", "isCorrect": false, "rationale": "Untuk Internal CSS." },
+      { "text": "<link>", "isCorrect": true, "rationale": "<link rel='stylesheet' href='...'> digunakan untuk file eksternal. (Inisiasi 3)" },
+      { "text": "<script>", "isCorrect": false, "rationale": "Untuk file JavaScript." },
+      { "text": "<a>", "isCorrect": false, "rationale": "Untuk hyperlink antar halaman." }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Directive v-bind dapat disingkat dengan simbol...",
+    "answerOptions": [
+      { "text": "@", "isCorrect": false, "rationale": "Simbol @ adalah singkatan v-on." },
+      { "text": ":", "isCorrect": true, "rationale": "Tanda titik dua (:) adalah shortcut untuk v-bind. (Inisiasi 6)" },
+      { "text": "#", "isCorrect": false, "rationale": "Simbol # adalah singkatan v-slot." },
+      { "text": "$", "isCorrect": false, "rationale": "Simbol $ digunakan untuk internal property Vue (misal: $emit)." }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Dalam siklus hidup (lifecycle) Vue, method yang dipanggil setelah instance selesai dibuat adalah...",
+    "answerOptions": [
+      { "text": "created", "isCorrect": true, "rationale": "Hook created dipanggil setelah instance selesai diproses. (Inisiasi 9)" },
+      { "text": "mounted", "isCorrect": false, "rationale": "Mounted dipanggil setelah elemen masuk ke DOM." },
+      { "text": "updated", "isCorrect": false, "rationale": "Updated dipanggil saat ada perubahan data yang merender ulang." },
+      { "text": "destroyed", "isCorrect": false, "rationale": "Destroyed dipanggil saat instance dihapus." }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Berikut adalah tipe data primitif di JavaScript, kecuali...",
+    "answerOptions": [
+      { "text": "String", "isCorrect": false, "rationale": "String adalah tipe data primitif." },
+      { "text": "Number", "isCorrect": false, "rationale": "Number adalah tipe data primitif." },
+      { "text": "Array", "isCorrect": true, "rationale": "Array di JavaScript dianggap sebagai objek (Object). (Inisiasi 10)" },
+      { "text": "Boolean", "isCorrect": false, "rationale": "Boolean adalah tipe data primitif." }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Metode array yang digunakan untuk menambah elemen baru di akhir array adalah...",
+    "answerOptions": [
+      { "text": "pop()", "isCorrect": false, "rationale": "pop() menghapus elemen terakhir." },
+      { "text": "push()", "isCorrect": true, "rationale": "push() menambah elemen ke posisi terakhir. (Inisiasi 10)" },
+      { "text": "shift()", "isCorrect": false, "rationale": "shift() menghapus elemen pertama." },
+      { "text": "unshift()", "isCorrect": false, "rationale": "unshift() menambah elemen ke posisi awal." }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Untuk menangkap input dari keyboard pada Vue.js, kita bisa menggunakan...",
+    "answerOptions": [
+      { "text": "v-on:keyup", "isCorrect": true, "rationale": "v-on:keyup (atau @keyup) mendeteksi saat tombol dilepas. (Inisiasi 11)" },
+      { "text": "v-on:click", "isCorrect": false, "rationale": "Untuk klik mouse." },
+      { "text": "v-bind:key", "isCorrect": false, "rationale": "Untuk identitas list rendering." },
+      { "text": "v-model:key", "isCorrect": false, "rationale": "Bukan sintaks standar Vue." }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Komponen yang dapat digunakan kembali dalam Vue disebut dengan istilah...",
+    "answerOptions": [
+      { "text": "Directives", "isCorrect": false, "rationale": "Atribut khusus pada HTML." },
+      { "text": "Components", "isCorrect": true, "rationale": "Instance Vue yang bisa dipanggil sebagai elemen custom. (Inisiasi 12)" },
+      { "text": "Mixins", "isCorrect": false, "rationale": "Untuk berbagi logika fungsional." },
+      { "text": "Filters", "isCorrect": false, "rationale": "Untuk memformat teks." }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Dalam Component, data property harus berbentuk...",
+    "answerOptions": [
+      { "text": "Object", "isCorrect": false, "rationale": "Pada instance root boleh object, tapi di component tidak." },
+      { "text": "Function yang mengembalikan Object", "isCorrect": true, "rationale": "Agar setiap instance component punya salinan data sendiri. (Inisiasi 12)" },
+      { "text": "Array", "isCorrect": false, "rationale": "Data harus mengembalikan object." },
+      { "text": "String", "isCorrect": false, "rationale": "Data harus mengembalikan object." }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Metode 'arc()' pada Canvas digunakan untuk menggambar...",
+    "answerOptions": [
+      { "text": "Garis lurus", "isCorrect": false, "rationale": "Garis lurus menggunakan lineTo()." },
+      { "text": "Lingkaran atau lengkungan", "isCorrect": true, "rationale": "arc() mendefinisikan busur lingkaran. (Inisiasi 13)" },
+      { "text": "Segitiga", "isCorrect": false, "rationale": "Segitiga dibuat dengan kumpulan lineTo()." },
+      { "text": "Teks", "isCorrect": false, "rationale": "Teks menggunakan fillText()." }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Aplikasi stack yang sering digunakan dalam pengembangan web PHP adalah XAMPP, di mana 'A' dalam XAMPP berarti...",
+    "answerOptions": [
+      { "text": "Application", "isCorrect": false, "rationale": "Salah." },
+      { "text": "Apache", "isCorrect": true, "rationale": "A adalah Apache Web Server. (Inisiasi 14)" },
+      { "text": "Array", "isCorrect": false, "rationale": "Salah." },
+      { "text": "Asynchronous", "isCorrect": false, "rationale": "Salah." }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Dalam pengambilan data dari database, fungsi PHP 'json_encode()' digunakan untuk...",
+    "answerOptions": [
+      { "text": "Mengamankan database", "isCorrect": false, "rationale": "Bukan untuk keamanan." },
+      { "text": "Mengubah array/data PHP menjadi format JSON", "isCorrect": true, "rationale": "Agar data bisa dikirim dan dibaca oleh frontend JavaScript. (Inisiasi 14)" },
+      { "text": "Menghapus data", "isCorrect": false, "rationale": "Bukan fungsi penghapusan." },
+      { "text": "Menampilkan tabel HTML", "isCorrect": false, "rationale": "PHP menampilkan HTML lewat echo atau tag template." }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "WWW diperkenalkan pertama kali pada tahun...",
+    "answerOptions": [
+      { "text": "1989", "isCorrect": false, "rationale": "Tahun pengusulan proposal." },
+      { "text": "1990", "isCorrect": true, "rationale": "Website pertama kali diperkenalkan secara publik. (Formatif 1)" },
+      { "text": "1995", "isCorrect": false, "rationale": "Tahun lahirnya JS." },
+      { "text": "2000", "isCorrect": false, "rationale": "Era bubble dot-com." }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Contoh bahasa pemrograman sisi server (server-side) adalah...",
+    "answerOptions": [
+      { "text": "HTML", "isCorrect": false, "rationale": "Markup language sisi klien." },
+      { "text": "CSS", "isCorrect": false, "rationale": "Style language sisi klien." },
+      { "text": "PHP", "isCorrect": true, "rationale": "PHP dieksekusi di server. (Formatif 1)" },
+      { "text": "JavaScript Standard", "isCorrect": false, "rationale": "Secara default adalah client-side (kecuali Node.js)." }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Atribut 'href' pada tag <a> digunakan untuk...",
+    "answerOptions": [
+      { "text": "Menentukan nama gambar", "isCorrect": false, "rationale": "Itu atribut src di <img>." },
+      { "text": "Menentukan alamat tujuan link", "isCorrect": true, "rationale": "href adalah Hypertext Reference. (Inisiasi 1)" },
+      { "text": "Menentukan ukuran font", "isCorrect": false, "rationale": "Ukuran font diatur via CSS." },
+      { "text": "Membuat garis bawah", "isCorrect": false, "rationale": "Link otomatis bergaris bawah, tapi diatur via CSS." }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Untuk memberikan komentar di kode CSS, kita menggunakan simbol...",
+    "answerOptions": [
+      { "text": "//", "isCorrect": false, "rationale": "Untuk komentar satu baris di JS." },
+      { "text": "/* ... */", "isCorrect": true, "rationale": "Satu-satunya cara komentar di CSS. (Inisiasi 2)" },
+      { "text": "`", "isCorrect": false, "rationale": "Komentar untuk HTML." },
+      { "text": "#", "isCorrect": false, "rationale": "Biasanya untuk ID selector di CSS." }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Manakah directive yang digunakan untuk rendering kondisional (menampilkan elemen hanya jika syarat terpenuhi)?",
+    "answerOptions": [
+      { "text": "v-for", "isCorrect": false, "rationale": "Untuk perulangan." },
+      { "text": "v-if", "isCorrect": true, "rationale": "Menghapus/menambah elemen berdasarkan kondisi. (Inisiasi 5)" },
+      { "text": "v-model", "isCorrect": false, "rationale": "Untuk data binding input." },
+      { "text": "v-on", "isCorrect": false, "rationale": "Untuk event handling." }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Apa fungsi dari 'v-on:submit.prevent'?",
+    "answerOptions": [
+      { "text": "Mengirim data secara otomatis", "isCorrect": false, "rationale": "Salah." },
+      { "text": "Mencegah halaman reload saat form di-submit", "isCorrect": true, "rationale": ".prevent menghentikan aksi default browser (reload). (Inisiasi 11)" },
+      { "text": "Menghapus isi form", "isCorrect": false, "rationale": "Harus dilakukan manual di logic." },
+      { "text": "Memvalidasi input angka", "isCorrect": false, "rationale": "Bukan fungsinya." }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Komunikasi data antara Component Anak (Child) ke Component Induk (Parent) dilakukan melalui...",
+    "answerOptions": [
+      { "text": "Props", "isCorrect": false, "rationale": "Props adalah aliran data Parent ke Child." },
+      { "text": "$emit (Events)", "isCorrect": true, "rationale": "Child mengirim sinyal/data ke Parent menggunakan event $emit. (Inisiasi 12)" },
+      { "text": "Data binding", "isCorrect": false, "rationale": "Istilah umum." },
+      { "text": "Slot", "isCorrect": false, "rationale": "Untuk distribusi konten." }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Property 'this' dalam method Vue merujuk kepada...",
+    "answerOptions": [
+      { "text": "Window browser", "isCorrect": false, "rationale": "Di dalam Vue, scope dipindahkan." },
+      { "text": "Instance Vue yang bersangkutan", "isCorrect": true, "rationale": "'this' memberikan akses ke data, computed, dan method instance. (Inisiasi 8)" },
+      { "text": "Elemen HTML murni", "isCorrect": false, "rationale": "Murni elemen bisa diakses via refs." },
+      { "text": "Database server", "isCorrect": false, "rationale": "Sangat jauh berbeda." }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Urutan hirarki file yang umum dalam praktikum Vue.js sederhana adalah...",
+    "answerOptions": [
+      { "text": "index.html -> app.js -> style.css", "isCorrect": true, "rationale": "Urutan standar struktur file frontend. (Inisiasi 9)" },
+      { "text": "app.js -> index.html -> style.css", "isCorrect": false, "rationale": "HTML adalah entry point utama." },
+      { "text": "style.css -> index.html -> app.js", "isCorrect": false, "rationale": "Salah." },
+      { "text": "database.sql -> index.html", "isCorrect": false, "rationale": "SQL hanya untuk server." }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Metode array 'pop()' berguna untuk...",
+    "answerOptions": [
+      { "text": "Menambah elemen", "isCorrect": false, "rationale": "Push/Unshift untuk menambah." },
+      { "text": "Menghapus elemen terakhir", "isCorrect": true, "rationale": "pop() mengambil dan menghapus item terakhir. (Inisiasi 10)" },
+      { "text": "Menghapus elemen pertama", "isCorrect": false, "rationale": "Itu adalah shift()." },
+      { "text": "Mengurutkan data", "isCorrect": false, "rationale": "Itu adalah sort()." }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Property 'transition' di Vue.js digunakan untuk...",
+    "answerOptions": [
+      { "text": "Navigasi antar halaman", "isCorrect": false, "rationale": "Navigasi menggunakan Vue Router." },
+      { "text": "Memberikan efek animasi saat elemen muncul/hilang", "isCorrect": true, "rationale": "Transition membungkus elemen yang masuk/keluar DOM. (Inisiasi 13)" },
+      { "text": "Mengubah warna teks secara statis", "isCorrect": false, "rationale": "Cukup pakai CSS biasa." },
+      { "text": "Menghubungkan ke database", "isCorrect": false, "rationale": "Tidak berhubungan." }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Sistem alamat unik untuk host dalam jaringan TCP/IP disebut...",
+    "answerOptions": [
+      { "text": "URL", "isCorrect": false, "rationale": "URL menyertakan protokol dan domain." },
+      { "text": "Alamat IP (IP Address)", "isCorrect": true, "rationale": "IP adalah identitas unik perangkat di jaringan. (Formatif 1)" },
+      { "text": "DNS", "isCorrect": false, "rationale": "DNS mengubah IP jadi nama domain." },
+      { "text": "HTTP", "isCorrect": false, "rationale": "HTTP adalah protokol transfernya." }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Layanan untuk menyimpan data website agar dapat diakses publik di internet disebut...",
+    "answerOptions": [
+      { "text": "Web Browser", "isCorrect": false, "rationale": "Aplikasi untuk melihat web." },
+      { "text": "Web Hosting", "isCorrect": true, "rationale": "Hosting adalah 'rumah' penyimpanan file web. (Inisiasi 1)" },
+      { "text": "Web Server", "isCorrect": false, "rationale": "Perangkat lunak yang melayani request (misal: Apache)." },
+      { "text": "Domain", "isCorrect": false, "rationale": "Alamat unik (misal: google.com)." }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Dalam Canvas, perintah 'ctx.beginPath()' berfungsi untuk...",
+    "answerOptions": [
+      { "text": "Menghapus gambar", "isCorrect": false, "rationale": "Salah." },
+      { "text": "Memulai jalur baru atau mereset jalur saat ini", "isCorrect": true, "rationale": "Agar gambar baru tidak terhubung dengan garis sebelumnya. (Inisiasi 13)" },
+      { "text": "Mengakhiri gambar", "isCorrect": false, "rationale": "closePath() menutup jalur." },
+      { "text": "Memberi warna garis", "isCorrect": false, "rationale": "Itu adalah strokeStyle." }
+    ]
+  }
+]
+
+
+  function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>

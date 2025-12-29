@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UO Kewirausahaan Di Era Digital UT</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList =[
+  {
+    "questionNumber": 1,
+    "question": "Definisi kewirausahaan yang menitikberatkan pada seseorang yang membutuhkan dana untuk mengembangkan usahanya merupakan ciri khas pada periode abad...",
+    "answerOptions": [
+      {
+        "text": "Abad 17",
+        "isCorrect": false,
+        "rationale": "Pada abad 17, wirausaha lebih dikaitkan dengan kontrak kerja dengan pemerintah."
+      },
+      {
+        "text": "Abad 18",
+        "isCorrect": true,
+        "rationale": "Abad 18 adalah periode di mana wirausaha mulai dipisahkan dari pemilik modal, namun tetap membutuhkan dana pengembangan."
+      },
+      {
+        "text": "Abad 19",
+        "isCorrect": false,
+        "rationale": "Abad 19 lebih menekankan pada kemampuan mengorganisasi dan mengelola sumber daya."
+      },
+      {
+        "text": "Abad 20",
+        "isCorrect": false,
+        "rationale": "Abad 20 fokus pada inovasi dan teknologi digital."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Seorang wirausaha yang memiliki ego tinggi seringkali sulit menghargai pandangan orang lain. Karakteristik kunci apa yang seharusnya dimiliki untuk mengatasi hal ini?",
+    "answerOptions": [
+      {
+        "text": "Kejujuran",
+        "isCorrect": false,
+        "rationale": "Kejujuran terkait dengan etika bisnis, bukan langsung mengatasi masalah ego dalam menerima pendapat."
+      },
+      {
+        "text": "Kepemimpinan",
+        "isCorrect": false,
+        "rationale": "Kepemimpinan adalah kemampuan memberikan inspirasi, meski ego rendah membantu kepemimpinan yang baik."
+      },
+      {
+        "text": "Fleksibilitas dan Menghilangkan Ego",
+        "isCorrect": true,
+        "rationale": "Fleksibilitas dalam berpikir mengharuskan seseorang menghilangkan egonya agar bisa mengubah strategi berdasarkan situasi."
+      },
+      {
+        "text": "Berani Mengambil Risiko",
+        "isCorrect": false,
+        "rationale": "Mengambil risiko adalah soal keberanian menghadapi ketidakpastian, bukan soal keterbukaan terhadap pendapat orang lain."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Dalam prinsip Effectuation, 'Bird-in-Hand' berarti wirausaha harus memulai usahanya dengan...",
+    "answerOptions": [
+      {
+        "text": "Modal pinjaman bank yang besar agar cepat tumbuh.",
+        "isCorrect": false,
+        "rationale": "Effectuation justru menghindari ketergantungan pada modal besar di awal."
+      },
+      {
+        "text": "Sumber daya yang dimiliki saat ini (keterampilan, jaringan, dan pengalaman).",
+        "isCorrect": true,
+        "rationale": "Prinsip Bird-in-Hand menekankan penggunaan apa yang sudah tersedia di tangan."
+      },
+      {
+        "text": "Menunggu kondisi pasar stabil terlebih dahulu.",
+        "isCorrect": false,
+        "rationale": "Wirausaha tidak menunggu kondisi sempurna, tapi bertindak dengan apa yang ada."
+      },
+      {
+        "text": "Melakukan riset pasar selama bertahun-tahun.",
+        "isCorrect": false,
+        "rationale": "Ini adalah pendekatan kausal (planning-based), bukan effectuation."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Model bisnis e-commerce seperti Bukalapak dan Tokopedia yang mempertemukan banyak penjual dan pembeli menggunakan model...",
+    "answerOptions": [
+      {
+        "text": "Virtual Store",
+        "isCorrect": false,
+        "rationale": "Virtual store biasanya merujuk pada toko tunggal yang berpindah ke online."
+      },
+      {
+        "text": "Marketplace",
+        "isCorrect": true,
+        "rationale": "Marketplace adalah model bisnis yang menyediakan platform bagi pihak ketiga untuk bertransaksi."
+      },
+      {
+        "text": "Drop-shipping",
+        "isCorrect": false,
+        "rationale": "Drop-shipping adalah metode pemenuhan pesanan, bukan model platform utamanya."
+      },
+      {
+        "text": "Social Commerce",
+        "isCorrect": false,
+        "rationale": "Social commerce menggunakan media sosial sebagai alat transaksi utama."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Tahap pertama dalam Design Thinking yang berfokus pada pemahaman mendalam tentang kebutuhan dan masalah pelanggan disebut...",
+    "answerOptions": [
+      {
+        "text": "Define",
+        "isCorrect": false,
+        "rationale": "Define adalah tahap menentukan masalah setelah mendapatkan informasi."
+      },
+      {
+        "text": "Ideate",
+        "isCorrect": false,
+        "rationale": "Ideate adalah tahap menghasilkan solusi kreatif."
+      },
+      {
+        "text": "Empathy",
+        "isCorrect": true,
+        "rationale": "Empathy melibatkan pengamatan dan wawancara untuk merasakan apa yang dirasakan pengguna."
+      },
+      {
+        "text": "Prototype",
+        "isCorrect": false,
+        "rationale": "Prototype adalah pembuatan model fisik/digital dari solusi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Apa fungsi dari Value Proposition Canvas (VPC)?",
+    "answerOptions": [
+      {
+        "text": "Menghitung keuntungan bersih perusahaan secara otomatis.",
+        "isCorrect": false,
+        "rationale": "VPC bukan alat akuntansi."
+      },
+      {
+        "text": "Memetakan profil konsumen dan nilai produk agar selaras (fit).",
+        "isCorrect": true,
+        "rationale": "VPC membantu menyelaraskan masalah konsumen (pains/gains) dengan solusi produk."
+      },
+      {
+        "text": "Menentukan struktur gaji karyawan dalam tim.",
+        "isCorrect": false,
+        "rationale": "VPC fokus pada nilai produk bagi konsumen, bukan manajemen internal SDM."
+      },
+      {
+        "text": "Menghitung biaya pemasaran digital.",
+        "isCorrect": false,
+        "rationale": "Ini adalah bagian dari budgeting, bukan fungsi VPC."
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Dalam Blue Ocean Strategy, tujuannya adalah membuat kompetisi menjadi tidak relevan dengan cara...",
+    "answerOptions": [
+      {
+        "text": "Menurunkan harga serendah mungkin untuk mematikan lawan.",
+        "isCorrect": false,
+        "rationale": "Ini adalah strategi 'Red Ocean' yang berdarah-darah."
+      },
+      {
+        "text": "Membuka ruang pasar baru (uncontested market space).",
+        "isCorrect": true,
+        "rationale": "Blue Ocean berfokus pada inovasi nilai untuk menciptakan pasar yang belum ada pesaingnya."
+      },
+      {
+        "text": "Meniru produk kompetitor yang sudah sukses.",
+        "isCorrect": false,
+        "rationale": "Meniru justru membuat bisnis terjebak di Red Ocean."
+      },
+      {
+        "text": "Membeli perusahaan kompetitor agar tidak ada saingan.",
+        "isCorrect": false,
+        "rationale": "Ini adalah akuisisi, bukan strategi penciptaan pasar baru."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Apa yang dimaksud dengan 'Affordable Loss' dalam kewirausahaan?",
+    "answerOptions": [
+      {
+        "text": "Keuntungan maksimal yang bisa diperoleh.",
+        "isCorrect": false,
+        "rationale": "Affordable loss bicara tentang batas bawah risiko, bukan batas atas profit."
+      },
+      {
+        "text": "Batas kerugian yang sanggup ditanggung wirausaha tanpa bangkrut.",
+        "isCorrect": true,
+        "rationale": "Wirausaha harus berinvestasi hanya sebesar yang mereka rela hilangkan jika gagal."
+      },
+      {
+        "text": "Biaya operasional bulanan yang tetap.",
+        "isCorrect": false,
+        "rationale": "Ini adalah biaya tetap (fixed cost), bukan konsep risiko kerugian."
+      },
+      {
+        "text": "Kehilangan pelanggan akibat persaingan.",
+        "isCorrect": false,
+        "rationale": "Ini adalah dampak persaingan, bukan prinsip manajemen risiko."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Tahap pembentukan tim di mana terjadi konflik antar anggota terkait peran dan tanggung jawab disebut tahap...",
+    "answerOptions": [
+      {
+        "text": "Forming",
+        "isCorrect": false,
+        "rationale": "Forming adalah tahap awal perkenalan."
+      },
+      {
+        "text": "Storming",
+        "isCorrect": true,
+        "rationale": "Storming ditandai dengan munculnya ketegangan dan konflik saat tim mulai bekerja."
+      },
+      {
+        "text": "Norming",
+        "isCorrect": false,
+        "rationale": "Norming adalah tahap mulai terbentuknya konsensus dan norma."
+      },
+      {
+        "text": "Performing",
+        "isCorrect": false,
+        "rationale": "Performing adalah tahap di mana tim sudah bekerja secara efektif dan fungsional."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Konsep 'Lemonade Principle' dalam effectuation mengajarkan wirausaha untuk...",
+    "answerOptions": [
+      {
+        "text": "Fokus hanya pada penjualan minuman segar.",
+        "isCorrect": false,
+        "rationale": "Lemonade hanyalah metafora, bukan produk fisik."
+      },
+      {
+        "text": "Menghindari segala bentuk masalah yang ada.",
+        "isCorrect": false,
+        "rationale": "Masalah tidak bisa dihindari dalam bisnis."
+      },
+      {
+        "text": "Memanfaatkan kejutan atau masalah sebagai peluang baru.",
+        "isCorrect": true,
+        "rationale": "Prinsip ini analog dengan 'jika hidup memberimu lemon, buatlah lemonade'."
+      },
+      {
+        "text": "Menjual produk dengan harga yang sangat murah.",
+        "isCorrect": false,
+        "rationale": "Ini adalah strategi harga, bukan prinsip adaptasi peluang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Menurut teori Flow, 'distorsi pengalaman temporal' berarti...",
+    "answerOptions": [
+      {
+        "text": "Waktu terasa berlalu sangat lambat karena bosan.",
+        "isCorrect": false,
+        "rationale": "Ini justru tanda tidak berada dalam kondisi flow."
+      },
+      {
+        "text": "Waktu terasa berlalu lebih cepat dari biasanya karena saking asyiknya.",
+        "isCorrect": true,
+        "rationale": "Flow membuat seseorang kehilangan rasa akan waktu."
+      },
+      {
+        "text": "Kesulitan dalam mengatur jadwal harian.",
+        "isCorrect": false,
+        "rationale": "Ini adalah masalah manajemen waktu, bukan flow."
+      },
+      {
+        "text": "Ketidakmampuan mengingat kejadian di masa lalu.",
+        "isCorrect": false,
+        "rationale": "Ini adalah amnesia, bukan distorsi temporal dalam aktivitas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Ciri khas wirausaha pada abad ke-19 adalah...",
+    "answerOptions": [
+      {
+        "text": "Pencipta teknologi digital.",
+        "isCorrect": false,
+        "rationale": "Ini karakteristik abad ke-20 dan 21."
+      },
+      {
+        "text": "Orang yang mengorganisasi dan mengelola perusahaan untuk nilai pribadi.",
+        "isCorrect": true,
+        "rationale": "Abad 19 menekankan pada manajemen dan organisasi sumber daya."
+      },
+      {
+        "text": "Seseorang yang hanya bekerja di bawah perintah pemerintah.",
+        "isCorrect": false,
+        "rationale": "Ini karakteristik abad pertengahan/17."
+      },
+      {
+        "text": "Penemu alat-alat musik tradisional.",
+        "isCorrect": false,
+        "rationale": "Tidak relevan dengan sejarah kewirausahaan secara umum."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Dalam konteks digital, apa peran utama 'Minimum Viable Product' (MVP)?",
+    "answerOptions": [
+      {
+        "text": "Produk dengan fitur paling lengkap dan mahal.",
+        "isCorrect": false,
+        "rationale": "MVP justru produk dengan fitur paling minimal."
+      },
+      {
+        "text": "Produk sederhana untuk menguji pasar dan mendapatkan feedback cepat.",
+        "isCorrect": true,
+        "rationale": "MVP digunakan untuk belajar dari konsumen dengan risiko biaya rendah."
+      },
+      {
+        "text": "Produk yang sudah siap diproduksi massal jutaan unit.",
+        "isCorrect": false,
+        "rationale": "Produksi massal dilakukan setelah MVP terbukti sukses di pasar."
+      },
+      {
+        "text": "Produk yang tidak memiliki kegunaan sama sekali.",
+        "isCorrect": false,
+        "rationale": "Meskipun minimal, produk harus tetap 'viable' atau berguna."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Strategi 'Rapid Skimming' dalam peluncuran usaha berarti...",
+    "answerOptions": [
+      {
+        "text": "Harga rendah dengan promosi rendah.",
+        "isCorrect": false,
+        "rationale": "Ini adalah slow penetration."
+      },
+      {
+        "text": "Harga tinggi dengan tingkat promosi yang tinggi.",
+        "isCorrect": true,
+        "rationale": "Tujuannya untuk meraup keuntungan maksimal dari segmen atas secepat mungkin."
+      },
+      {
+        "text": "Menjual produk bekas secara online.",
+        "isCorrect": false,
+        "rationale": "Skimming tidak ada kaitannya dengan status produk baru atau bekas."
+      },
+      {
+        "text": "Membagikan produk secara gratis.",
+        "isCorrect": false,
+        "rationale": "Ini adalah strategi 'freemium' atau sampel."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Apa elemen terpenting dalam membangun kepercayaan pelanggan di era digital menurut materi Design Thinking?",
+    "answerOptions": [
+      {
+        "text": "Memasang iklan di papan reklame jalan raya.",
+        "isCorrect": false,
+        "rationale": "Iklan fisik kurang relevan dengan inti kepercayaan digital yang interaktif."
+      },
+      {
+        "text": "Komunikasi yang jujur, transparan, dan pemberian solusi yang memadai.",
+        "isCorrect": true,
+        "rationale": "Transparansi adalah kunci loyalitas di dunia digital."
+      },
+      {
+        "text": "Menggunakan jasa influencer mahal sekalipun produk belum bagus.",
+        "isCorrect": false,
+        "rationale": "Ini justru bisa merusak kepercayaan jangka panjang jika produk mengecewakan."
+      },
+      {
+        "text": "Menyembunyikan ulasan negatif dari pelanggan.",
+        "isCorrect": false,
+        "rationale": "Tindakan ini tidak transparan dan merusak integritas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Langkah pertama dalam menyusun Deskripsi Pekerjaan (Job Description) yang efektif adalah...",
+    "answerOptions": [
+      {
+        "text": "Menentukan besaran gaji.",
+        "isCorrect": false,
+        "rationale": "Gaji biasanya ditentukan di tahap akhir setelah tugas jelas."
+      },
+      {
+        "text": "Melakukan analisis pekerjaan (job analysis).",
+        "isCorrect": true,
+        "rationale": "Analisis dilakukan untuk memahami kebutuhan posisi tersebut sebelum dituangkan dalam draf."
+      },
+      {
+        "text": "Langsung mengiklankan lowongan di media sosial.",
+        "isCorrect": false,
+        "rationale": "Iklan membutuhkan job desc yang sudah jadi."
+      },
+      {
+        "text": "Mewawancarai kandidat.",
+        "isCorrect": false,
+        "rationale": "Wawancara dilakukan setelah lamaran masuk berdasarkan job desc."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Model bisnis 'Software-as-a-Service' (SaaS) sangat menguntungkan di era digital karena...",
+    "answerOptions": [
+      {
+        "text": "Wirausaha tidak perlu memiliki server fisik sendiri.",
+        "isCorrect": false,
+        "rationale": "Ini lebih ke arah infrastruktur cloud, bukan inti keuntungan SaaS bagi pebisnis."
+      },
+      {
+        "text": "Mengurangi biaya operasional dan memperluas jangkauan pasar lewat cloud.",
+        "isCorrect": true,
+        "rationale": "SaaS memungkinkan skalabilitas tinggi dengan biaya variabel yang rendah."
+      },
+      {
+        "text": "Hanya bisa digunakan oleh perusahaan besar.",
+        "isCorrect": false,
+        "rationale": "SaaS justru mempermudah UKM mengakses software canggih."
+      },
+      {
+        "text": "Tidak membutuhkan koneksi internet.",
+        "isCorrect": false,
+        "rationale": "SaaS mutlak membutuhkan internet untuk diakses."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Wirausaha yang memiliki sifat 'ingin mendapatkan sesuatu yang besar dengan cara instan' biasanya...",
+    "answerOptions": [
+      {
+        "text": "Akan sukses dalam waktu singkat.",
+        "isCorrect": false,
+        "rationale": "Kesuksesan sejati membutuhkan proses dan ketekunan."
+      },
+      {
+        "text": "Merupakan karakter wirausaha yang ideal.",
+        "isCorrect": false,
+        "rationale": "Karakter ideal adalah disiplin dan tahan banting."
+      },
+      {
+        "text": "Cenderung tidak memiliki ketahanan (tahan banting) yang baik.",
+        "isCorrect": true,
+        "rationale": "Sifat instan bertentangan dengan prinsip ketekunan wirausaha."
+      },
+      {
+        "text": "Sangat ahli dalam berinvestasi saham.",
+        "isCorrect": false,
+        "rationale": "Tidak ada korelasi langsung."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Apa yang dimaksud dengan 'Value Proposition' dalam kanvas model bisnis?",
+    "answerOptions": [
+      {
+        "text": "Daftar aset fisik perusahaan.",
+        "isCorrect": false,
+        "rationale": "Aset fisik masuk ke dalam Key Resources."
+      },
+      {
+        "text": "Alasan mengapa pelanggan harus membeli dari Anda, bukan dari pesaing.",
+        "isCorrect": true,
+        "rationale": "Proposisi nilai adalah keunikan dan solusi yang ditawarkan produk kepada konsumen."
+      },
+      {
+        "text": "Lokasi kantor pusat perusahaan.",
+        "isCorrect": false,
+        "rationale": "Lokasi bukan merupakan nilai produk bagi konsumen secara langsung."
+      },
+      {
+        "text": "Jumlah total modal yang diinvestasikan.",
+        "isCorrect": false,
+        "rationale": "Ini adalah data keuangan, bukan proposisi nilai."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Strategi Blue Ocean menekankan pada 'Inovasi Nilai' (Value Innovation), yang artinya...",
+    "answerOptions": [
+      {
+        "text": "Meningkatkan nilai produk sambil menurunkan biaya secara simultan.",
+        "isCorrect": true,
+        "rationale": "Inovasi nilai menolak trade-off antara nilai dan biaya."
+      },
+      {
+        "text": "Hanya fokus pada kemasan produk yang mewah.",
+        "isCorrect": false,
+        "rationale": "Nilai bukan sekadar kemasan, tapi solusi bagi konsumen."
+      },
+      {
+        "text": "Menaikkan harga karena produk terasa eksklusif.",
+        "isCorrect": false,
+        "rationale": "Blue ocean bisa saja menawarkan harga yang kompetitif untuk pasar massal."
+      },
+      {
+        "text": "Mengurangi fitur produk agar harganya sangat murah.",
+        "isCorrect": false,
+        "rationale": "Ini hanya strategi biaya rendah (low cost), bukan inovasi nilai."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Wirausahawan pada abad ke-18 didefinisikan sebagai pengambil risiko yang membeli pada harga tetap dan menjual pada harga tidak pasti. Tokoh yang mengemukakan ide ini adalah...",
+    "answerOptions": [
+      {
+        "text": "Jean Baptiste Say",
+        "isCorrect": false,
+        "rationale": "Say lebih menekankan pada fungsi manajerial dan pengalihan sumber daya ke produktivitas lebih tinggi."
+      },
+      {
+        "text": "Richard Cantillon",
+        "isCorrect": true,
+        "rationale": "Cantillon mendefinisikan wirausaha sebagai pengambil risiko karena adanya ketidakpastian harga di masa depan."
+      },
+      {
+        "text": "Joseph Schumpeter",
+        "isCorrect": false,
+        "rationale": "Schumpeter fokus pada peran wirausaha sebagai inovator (abad ke-20)."
+      },
+      {
+        "text": "Eric Ries",
+        "isCorrect": false,
+        "rationale": "Eric Ries adalah tokoh modern pencetus konsep Lean Startup."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Menurut Csikszentmihalyi, kondisi di mana seseorang sangat fokus dan menikmati pekerjaannya sehingga motivasi muncul dari dalam diri disebut...",
+    "answerOptions": [
+      {
+        "text": "Ekstrinsik",
+        "isCorrect": false,
+        "rationale": "Motivasi ekstrinsik berasal dari luar, seperti uang atau pujian."
+      },
+      {
+        "text": "Autoletic",
+        "isCorrect": true,
+        "rationale": "Autoletic berasal dari bahasa Yunani 'auto' (diri) dan 'telos' (tujuan), artinya aktivitas itu sendiri adalah tujuannya."
+      },
+      {
+        "text": "Transaksional",
+        "isCorrect": false,
+        "rationale": "Ini adalah gaya kepemimpinan berbasis pertukaran, bukan kondisi psikologis flow."
+      },
+      {
+        "text": "Emergent Motivation",
+        "isCorrect": false,
+        "rationale": "Ini adalah motivasi yang muncul selama aktivitas, bukan istilah untuk sumber motivasi internal dalam flow."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Dalam prinsip Crazy-Quilt (Kemitraan), wirausaha harus fokus pada...",
+    "answerOptions": [
+      {
+        "text": "Mendapatkan komitmen dari pemangku kepentingan (stakeholders) sejak dini.",
+        "isCorrect": true,
+        "rationale": "Prinsip ini menekankan pembangunan jaringan mitra yang bersedia berinvestasi dalam masa depan bisnis."
+      },
+      {
+        "text": "Melakukan analisis kompetitor secara rahasia.",
+        "isCorrect": false,
+        "rationale": "Crazy-Quilt lebih ke arah kolaborasi daripada sekadar analisis kompetisi."
+      },
+      {
+        "text": "Menghindari kerjasama agar rahasia perusahaan terjamin.",
+        "isCorrect": false,
+        "rationale": "Ini bertentangan dengan prinsip effectuation yang mendorong kemitraan."
+      },
+      {
+        "text": "Membayar vendor dengan harga semurah mungkin.",
+        "isCorrect": false,
+        "rationale": "Ini adalah negosiasi operasional biasa, bukan inti dari Crazy-Quilt."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Strategi penetrasi lambat (slow-penetration) dilakukan dengan cara...",
+    "answerOptions": [
+      {
+        "text": "Harga tinggi dan promosi tinggi.",
+        "isCorrect": false,
+        "rationale": "Ini adalah rapid skimming."
+      },
+      {
+        "text": "Harga tinggi dan promosi rendah.",
+        "isCorrect": false,
+        "rationale": "Ini adalah slow skimming."
+      },
+      {
+        "text": "Harga rendah dan promosi rendah.",
+        "isCorrect": true,
+        "rationale": "Strategi ini bertujuan untuk menjaga biaya tetap rendah namun produk tetap terjangkau."
+      },
+      {
+        "text": "Harga rendah dan promosi tinggi.",
+        "isCorrect": false,
+        "rationale": "Ini adalah rapid-penetration."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Kunci sukses transformasi bisnis di era digital agar berjalan mulus adalah...",
+    "answerOptions": [
+      {
+        "text": "Memiliki modal besar tanpa perlu strategi.",
+        "isCorrect": false,
+        "rationale": "Modal tanpa strategi akan menyebabkan pemborosan."
+      },
+      {
+        "text": "Memperkuat budaya organisasi dan kompetensi SDM.",
+        "isCorrect": true,
+        "rationale": "Teknologi hanyalah alat; manusia dan budaya adalah penggeraknya."
+      },
+      {
+        "text": "Menggunakan teknologi yang paling mahal di pasar.",
+        "isCorrect": false,
+        "rationale": "Teknologi mahal tidak menjamin kesesuaian dengan kebutuhan bisnis."
+      },
+      {
+        "text": "Menghilangkan semua tenaga kerja manusia dan menggantinya dengan robot.",
+        "isCorrect": false,
+        "rationale": "Transformasi digital tetap membutuhkan peran manusia sebagai inovator."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Langkah pertama dalam 5 tahap pengembangan kelompok menurut Bruce Tuckman adalah...",
+    "answerOptions": [
+      {
+        "text": "Storming",
+        "isCorrect": false,
+        "rationale": "Storming adalah tahap kedua (konflik)."
+      },
+      {
+        "text": "Forming",
+        "isCorrect": true,
+        "rationale": "Forming adalah tahap pembentukan di mana anggota masih saling mengenal."
+      },
+      {
+        "text": "Norming",
+        "isCorrect": false,
+        "rationale": "Norming adalah tahap ketiga (penyelesaian konflik)."
+      },
+      {
+        "text": "Adjourning",
+        "isCorrect": false,
+        "rationale": "Adjourning adalah tahap akhir (pembubaran tim)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Model bisnis 'Marketplace' memiliki keunggulan utama dalam hal...",
+    "answerOptions": [
+      {
+        "text": "Memiliki stok barang sendiri yang melimpah.",
+        "isCorrect": false,
+        "rationale": "Marketplace umumnya tidak memiliki stok (inventory) sendiri."
+      },
+      {
+        "text": "Menghubungkan penjual dan pembeli tanpa harus memiliki inventori produk.",
+        "isCorrect": true,
+        "rationale": "Ini memungkinkan efisiensi biaya dan skala bisnis yang cepat."
+      },
+      {
+        "text": "Mengendalikan harga pasar secara sepihak.",
+        "isCorrect": false,
+        "rationale": "Harga ditentukan oleh penjual atau mekanisme pasar di platform."
+      },
+      {
+        "text": "Hanya menjual produk impor.",
+        "isCorrect": false,
+        "rationale": "Marketplace menjual beragam produk lokal maupun internasional."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Apa yang dimaksud dengan 'Pains' dalam Value Proposition Canvas?",
+    "answerOptions": [
+      {
+        "text": "Keuntungan yang diharapkan pelanggan.",
+        "isCorrect": false,
+        "rationale": "Ini disebut 'Gains'."
+      },
+      {
+        "text": "Risiko, hambatan, atau emosi negatif yang dialami pelanggan saat menyelesaikan tugas.",
+        "isCorrect": true,
+        "rationale": "Pains adalah masalah yang ingin dihindari atau dikurangi oleh pelanggan."
+      },
+      {
+        "text": "Daftar fitur fisik dari sebuah produk.",
+        "isCorrect": false,
+        "rationale": "Fitur fisik masuk dalam 'Products & Services' pada sisi Value Map."
+      },
+      {
+        "text": "Biaya produksi yang dikeluarkan perusahaan.",
+        "isCorrect": false,
+        "rationale": "VPC fokus pada perspektif pelanggan, bukan internal biaya perusahaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Sebuah startup yang menggunakan teknologi cloud untuk kolaborasi tim di berbagai lokasi merupakan contoh penerapan...",
+    "answerOptions": [
+      {
+        "text": "Model Bisnis Tradisional",
+        "isCorrect": false,
+        "rationale": "Model tradisional biasanya berbasis lokasi fisik tetap."
+      },
+      {
+        "text": "Model Bisnis Berbasis Teknologi",
+        "isCorrect": true,
+        "rationale": "Penggunaan cloud dan platform digital adalah inti dari model ini."
+      },
+      {
+        "text": "Ekonomi Sirkular",
+        "isCorrect": false,
+        "rationale": "Ekonomi sirkular berfokus pada daur ulang dan pengurangan limbah."
+      },
+      {
+        "text": "Strategi Blue Ocean",
+        "isCorrect": false,
+        "rationale": "Blue Ocean adalah strategi pasar, bukan sekadar penggunaan alat kerja."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Ciri khas wirausaha yang 'tahan banting' adalah...",
+    "answerOptions": [
+      {
+        "text": "Menyerah saat mengalami kegagalan pertama.",
+        "isCorrect": false,
+        "rationale": "Ini adalah lawan dari tahan banting."
+      },
+      {
+        "text": "Disiplin, telaten, dan mampu bangkit dari keterpurukan.",
+        "isCorrect": true,
+        "rationale": "Tahan banting berarti memiliki daya lenting (resilience) yang tinggi."
+      },
+      {
+        "text": "Hanya mau bekerja jika ada modal besar.",
+        "isCorrect": false,
+        "rationale": "Wirausaha harus bisa mulai meski dengan keterbatasan (Bird-in-hand)."
+      },
+      {
+        "text": "Mengandalkan keberuntungan semata.",
+        "isCorrect": false,
+        "rationale": "Keberhasilan wirausaha adalah hasil kerja keras dan strategi, bukan cuma nasib."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Apa tujuan utama dari pembuatan Prototype dalam Design Thinking?",
+    "answerOptions": [
+      {
+        "text": "Membuat produk akhir yang siap dijual ke pasar global.",
+        "isCorrect": false,
+        "rationale": "Prototype masih berupa draf kasar untuk pengujian."
+      },
+      {
+        "text": "Gagal sedini mungkin dan semurah mungkin untuk belajar.",
+        "isCorrect": true,
+        "rationale": "Prototype membantu memvalidasi ide sebelum menghabiskan banyak sumber daya."
+      },
+      {
+        "text": "Sebagai hiasan di kantor untuk menarik investor.",
+        "isCorrect": false,
+        "rationale": "Fungsi utama prototype adalah fungsionalitas dan validasi, bukan estetika semata."
+      },
+      {
+        "text": "Menghitung total pajak yang harus dibayar perusahaan.",
+        "isCorrect": false,
+        "rationale": "Sama sekali tidak relevan dengan konsep prototype."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Wirausaha yang memiliki ego tinggi akan berisiko...",
+    "answerOptions": [
+      {
+        "text": "Menjadi pemimpin yang sangat dicintai karyawan.",
+        "isCorrect": false,
+        "rationale": "Ego tinggi justru membuat orang sulit bekerja sama."
+      },
+      {
+        "text": "Menjadi santapan kompetitor karena tidak mau mendengar masukan pasar.",
+        "isCorrect": true,
+        "rationale": "Ketidakmampuan menerima pandangan orang lain membuat bisnis tidak fleksibel."
+      },
+      {
+        "text": "Memperoleh pinjaman bank dengan lebih mudah.",
+        "isCorrect": false,
+        "rationale": "Bank menilai kelayakan bisnis, bukan ego pemilik."
+      },
+      {
+        "text": "Membangun budaya perusahaan yang inovatif.",
+        "isCorrect": false,
+        "rationale": "Inovasi membutuhkan keterbukaan, yang seringkali dihambat oleh ego."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Langkah akhir dalam menyusun deskripsi pekerjaan (Job Description) menurut modul adalah...",
+    "answerOptions": [
+      {
+        "text": "Finalisasi dan draf disetujui manajemen.",
+        "isCorrect": true,
+        "rationale": "Setelah draf disusun dan ditinjau, langkah terakhir adalah persetujuan resmi (finalisasi)."
+      },
+      {
+        "text": "Melakukan wawancara pertama.",
+        "isCorrect": false,
+        "rationale": "Wawancara dilakukan setelah job desc selesai dan iklan dipasang."
+      },
+      {
+        "text": "Menentukan kompetensi karyawan.",
+        "isCorrect": false,
+        "rationale": "Ini dilakukan di tahap awal analisis pekerjaan."
+      },
+      {
+        "text": "Membayar agen rekrutmen.",
+        "isCorrect": false,
+        "rationale": "Ini adalah langkah administratif eksternal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Prinsip 'Pilot-in-the-Plane' dalam effectuation bermakna...",
+    "answerOptions": [
+      {
+        "text": "Wirausaha harus belajar cara menerbangkan pesawat.",
+        "isCorrect": false,
+        "rationale": "Ini adalah metafora, bukan keahlian fisik."
+      },
+      {
+        "text": "Fokus pada hal-hal yang dapat dikendalikan daripada memprediksi masa depan.",
+        "isCorrect": true,
+        "rationale": "Masa depan tidak diprediksi, tapi diciptakan melalui tindakan yang terkendali."
+      },
+      {
+        "text": "Menyerahkan nasib bisnis sepenuhnya kepada keberuntungan pasar.",
+        "isCorrect": false,
+        "rationale": "Ini bertentangan dengan peran 'pilot' yang memegang kendali."
+      },
+      {
+        "text": "Hanya bekerja jika kondisi cuaca (ekonomi) mendukung.",
+        "isCorrect": false,
+        "rationale": "Pilot yang baik tetap terbang dan menyesuaikan arah meski cuaca buruk."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Segmen pasar yang terdiri dari kelompok konsumen dengan kebutuhan dan keinginan yang sama disebut...",
+    "answerOptions": [
+      {
+        "text": "Targeting",
+        "isCorrect": false,
+        "rationale": "Targeting adalah proses memilih segmen mana yang akan dimasuki."
+      },
+      {
+        "text": "Segmen Pasar",
+        "isCorrect": true,
+        "rationale": "Definisi segmen pasar adalah kelompok konsumen dengan karakteristik serupa."
+      },
+      {
+        "text": "Positioning",
+        "isCorrect": false,
+        "rationale": "Positioning adalah cara produk dilihat di benak konsumen dibandingkan kompetitor."
+      },
+      {
+        "text": "Diversifikasi",
+        "isCorrect": false,
+        "rationale": "Diversifikasi adalah pengembangan produk atau pasar baru."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Apa kelemahan utama dari wirausaha yang ingin mendapatkan hasil besar secara instan?",
+    "answerOptions": [
+      {
+        "text": "Terlalu banyak modal.",
+        "isCorrect": false,
+        "rationale": "Sifat instan tidak ada kaitannya dengan jumlah modal awal."
+      },
+      {
+        "text": "Kurang memiliki daya tahan dan mudah menyerah jika tidak cepat untung.",
+        "isCorrect": true,
+        "rationale": "Wirausaha adalah maraton, bukan lari cepat (sprint) instan."
+      },
+      {
+        "text": "Terlalu pintar dalam melihat peluang.",
+        "isCorrect": false,
+        "rationale": "Melihat peluang adalah kelebihan, namun mengeksekusinya butuh proses."
+      },
+      {
+        "text": "Memiliki jaringan yang terlalu luas.",
+        "isCorrect": false,
+        "rationale": "Jaringan luas adalah aset, bukan kelemahan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Dalam Blue Ocean Strategy, kurva nilai yang menyimpang dari standar industri menunjukkan bahwa perusahaan...",
+    "answerOptions": [
+      {
+        "text": "Sedang menuju kebangkrutan.",
+        "isCorrect": false,
+        "rationale": "Penyimpangan kurva nilai justru bisa menjadi tanda inovasi."
+      },
+      {
+        "text": "Telah berhasil melakukan inovasi nilai dan membedakan diri.",
+        "isCorrect": true,
+        "rationale": "Kurva nilai yang berbeda adalah tanda perusahaan keluar dari Red Ocean."
+      },
+      {
+        "text": "Hanya mengikuti tren pasar yang sudah ada.",
+        "isCorrect": false,
+        "rationale": "Mengikuti tren akan membuat kurva nilai sama dengan kompetitor."
+      },
+      {
+        "text": "Memiliki biaya produksi paling tinggi.",
+        "isCorrect": false,
+        "rationale": "Belum tentu, inovasi nilai seringkali justru menurunkan biaya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Fungsi teknologi informasi yang memungkinkan penyusunan struktur organisasi menjadi lebih ramping disebut fungsi...",
+    "answerOptions": [
+      {
+        "text": "Operasional",
+        "isCorrect": false,
+        "rationale": "Fungsi operasional terkait dengan efisiensi kerja harian."
+      },
+      {
+        "text": "Organisasional",
+        "isCorrect": true,
+        "rationale": "TI memungkinkan komunikasi horizontal sehingga lapisan manajemen menengah bisa dikurangi."
+      },
+      {
+        "text": "Strategis",
+        "isCorrect": false,
+        "rationale": "Fungsi strategis terkait dengan keunggulan kompetitif jangka panjang."
+      },
+      {
+        "text": "Finansial",
+        "isCorrect": false,
+        "rationale": "Tidak ada istilah fungsi finansial dalam konteks struktur organisasi TI di modul ini."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Salah satu tantangan dalam pengelolaan bisnis digital adalah keamanan siber. Apa langkah pencegahan yang disarankan?",
+    "answerOptions": [
+      {
+        "text": "Menghapus semua data pelanggan agar tidak dicuri.",
+        "isCorrect": false,
+        "rationale": "Data pelanggan sangat penting untuk operasional bisnis."
+      },
+      {
+        "text": "Investasi dalam infrastruktur keamanan digital yang kuat.",
+        "isCorrect": true,
+        "rationale": "Perlindungan data adalah kunci menjaga kepercayaan konsumen."
+      },
+      {
+        "text": "Hanya menggunakan transaksi tunai (cash).",
+        "isCorrect": false,
+        "rationale": "Ini akan menghambat pertumbuhan bisnis digital."
+      },
+      {
+        "text": "Meminta pelanggan menyimpan data mereka di kertas.",
+        "isCorrect": false,
+        "rationale": "Sangat tidak praktis di era transformasi digital."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Dalam teori Flow, 'distorsi pengalaman temporal' menjelaskan fenomena...",
+    "answerOptions": [
+      {
+        "text": "Waktu terasa berjalan sangat lambat saat bekerja.",
+        "isCorrect": false,
+        "rationale": "Ini tanda kebosanan atau stres."
+      },
+      {
+        "text": "Waktu terasa berlalu lebih cepat karena konsentrasi penuh pada aktivitas.",
+        "isCorrect": true,
+        "rationale": "Kehilangan rasa akan waktu adalah ciri khas kondisi flow."
+      },
+      {
+        "text": "Ketidakmampuan mengatur jadwal kerja harian.",
+        "isCorrect": false,
+        "rationale": "Ini masalah manajemen waktu, bukan distorsi temporal flow."
+      },
+      {
+        "text": "Sering datang terlambat ke kantor.",
+        "isCorrect": false,
+        "rationale": "Tidak ada kaitannya dengan teori Flow."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Apa perbedaan utama antara 'Empathy' dan 'User Testing' dalam Design Thinking?",
+    "answerOptions": [
+      {
+        "text": "Empathy dilakukan di awal untuk memahami masalah, User Testing dilakukan di akhir untuk menguji solusi.",
+        "isCorrect": true,
+        "rationale": "Empathy untuk menggali kebutuhan, Testing untuk memvalidasi prototype."
+      },
+      {
+        "text": "Empathy hanya untuk karyawan, User Testing untuk pelanggan.",
+        "isCorrect": false,
+        "rationale": "Keduanya berfokus pada pengguna/pelanggan."
+      },
+      {
+        "text": "Empathy menggunakan angka (kuantitatif), User Testing menggunakan perasaan.",
+        "isCorrect": false,
+        "rationale": "Empathy justru sangat kualitatif (berbasis perasaan dan pengamatan)."
+      },
+      {
+        "text": "Tidak ada perbedaan antara keduanya.",
+        "isCorrect": false,
+        "rationale": "Keduanya adalah tahap yang berbeda dalam siklus design thinking."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Model bisnis 'Software-as-a-Service' (SaaS) memungkinkan pengguna untuk...",
+    "answerOptions": [
+      {
+        "text": "Membeli lisensi perangkat lunak sekali seumur hidup dengan harga mahal.",
+        "isCorrect": false,
+        "rationale": "SaaS biasanya berbasis langganan (subscription)."
+      },
+      {
+        "text": "Mengakses aplikasi melalui internet tanpa perlu instalasi rumit di perangkat lokal.",
+        "isCorrect": true,
+        "rationale": "SaaS berbasis cloud dan mempermudah aksesibilitas."
+      },
+      {
+        "text": "Membuat perangkat lunak mereka sendiri dari nol.",
+        "isCorrect": false,
+        "rationale": "SaaS menyediakan produk yang sudah jadi untuk digunakan."
+      },
+      {
+        "text": "Menggunakan komputer tanpa sistem operasi.",
+        "isCorrect": false,
+        "rationale": "SaaS tetap membutuhkan browser dan sistem operasi untuk berjalan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Dalam Value Proposition Canvas, 'Gain Creators' bertugas untuk...",
+    "answerOptions": [
+      {
+        "text": "Menjelaskan bagaimana produk/layanan menciptakan manfaat yang diharapkan pelanggan.",
+        "isCorrect": true,
+        "rationale": "Gain creators adalah jawaban atas 'Gains' yang diinginkan konsumen."
+      },
+      {
+        "text": "Menghitung jumlah pajak pendapatan.",
+        "isCorrect": false,
+        "rationale": "Tidak relevan dengan kanvas proposisi nilai."
+      },
+      {
+        "text": "Mencari kesalahan pada produk kompetitor.",
+        "isCorrect": false,
+        "rationale": "Fokus VPC adalah pada hubungan produk sendiri dengan pelanggan sendiri."
+      },
+      {
+        "text": "Menambah biaya produksi agar terlihat mewah.",
+        "isCorrect": false,
+        "rationale": "Menambah biaya tanpa manfaat bukan tujuan Gain Creators."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Wirausaha yang sukses di era digital seperti Robin Boe (Kopi Kartel) menggabungkan...",
+    "answerOptions": [
+      {
+        "text": "Produk tradisional dengan sistem manajemen manual.",
+        "isCorrect": false,
+        "rationale": "Sistem manual sulit bersaing di era digital."
+      },
+      {
+        "text": "Keahlian (kopi) dengan pemanfaatan teknologi digital.",
+        "isCorrect": true,
+        "rationale": "Sinergi antara core product dan teknologi adalah kunci keberhasilan."
+      },
+      {
+        "text": "Hanya fokus pada promosi tanpa memperhatikan rasa produk.",
+        "isCorrect": false,
+        "rationale": "Kualitas produk tetap menjadi fondasi utama."
+      },
+      {
+        "text": "Pinjaman uang yang sangat besar di awal usaha.",
+        "isCorrect": false,
+        "rationale": "Kesuksesan Boe lebih ditekankan pada inovasi dan pemanfaatan peluang."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Tahap 'Performing' dalam tim ditandai dengan...",
+    "answerOptions": [
+      {
+        "text": "Anggota tim mulai bertengkar memperebutkan posisi.",
+        "isCorrect": false,
+        "rationale": "Ini adalah tahap Storming."
+      },
+      {
+        "text": "Tim bekerja secara efektif, otonom, dan fokus pada pencapaian tujuan.",
+        "isCorrect": true,
+        "rationale": "Pada tahap ini, tim sudah stabil dan berkinerja tinggi."
+      },
+      {
+        "text": "Anggota tim baru pertama kali bertemu.",
+        "isCorrect": false,
+        "rationale": "Ini adalah tahap Forming."
+      },
+      {
+        "text": "Pembubaran tim karena proyek selesai.",
+        "isCorrect": false,
+        "rationale": "Ini adalah tahap Adjourning."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Apa yang dimaksud dengan 'Uncontested Market Space' dalam Blue Ocean Strategy?",
+    "answerOptions": [
+      {
+        "text": "Pasar yang sudah dipenuhi oleh ribuan pesaing.",
+        "isCorrect": false,
+        "rationale": "Ini disebut Red Ocean."
+      },
+      {
+        "text": "Ruang pasar baru di mana kompetisi belum ada atau tidak relevan.",
+        "isCorrect": true,
+        "rationale": "Blue Ocean menciptakan permintaan baru daripada memperebutkan yang sudah ada."
+      },
+      {
+        "text": "Pasar yang dilarang oleh pemerintah.",
+        "isCorrect": false,
+        "rationale": "Tidak ada kaitan dengan legalitas larangan pemerintah."
+      },
+      {
+        "text": "Pasar tradisional di daerah pedesaan.",
+        "isCorrect": false,
+        "rationale": "Blue ocean bisa terjadi di pasar mana pun melalui inovasi nilai."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "Gogobli merupakan contoh sukses transformasi digital karena...",
+    "answerOptions": [
+      {
+        "text": "Menutup semua toko fisik di Indonesia.",
+        "isCorrect": false,
+        "rationale": "Gogobli justru bermitra dengan toko ritel offline."
+      },
+      {
+        "text": "Membantu toko ritel offline produk kesehatan bertransformasi online.",
+        "isCorrect": true,
+        "rationale": "Sinergi antara e-commerce dan toko fisik meningkatkan daya saing ritel lokal."
+      },
+      {
+        "text": "Hanya menjual produk melalui media cetak.",
+        "isCorrect": false,
+        "rationale": "Media cetak bukan inti dari transformasi digital Gogobli."
+      },
+      {
+        "text": "Menjual produk dengan harga yang paling mahal di dunia.",
+        "isCorrect": false,
+        "rationale": "Gogobli fokus pada rantai distribusi yang ringkas dan keuntungan mitra."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Prinsip 'Lemonade' dalam effectuation mengajarkan kita bahwa...",
+    "answerOptions": [
+      {
+        "text": "Kegagalan adalah akhir dari segalanya.",
+        "isCorrect": false,
+        "rationale": "Sebaliknya, kegagalan/kejutan adalah awal dari peluang baru."
+      },
+      {
+        "text": "Kejutan yang tidak menyenangkan bisa diubah menjadi peluang bisnis.",
+        "isCorrect": true,
+        "rationale": "Wirausaha menggunakan 'lemon' (masalah) untuk membuat 'lemonade' (solusi/peluang)."
+      },
+      {
+        "text": "Kita harus selalu menghindari risiko apa pun.",
+        "isCorrect": false,
+        "rationale": "Risiko tidak bisa dihindari, tapi bisa dikelola (Affordable Loss)."
+      },
+      {
+        "text": "Minuman jeruk adalah bisnis yang paling menguntungkan.",
+        "isCorrect": false,
+        "rationale": "Ini hanya metafora, bukan saran jenis bisnis tertentu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Ekonomi sirkular dalam model bisnis keberlanjutan menekankan pada...",
+    "answerOptions": [
+      {
+        "text": "Penggunaan bahan sekali pakai untuk efisiensi.",
+        "isCorrect": false,
+        "rationale": "Sekali pakai justru menambah limbah (linier, bukan sirkular)."
+      },
+      {
+        "text": "Prinsip pengurangan (reduce), penggunaan kembali (reuse), dan daur ulang (recycle).",
+        "isCorrect": true,
+        "rationale": "Tujuannya adalah meminimalkan limbah dan dampak lingkungan."
+      },
+      {
+        "text": "Mengeksploitasi sumber daya alam sebanyak mungkin.",
+        "isCorrect": false,
+        "rationale": "Ini bertentangan dengan prinsip keberlanjutan (sustainability)."
+      },
+      {
+        "text": "Menjual produk hanya di satu negara saja.",
+        "isCorrect": false,
+        "rationale": "Sirkularitas berkaitan dengan siklus material, bukan batasan geografis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Untuk memahami teori Flow, interaksi dengan lingkungan sangat penting. Konsep ini disebut sebagai...",
+    "answerOptions": [
+      {
+        "text": "Reflektif",
+        "isCorrect": false,
+        "rationale": "Reflektif adalah proses berpikir kembali atas apa yang dilakukan."
+      },
+      {
+        "text": "Interactionism",
+        "isCorrect": true,
+        "rationale": "Fokus diri saja tidak cukup, flow memerlukan keseimbangan interaksi antara individu dan lingkungan/tugasnya."
+      },
+      {
+        "text": "Autoletic",
+        "isCorrect": false,
+        "rationale": "Autoletic lebih ke arah motivasi internal dari aktivitas itu sendiri."
+      },
+      {
+        "text": "Egoism",
+        "isCorrect": false,
+        "rationale": "Egoism justru menghambat flow karena terlalu fokus pada diri sendiri secara negatif."
+      }
+    ]
+  }
+]
+
+
+  function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>

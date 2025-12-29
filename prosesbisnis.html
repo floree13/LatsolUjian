@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Latihan Soal Ujian</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f7f6;
+      margin: 0;
+      padding: 20px 10px;
+    }
+    h1 {
+      text-align: center;
+      padding: 10px 0;
+      font-size: 24px;
+      color: #1a237e;
+    }
+    .soal {
+      background: #ffffff;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left: 5px solid #42a5f5;
+    }
+    h3 {
+      color: #3f51b5;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    p {
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+    .jawaban button {
+      color: #2a2a2a;
+      display: block;
+      width: 100%;
+      padding: 12px 15px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #c5cae9;
+      background: #e8eaf6;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .jawaban button:hover:not(:disabled) {
+      background: #c5cae9;
+    }
+    .jawaban button.benar {
+      background-color: #dcf9dc;
+      border-color: #388e3c;
+      font-weight: bold;
+    }
+    .jawaban button.salah {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      opacity: 0.7;
+    }
+
+    .penjelasan-opsi {
+      background: #f3e5f5;
+      color: #4a148c;
+      padding: 10px;
+      margin-top: -5px;
+      margin-bottom: 15px;
+      border-radius: 0 0 8px 8px;
+      border-top: none;
+      border-left: 5px solid #7b1fa2;
+      font-size: 14px;
+      display: none;
+    }
+    .counter {
+      position: sticky;
+      bottom: 0;
+      background: #1a237e;
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      font-size: 16px;
+      text-align: center;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .jawaban button { font-size: 14px; padding: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>Latihan Soal UO Proses Bisnis UT</h1>
+
+<div id="container"></div>
+
+<div class="counter">
+  ✅ Jawaban Benar: <span id="benar">0</span> |
+  ❌ Jawaban Salah: <span id="salah">0</span>
+</div>
+
+<script>
+  let totalBenar = 0;
+  let totalSalah = 0;
+  let answeredQuestions = new Set();
+
+  function updateCounter() {
+     document.getElementById("benar").textContent = totalBenar;
+    document.getElementById("salah").textContent = totalSalah;
+  }
+
+  function checkAnswer(button, questionNumber, isCorrect) {
+      if (answeredQuestions.has(questionNumber)) {
+          return;
+      }
+
+      const soalElement = button.closest('.soal');
+      const buttons = soalElement.querySelectorAll('.jawaban button');
+      
+      buttons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+          button.classList.add('benar');
+          totalBenar++;
+      } else {
+          button.classList.add('salah');
+          totalSalah++;
+          
+          buttons.forEach(btn => {
+              if (btn.getAttribute('data-iscorrect') === 'true') {
+                  btn.classList.add('benar');
+              }
+          });
+      }
+
+      const allRationales = soalElement.querySelectorAll('.penjelasan-opsi');
+      allRationales.forEach(rationaleDiv => {
+          rationaleDiv.style.display = 'block';
+      });
+
+      answeredQuestions.add(questionNumber);
+      updateCounter();
+  }
+
+  const soalList = [
+  {
+    "questionNumber": 1,
+    "question": "Seorang bisnis analis perlu melihat berjalannya proses-proses beserta komponennya dengan sangat teliti dan terperinci karena...",
+    "answerOptions": [
+      {
+        "text": "Adanya kemungkinan proses saat ini belum menggunakan prosedur ISO yang jelas.",
+        "isCorrect": false,
+        "rationale": "Meskipun ISO penting, alasan utama analisis mendalam adalah untuk efisiensi sumber daya dan teknologi."
+      },
+      {
+        "text": "Ada kemungkinan proses saat ini menggunakan terlalu banyak sumber daya atau tidak efisien karena teknologi yang ketinggalan zaman.",
+        "isCorrect": true,
+        "rationale": "Analisis detail diperlukan untuk mengidentifikasi pemborosan sumber daya dan ketidakefisienan akibat teknologi lama. [cite: 1257]"
+      },
+      {
+        "text": "Perlunya monitoring terhadap penggunaan sistem lama secara terus-menerus.",
+        "isCorrect": false,
+        "rationale": "Monitoring sistem lama hanyalah bagian kecil, bukan alasan utama analisis proses secara menyeluruh."
+      },
+      {
+        "text": "Karena sistem yang berjalan sudah terlalu lama digunakan oleh perusahaan.",
+        "isCorrect": false,
+        "rationale": "Usia sistem bukan indikator tunggal perlunya analisis; efisiensi dan nilai tambah adalah fokus utamanya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 2,
+    "question": "Hal yang dapat membantu mengidentifikasi area perbaikan sebelum menjadi masalah besar serta memberi kesempatan merespon perubahan adalah...",
+    "answerOptions": [
+      {
+        "text": "Menilai kinerja karyawan.",
+        "isCorrect": false,
+        "rationale": "Kinerja karyawan hanya satu aspek, bukan indikator menyeluruh untuk perubahan bisnis."
+      },
+      {
+        "text": "Menilai kinerja sistem.",
+        "isCorrect": false,
+        "rationale": "Kinerja sistem teknis tidak mencakup aspek strategis bisnis secara luas."
+      },
+      {
+        "text": "Menilai kinerja bisnis berkelanjutan.",
+        "isCorrect": true,
+        "rationale": "Penilaian kinerja bisnis berkelanjutan memungkinkan deteksi dini masalah dan adaptasi terhadap perubahan lingkungan bisnis. [cite: 1257, 1258]"
+      },
+      {
+        "text": "Menilai kinerja pimpinan berkelanjutan.",
+        "isCorrect": false,
+        "rationale": "Kinerja pimpinan tidak secara langsung memetakan area perbaikan proses operasional."
+      }
+    ]
+  },
+  {
+    "questionNumber": 3,
+    "question": "Siapakah ahli yang menyatakan bahwa Manajemen Proses Bisnis membantu manajemen mencapai keunggulan kompetitif dalam lingkungan yang bergejolak?",
+    "answerOptions": [
+      {
+        "text": "Jeston & Nelis, 2014.",
+        "isCorrect": true,
+        "rationale": "Jeston & Nelis (2014) menekankan peran BPM dalam menciptakan keunggulan kompetitif di lingkungan dinamis. [cite: 1316, 1318]"
+      },
+      {
+        "text": "Hutton, 2011.",
+        "isCorrect": false,
+        "rationale": "Hutton memiliki pandangan berbeda mengenai manajemen proses."
+      },
+      {
+        "text": "Satzinger, 2016.",
+        "isCorrect": false,
+        "rationale": "Satzinger lebih berfokus pada analisis dan desain sistem informasi."
+      },
+      {
+        "text": "Pressman, 2010.",
+        "isCorrect": false,
+        "rationale": "Pressman adalah ahli di bidang rekayasa perangkat lunak."
+      }
+    ]
+  },
+  {
+    "questionNumber": 4,
+    "question": "Dalam konteks operasional perusahaan, cara efektif untuk menghemat biaya produksi secara signifikan adalah melalui...",
+    "answerOptions": [
+      {
+        "text": "Globalisasi.",
+        "isCorrect": false,
+        "rationale": "Globalisasi dapat memperluas pasar namun tidak otomatis menurunkan biaya produksi internal."
+      },
+      {
+        "text": "Digitalisasi.",
+        "isCorrect": true,
+        "rationale": "Digitalisasi mengoptimalkan proses dan mengurangi biaya manual serta operasional yang tidak perlu. [cite: 1333]"
+      },
+      {
+        "text": "Distribusi di seluruh negeri.",
+        "isCorrect": false,
+        "rationale": "Ini adalah strategi pemasaran/logistik yang justru bisa menambah biaya operasional."
+      },
+      {
+        "text": "Pemantauan teknologi terkini.",
+        "isCorrect": false,
+        "rationale": "Pemantauan saja tidak cukup tanpa implementasi nyata (digitalisasi)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 5,
+    "question": "Identifikasi proses adalah serangkaian kegiatan sistematis untuk mendefinisikan Proses Bisnis perusahaan yang hasilnya berupa...",
+    "answerOptions": [
+      {
+        "text": "Komunikasi proses.",
+        "isCorrect": false,
+        "rationale": "Komunikasi proses adalah aktivitas pendukung, bukan keluaran utama identifikasi."
+      },
+      {
+        "text": "Arsitektur proses.",
+        "isCorrect": true,
+        "rationale": "Hasil akhir dari identifikasi proses yang sistematis adalah terbentuknya arsitektur proses perusahaan. [cite: 1265]"
+      },
+      {
+        "text": "Penetapan bisnis proses.",
+        "isCorrect": false,
+        "rationale": "Ini adalah langkah awal, bukan keluaran (output) terstruktur."
+      },
+      {
+        "text": "Standar Operasional Prosedur (SOP).",
+        "isCorrect": false,
+        "rationale": "SOP adalah detail dari proses, sedangkan identifikasi menghasilkan kerangka besar (arsitektur)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 6,
+    "question": "Metrik terukur yang memungkinkan evaluasi efisiensi dan efektivitas Proses Bisnis berdasarkan data aliran proses disebut...",
+    "answerOptions": [
+      {
+        "text": "Indikator Kinerja Karyawan.",
+        "isCorrect": false,
+        "rationale": "Fokus pada individu, bukan pada aliran proses bisnis secara keseluruhan."
+      },
+      {
+        "text": "Indikator Kinerja Prosedur.",
+        "isCorrect": false,
+        "rationale": "Istilah ini tidak standar dalam manajemen proses bisnis."
+      },
+      {
+        "text": "Indikator Kinerja Utama (KPI).",
+        "isCorrect": false,
+        "rationale": "KPI bersifat umum untuk tujuan organisasi, bukan spesifik hanya untuk metrik aliran proses."
+      },
+      {
+        "text": "Indikator Kinerja Proses.",
+        "isCorrect": true,
+        "rationale": "Indikator kinerja proses secara spesifik mengukur efisiensi dan efektivitas aliran proses bisnis. [cite: 1265]"
+      }
+    ]
+  },
+  {
+    "questionNumber": 7,
+    "question": "Metodologi yang berfokus pada menghilangkan tugas dan sumber daya yang tidak memberikan nilai tambah (waste) disebut...",
+    "answerOptions": [
+      {
+        "text": "Six Sigma.",
+        "isCorrect": false,
+        "rationale": "Six Sigma lebih berfokus pada pengurangan variasi dan cacat (defect)."
+      },
+      {
+        "text": "Lean.",
+        "isCorrect": true,
+        "rationale": "Filosofi Lean berpusat pada eliminasi pemborosan (muda) untuk memaksimalkan nilai pelanggan. [cite: 557, 1267]"
+      },
+      {
+        "text": "BPMN.",
+        "isCorrect": false,
+        "rationale": "BPMN adalah standar notasi grafis untuk pemodelan, bukan metodologi eliminasi waste."
+      },
+      {
+        "text": "Agile.",
+        "isCorrect": false,
+        "rationale": "Agile berfokus pada fleksibilitas dan pengembangan iteratif."
+      }
+    ]
+  },
+  {
+    "questionNumber": 8,
+    "question": "Dalam Six Sigma, tahapan yang digunakan untuk mendefinisikan masalah dan tujuan proyek adalah...",
+    "answerOptions": [
+      {
+        "text": "Measure.",
+        "isCorrect": false,
+        "rationale": "Measure adalah tahap mengukur kinerja proses saat ini."
+      },
+      {
+        "text": "Analyze.",
+        "isCorrect": false,
+        "rationale": "Analyze adalah tahap mencari akar penyebab masalah."
+      },
+      {
+        "text": "Define.",
+        "isCorrect": true,
+        "rationale": "Tahap 'Define' dalam DMAIC bertujuan menetapkan tujuan proyek dan mengidentifikasi masalah. [cite: 325]"
+      },
+      {
+        "text": "Improve.",
+        "isCorrect": false,
+        "rationale": "Improve adalah tahap mengimplementasikan solusi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 9,
+    "question": "Apa tujuan utama dari Business Process Model and Notation (BPMN)?",
+    "answerOptions": [
+      {
+        "text": "Menghitung biaya operasional secara otomatis.",
+        "isCorrect": false,
+        "rationale": "BPMN adalah alat visualisasi, bukan alat akuntansi otomatis."
+      },
+      {
+        "text": "Menyediakan bahasa universal untuk menjembatani komunikasi antara tim bisnis dan teknis.",
+        "isCorrect": true,
+        "rationale": "BPMN dirancang sebagai standar visual agar proses mudah dipahami oleh semua stakeholder. [cite: 1135, 1136]"
+      },
+      {
+        "text": "Menggantikan peran manajer proyek dalam pengambilan keputusan.",
+        "isCorrect": false,
+        "rationale": "BPMN membantu pemahaman proses, namun keputusan tetap di tangan manajer."
+      },
+      {
+        "text": "Menjamin perusahaan pasti mendapatkan sertifikasi ISO.",
+        "isCorrect": false,
+        "rationale": "BPMN membantu dokumentasi, tetapi sertifikasi ISO memerlukan kepatuhan standar yang lebih luas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 10,
+    "question": "Siklus hidup manajemen proyek yang terdiri dari Inisiasi, Perencanaan, Eksekusi, Monitoring, dan Penutupan disebut sebagai kerangka kerja...",
+    "answerOptions": [
+      {
+        "text": "Lean.",
+        "isCorrect": false,
+        "rationale": "Lean memiliki 5 prinsip sendiri (Value, Value Stream, dsb)."
+      },
+      {
+        "text": "PMBOK.",
+        "isCorrect": true,
+        "rationale": "PMBOK menggunakan lima kelompok proses tersebut sebagai standar manajemen proyek global. [cite: 666, 11]"
+      },
+      {
+        "text": "Six Sigma.",
+        "isCorrect": false,
+        "rationale": "Six Sigma menggunakan siklus DMAIC."
+      },
+      {
+        "text": "BPMN.",
+        "isCorrect": false,
+        "rationale": "BPMN adalah standar notasi, bukan fase manajemen proyek."
+      }
+    ]
+  },
+  {
+    "questionNumber": 11,
+    "question": "Manajer proyek memiliki peran sebagai pemimpin teknis, salah satunya adalah memberikan arahan untuk...",
+    "answerOptions": [
+      {
+        "text": "Menentukan gaji karyawan.",
+        "isCorrect": false,
+        "rationale": "Ini adalah tugas departemen HR/SDM."
+      },
+      {
+        "text": "Pengujian sistem dan fitur.",
+        "isCorrect": true,
+        "rationale": "Sebagai pemimpin teknis, manajer proyek mengarahkan pengujian sistem, fitur, dan integrasi. [cite: 667]"
+      },
+      {
+        "text": "Melakukan audit keuangan tahunan.",
+        "isCorrect": false,
+        "rationale": "Tugas ini dilakukan oleh auditor internal atau eksternal."
+      },
+      {
+        "text": "Menyusun strategi pemasaran global.",
+        "isCorrect": false,
+        "rationale": "Ini merupakan tanggung jawab manajer pemasaran/direktur strategi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 12,
+    "question": "Dalam manajemen risiko, tahap mengevaluasi kemungkinan (likelihood) dan dampak (impact) dari risiko disebut...",
+    "answerOptions": [
+      {
+        "text": "Identifikasi Risiko.",
+        "isCorrect": false,
+        "rationale": "Identifikasi hanya mengenali dan mendata risiko."
+      },
+      {
+        "text": "Analisis Risiko.",
+        "isCorrect": true,
+        "rationale": "Analisis risiko mengevaluasi seberapa besar peluang dan dampak kerugian yang ditimbulkan. [cite: 769, 772]"
+      },
+      {
+        "text": "Mitigasi Risiko.",
+        "isCorrect": false,
+        "rationale": "Mitigasi adalah tindakan untuk mengurangi risiko setelah dianalisis."
+      },
+      {
+        "text": "Pemantauan Risiko.",
+        "isCorrect": false,
+        "rationale": "Pemantauan dilakukan setelah solusi diterapkan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 13,
+    "question": "Apa karakteristik utama dari Pekerja Pengetahuan (Knowledge Worker)?",
+    "answerOptions": [
+      {
+        "text": "Bekerja secara fisik dengan tangan untuk memproduksi barang.",
+        "isCorrect": false,
+        "rationale": "Ini adalah karakteristik pekerja manual/kerah biru."
+      },
+      {
+        "text": "Mengandalkan keahlian dan analisis data untuk membuat keputusan.",
+        "isCorrect": true,
+        "rationale": "Pekerja pengetahuan menggunakan pemikiran, data, dan informasi untuk menciptakan nilai. [cite: 896]"
+      },
+      {
+        "text": "Hanya mengikuti instruksi tanpa perlu melakukan inovasi.",
+        "isCorrect": false,
+        "rationale": "Inovasi berkelanjutan justru merupakan salah satu karakteristik kunci mereka."
+      },
+      {
+        "text": "Menghindari kolaborasi dengan departemen lain.",
+        "isCorrect": false,
+        "rationale": "Kolaborasi efektif adalah ciri penting bagi pekerja pengetahuan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 14,
+    "question": "Sistem Informasi Eksekutif (EIS) dirancang khusus untuk mendukung...",
+    "answerOptions": [
+      {
+        "text": "Entry data harian oleh staf administrasi.",
+        "isCorrect": false,
+        "rationale": "Tugas ini dilakukan oleh TPS (Transaction Processing System)."
+      },
+      {
+        "text": "Pengambilan keputusan strategis oleh manajer senior.",
+        "isCorrect": true,
+        "rationale": "EIS menyajikan data holistik untuk membantu eksekutif merumuskan strategi jangka panjang. [cite: 1012]"
+      },
+      {
+        "text": "Pemeliharaan perangkat keras di gudang.",
+        "isCorrect": false,
+        "rationale": "Ini bukan fokus dari sistem informasi strategis tingkat puncak."
+      },
+      {
+        "text": "Perhitungan pajak penghasilan karyawan secara otomatis.",
+        "isCorrect": false,
+        "rationale": "Ini adalah fungsi dari sistem payroll atau akuntansi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 15,
+    "question": "Kemampuan dalam EIS yang memungkinkan eksekutif mengeksplorasi data dari ringkasan hingga detail transaksi disebut...",
+    "answerOptions": [
+      {
+        "text": "Summarizing.",
+        "isCorrect": false,
+        "rationale": "Summarizing hanya proses meringkas, bukan mengeksplorasi hingga ke detail."
+      },
+      {
+        "text": "Drill-down.",
+        "isCorrect": true,
+        "rationale": "Drill-down memungkinkan pengguna melihat data detail yang mendasari sebuah angka ringkasan. [cite: 1012]"
+      },
+      {
+        "text": "Dashboarding.",
+        "isCorrect": false,
+        "rationale": "Dashboard adalah tampilan visual secara umum."
+      },
+      {
+        "text": "Filtering.",
+        "isCorrect": false,
+        "rationale": "Filtering hanya menyaring data berdasarkan kriteria tertentu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 16,
+    "question": "Salah satu kelemahan sistem manajemen risiko yang masih bersifat manual adalah...",
+    "answerOptions": [
+      {
+        "text": "Biaya lisensi perangkat lunak yang sangat mahal.",
+        "isCorrect": false,
+        "rationale": "Sistem manual justru tidak memiliki biaya lisensi software."
+      },
+      {
+        "text": "Pemantauan yang tidak real-time dan rawan kesalahan manusia.",
+        "isCorrect": true,
+        "rationale": "Proses manual seringkali reaktif dan lambat dalam mendeteksi perubahan risiko. [cite: 9]"
+      },
+      {
+        "text": "Terlalu banyak integrasi otomatis antar departemen.",
+        "isCorrect": false,
+        "rationale": "Integrasi otomatis justru sulit dilakukan dalam sistem manual."
+      },
+      {
+        "text": "Data terlalu mudah diakses oleh pihak luar.",
+        "isCorrect": false,
+        "rationale": "Keamanan data fisik pada sistem manual justru seringkali lebih sulit diakses (namun berisiko hilang)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 17,
+    "question": "Simbol lingkaran dalam BPMN (Events) digunakan untuk menunjukkan...",
+    "answerOptions": [
+      {
+        "text": "Pekerjaan atau tugas yang dilakukan.",
+        "isCorrect": false,
+        "rationale": "Pekerjaan dilambangkan dengan persegi panjang sudut tumpul (Activities)."
+      },
+      {
+        "text": "Sesuatu yang terjadi selama proses bisnis (Mulai/Selesai).",
+        "isCorrect": true,
+        "rationale": "Lingkaran melambangkan Events, seperti Start Event dan End Event. "
+      },
+      {
+        "text": "Titik pengambilan keputusan.",
+        "isCorrect": false,
+        "rationale": "Keputusan dilambangkan dengan belah ketupat (Gateways)."
+      },
+      {
+        "text": "Aliran dokumen antar divisi.",
+        "isCorrect": false,
+        "rationale": "Aliran dilambangkan dengan garis panah (Flows)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 18,
+    "question": "Prinsip Lean yang menekankan pada penyampaian produk hanya saat diminta oleh pelanggan disebut...",
+    "answerOptions": [
+      {
+        "text": "Value Stream.",
+        "isCorrect": false,
+        "rationale": "Value Stream adalah pemetaan aliran nilai."
+      },
+      {
+        "text": "Flow.",
+        "isCorrect": false,
+        "rationale": "Flow memastikan aliran kerja berjalan lancar tanpa hambatan."
+      },
+      {
+        "text": "Pull System.",
+        "isCorrect": true,
+        "rationale": "Sistem tarik (pull) memastikan produksi dilakukan berdasarkan permintaan nyata pelanggan. [cite: 558]"
+      },
+      {
+        "text": "Perfection.",
+        "isCorrect": false,
+        "rationale": "Perfection adalah upaya perbaikan terus-menerus menuju kesempurnaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 19,
+    "question": "Apa manfaat utama integrasi Six Sigma ke dalam siklus manajemen proses?",
+    "answerOptions": [
+      {
+        "text": "Menghilangkan kebutuhan akan dokumentasi proses.",
+        "isCorrect": false,
+        "rationale": "Dokumentasi tetap diperlukan bahkan lebih ketat dalam Six Sigma."
+      },
+      {
+        "text": "Meningkatkan kualitas dengan mengurangi variasi dan cacat produk.",
+        "isCorrect": true,
+        "rationale": "Six Sigma berfokus pada akurasi dan konsistensi kualitas hasil proses. [cite: 328]"
+      },
+      {
+        "text": "Mempercepat proses tanpa memperhatikan kualitas hasil.",
+        "isCorrect": false,
+        "rationale": "Mempercepat tanpa kualitas bertentangan dengan prinsip Six Sigma."
+      },
+      {
+        "text": "Mengurangi jumlah karyawan secara drastis.",
+        "isCorrect": false,
+        "rationale": "Fokusnya adalah perbaikan proses, bukan pengurangan staf secara sembarangan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 20,
+    "question": "Analisis Pareto bersandar pada prinsip bahwa sejumlah besar faktor bertanggung jawab atas bagian terbesar dari efek yang diberikan.",
+    "answerOptions": [
+      {
+        "text": "Benar.",
+        "isCorrect": true,
+        "rationale": "Prinsip Pareto (80/20) menyatakan bahwa 80% masalah biasanya disebabkan oleh 20% penyebab utama. "
+      },
+      {
+        "text": "Salah.",
+        "isCorrect": false,
+        "rationale": "Pernyataan tersebut sesuai dengan definisi dasar analisis Pareto dalam manajemen kualitas."
+      }
+    ]
+  },
+  {
+    "questionNumber": 21,
+    "question": "Analisis risiko kuantitatif sering menggunakan model simulasi untuk mengevaluasi dampak risiko terhadap tujuan proyek. Teknik yang paling umum digunakan adalah...",
+    "answerOptions": [
+      {
+        "text": "Analisis SWOT.",
+        "isCorrect": false,
+        "rationale": "SWOT adalah analisis kualitatif strategis, bukan simulasi numerik."
+      },
+      {
+        "text": "Analisis Monte Carlo.",
+        "isCorrect": true,
+        "rationale": "Analisis Monte Carlo mensimulasikan efek gabungan dari risiko proyek untuk mengevaluasi probabilitas pencapaian tujuan. (Modul 2, hal. 10)"
+      },
+      {
+        "text": "Diagram Tulang Ikan (Ishikawa).",
+        "isCorrect": false,
+        "rationale": "Ini digunakan untuk mencari akar penyebab masalah secara kualitatif."
+      },
+      {
+        "text": "Metode Jalur Kritis (CPM).",
+        "isCorrect": false,
+        "rationale": "CPM fokus pada penjadwalan, bukan simulasi ketidakpastian risiko."
+      }
+    ]
+  },
+  {
+    "questionNumber": 22,
+    "question": "Dalam analisis sensitivitas risiko, terdapat tampilan khas yang digunakan untuk memvisualisasikan variabel mana yang memiliki dampak paling besar, yaitu...",
+    "answerOptions": [
+      {
+        "text": "Diagram Big Torpedo.",
+        "isCorrect": true,
+        "rationale": "Diagram Tornado (atau Big Torpedo dalam beberapa literatur UT) digunakan untuk menunjukkan sensitivitas variabel terhadap hasil proyek."
+      },
+      {
+        "text": "Pie Chart.",
+        "isCorrect": false,
+        "rationale": "Pie chart hanya menunjukkan proporsi, bukan sensitivitas dampak."
+      },
+      {
+        "text": "Gantt Chart.",
+        "isCorrect": false,
+        "rationale": "Gantt Chart digunakan untuk visualisasi jadwal proyek."
+      },
+      {
+        "text": "Flowchart.",
+        "isCorrect": false,
+        "rationale": "Flowchart menunjukkan alur langkah, bukan dampak risiko."
+      }
+    ]
+  },
+  {
+    "questionNumber": 23,
+    "question": "Apa yang menjadi fokus utama dalam fase 'Inisiasi' pada siklus hidup manajemen proyek menurut PMBOK?",
+    "answerOptions": [
+      {
+        "text": "Membangun deliverables secara fisik.",
+        "isCorrect": false,
+        "rationale": "Ini adalah bagian dari fase Eksekusi."
+      },
+      {
+        "text": "Mengidentifikasi kebutuhan dan menetapkan tujuan proyek.",
+        "isCorrect": true,
+        "rationale": "Inisiasi adalah tahap awal untuk mendefinisikan proyek dan mendapatkan otorisasi. (Siklus Hidup Proyek, hal. 3)"
+      },
+      {
+        "text": "Melakukan evaluasi akhir proyek.",
+        "isCorrect": false,
+        "rationale": "Evaluasi akhir dilakukan pada fase Penutupan."
+      },
+      {
+        "text": "Menyusun jadwal kegiatan harian.",
+        "isCorrect": false,
+        "rationale": "Ini masuk ke dalam fase Perencanaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 24,
+    "question": "Dalam BPMN, elemen 'Gateways' yang dilambangkan dengan belah ketupat berfungsi untuk...",
+    "answerOptions": [
+      {
+        "text": "Menunjukkan awal dari sebuah proses.",
+        "isCorrect": false,
+        "rationale": "Awal proses ditunjukkan oleh Start Event (lingkaran garis tipis)."
+      },
+      {
+        "text": "Menggambarkan tugas yang harus diselesaikan.",
+        "isCorrect": false,
+        "rationale": "Tugas digambarkan dengan persegi panjang (Activities)."
+      },
+      {
+        "text": "Mengontrol percabangan dan penggabungan aliran proses.",
+        "isCorrect": true,
+        "rationale": "Gateways digunakan untuk menentukan jalur berdasarkan kondisi tertentu (keputusan). (BPMN, hal. 4)"
+      },
+      {
+        "text": "Menyimpan data hasil proses.",
+        "isCorrect": false,
+        "rationale": "Penyimpanan data digambarkan dengan Data Objects atau Data Store."
+      }
+    ]
+  },
+  {
+    "questionNumber": 25,
+    "question": "Manajer proyek memiliki tanggung jawab analisis dan kebijakan. Langkah kedua setelah mengidentifikasi masalah adalah...",
+    "answerOptions": [
+      {
+        "text": "Mengembangkan kebijakan.",
+        "isCorrect": false,
+        "rationale": "Ini adalah langkah ketiga."
+      },
+      {
+        "text": "Analisis masalah.",
+        "isCorrect": true,
+        "rationale": "Setelah masalah dikenali (identifikasi), langkah selanjutnya adalah mengkaji penyebab dan dampaknya (analisis). (Siklus Hidup Proyek, hal. 7)"
+      },
+      {
+        "text": "Implementasi solusi.",
+        "isCorrect": false,
+        "rationale": "Implementasi adalah langkah terakhir."
+      },
+      {
+        "text": "Penutupan proyek.",
+        "isCorrect": false,
+        "rationale": "Penutupan bukan bagian dari siklus penanganan masalah teknis harian."
+      }
+    ]
+  },
+  {
+    "questionNumber": 26,
+    "question": "Seorang pekerja pengetahuan (knowledge worker) berbeda dengan pekerja manual karena mereka lebih banyak menghasilkan nilai melalui...",
+    "answerOptions": [
+      {
+        "text": "Kekuatan fisik dan kecepatan kerja.",
+        "isCorrect": false,
+        "rationale": "Ini adalah ciri pekerja manual/tradisional."
+      },
+      {
+        "text": "Pengolahan informasi dan penciptaan solusi berbasis data.",
+        "isCorrect": true,
+        "rationale": "Kekuatan utama mereka ada pada pemikiran analitis dan inovasi. (Manajemen Proses Pekerjaan Pengetahuan, hal. 2)"
+      },
+      {
+        "text": "Kepatuhan penuh pada perintah atasan tanpa bertanya.",
+        "isCorrect": false,
+        "rationale": "Pekerja pengetahuan justru diharapkan melakukan introspeksi dan inovasi berkelanjutan."
+      },
+      {
+        "text": "Pengoperasian mesin pabrik secara rutin.",
+        "isCorrect": false,
+        "rationale": "Ini adalah tugas operator mesin, bukan knowledge worker."
+      }
+    ]
+  },
+  {
+    "questionNumber": 27,
+    "question": "Proses manajemen pengetahuan yang melibatkan pengumpulan pengetahuan dari sumber internal maupun eksternal disebut...",
+    "answerOptions": [
+      {
+        "text": "Identifikasi Pengetahuan.",
+        "isCorrect": false,
+        "rationale": "Identifikasi adalah menentukan pengetahuan apa yang dibutuhkan."
+      },
+      {
+        "text": "Akuisisi Pengetahuan.",
+        "isCorrect": true,
+        "rationale": "Akuisisi adalah proses memperoleh pengetahuan untuk dimasukkan ke dalam organisasi."
+      },
+      {
+        "text": "Organisasi Pengetahuan.",
+        "isCorrect": false,
+        "rationale": "Organisasi adalah tahap penyimpanan dan pengkategorian."
+      },
+      {
+        "text": "Aplikasi Pengetahuan.",
+        "isCorrect": false,
+        "rationale": "Aplikasi adalah penggunaan pengetahuan dalam pekerjaan nyata."
+      }
+    ]
+  },
+  {
+    "questionNumber": 28,
+    "question": "Sistem Informasi Eksekutif (EIS) memiliki karakteristik 'Penyajian informasi yang tidak terstruktur'. Hal ini berarti...",
+    "answerOptions": [
+      {
+        "text": "Data dalam EIS berantakan dan sulit dibaca.",
+        "isCorrect": false,
+        "rationale": "EIS justru harus ramah pengguna dan visual."
+      },
+      {
+        "text": "EIS mampu menangani informasi dari lingkungan eksternal yang dinamis dan tidak berpola tetap.",
+        "isCorrect": true,
+        "rationale": "Eksekutif membutuhkan data pasar, berita, dan tren yang sifatnya tidak terstruktur untuk strategi. (EIS, hal. 3)"
+      },
+      {
+        "text": "EIS hanya berisi tabel angka tanpa grafik.",
+        "isCorrect": false,
+        "rationale": "EIS justru menonjolkan visualisasi (grafik/peta)."
+      },
+      {
+        "text": "EIS tidak memerlukan database perusahaan.",
+        "isCorrect": false,
+        "rationale": "EIS tetap membutuhkan integrasi data internal perusahaan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 29,
+    "question": "Salah satu keunggulan utama menggunakan BPMN dibandingkan narasi teks dalam menjelaskan proses bisnis adalah...",
+    "answerOptions": [
+      {
+        "text": "Narasi teks lebih mudah dipahami oleh orang awam.",
+        "isCorrect": false,
+        "rationale": "Teks panjang seringkali ambigu; BPMN memberikan standar visual yang jelas."
+      },
+      {
+        "text": "BPMN menghilangkan kebutuhan akan tim TI.",
+        "isCorrect": false,
+        "rationale": "BPMN justru membantu tim bisnis berkomunikasi lebih baik dengan tim TI."
+      },
+      {
+        "text": "BPMN menyediakan bahasa universal yang menjembatani kesenjangan antara desain dan implementasi.",
+        "isCorrect": true,
+        "rationale": "BPMN adalah standar global (OMG) yang dipahami secara lintas departemen. (BPMN, hal. 3)"
+      },
+      {
+        "text": "BPMN secara otomatis memperbaiki kesalahan proses.",
+        "isCorrect": false,
+        "rationale": "BPMN hanya memetakan; perbaikan dilakukan oleh manusia berdasarkan peta tersebut."
+      }
+    ]
+  },
+  {
+    "questionNumber": 30,
+    "question": "Risiko yang telah diidentifikasi perlu diprioritaskan. Kriteria utama dalam menentukan prioritas risiko adalah...",
+    "answerOptions": [
+      {
+        "text": "Biaya untuk memperbaiki risiko tersebut.",
+        "isCorrect": false,
+        "rationale": "Biaya adalah pertimbangan mitigasi, bukan kriteria prioritas awal."
+      },
+      {
+        "text": "Kombinasi antara probabilitas kejadian dan besarnya dampak terhadap organisasi.",
+        "isCorrect": true,
+        "rationale": "Risiko dengan probabilitas tinggi dan dampak besar akan mendapatkan prioritas utama. (Manajemen Risiko, hal. 4)"
+      },
+      {
+        "text": "Siapa yang menemukan risiko tersebut.",
+        "isCorrect": false,
+        "rationale": "Sumber penemu tidak relevan dengan tingkat bahaya risiko."
+      },
+      {
+        "text": "Waktu yang dibutuhkan untuk melaporkan risiko.",
+        "isCorrect": false,
+        "rationale": "Kecepatan lapor penting, tapi bukan dasar penentuan level risiko."
+      }
+    ]
+  },
+  {
+    "questionNumber": 31,
+    "question": "Studi kasus PT Indah Karya menunjukkan bahwa analisis proses bisnis yang tepat dapat memberikan dampak finansial berupa...",
+    "answerOptions": [
+      {
+        "text": "Peningkatan modal saham perusahaan.",
+        "isCorrect": false,
+        "rationale": "Fokus analisis proses adalah pada efisiensi biaya operasional."
+      },
+      {
+        "text": "Penghematan biaya sebesar Rp 3,8 miliar per tahun melalui eliminasi inefisiensi.",
+        "isCorrect": true,
+        "rationale": "Hasil nyata analisis proses adalah pengurangan pemborosan biaya. (Analisis Proses Bisnis, hal. 10)"
+      },
+      {
+        "text": "Kewajiban membayar pajak yang lebih rendah.",
+        "isCorrect": false,
+        "rationale": "Analisis proses tidak bertujuan untuk penghindaran pajak."
+      },
+      {
+        "text": "Penghapusan seluruh departemen keuangan.",
+        "isCorrect": false,
+        "rationale": "Integrasi proses tidak berarti menghapus fungsi organisasi yang penting."
+      }
+    ]
+  },
+  {
+    "questionNumber": 32,
+    "question": "Dalam konteks Six Sigma, fase 'Measure' bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Mencari akar penyebab masalah.",
+        "isCorrect": false,
+        "rationale": "Ini adalah tujuan fase Analyze."
+      },
+      {
+        "text": "Mengumpulkan data performa proses saat ini sebagai garis dasar (baseline).",
+        "isCorrect": true,
+        "rationale": "Measure dilakukan untuk mengetahui kondisi nyata sebelum perbaikan. (Six Sigma, hal. 2)"
+      },
+      {
+        "text": "Merancang solusi baru.",
+        "isCorrect": false,
+        "rationale": "Ini dilakukan pada fase Improve."
+      },
+      {
+        "text": "Membuat dokumen Standar Operasional Prosedur (SOP) baru.",
+        "isCorrect": false,
+        "rationale": "Ini biasanya dilakukan di fase Control."
+      }
+    ]
+  },
+  {
+    "questionNumber": 33,
+    "question": "Penggunaan elemen 'Lanes' dalam BPMN bertujuan untuk...",
+    "answerOptions": [
+      {
+        "text": "Menghubungkan dua organisasi yang berbeda.",
+        "isCorrect": false,
+        "rationale": "Interaksi antar organisasi menggunakan 'Pools'."
+      },
+      {
+        "text": "Memisahkan aktivitas berdasarkan peran atau departemen di dalam satu organisasi.",
+        "isCorrect": true,
+        "rationale": "Lanes (jalur) digunakan untuk menunjukkan tanggung jawab internal. (BPMN, hal. 6)"
+      },
+      {
+        "text": "Menentukan waktu dimulainya proses.",
+        "isCorrect": false,
+        "rationale": "Waktu ditentukan oleh Start Event atau timer."
+      },
+      {
+        "text": "Menggambarkan database yang digunakan.",
+        "isCorrect": false,
+        "rationale": "Database digambarkan dengan simbol Data Store."
+      }
+    ]
+  },
+  {
+    "questionNumber": 34,
+    "question": "Sinergi antara Lean dan PMBOK dalam manajemen proyek modern dapat menghasilkan...",
+    "answerOptions": [
+      {
+        "text": "Proses yang lebih birokratis dan kaku.",
+        "isCorrect": false,
+        "rationale": "Sinergi justru bertujuan menyederhanakan dan mempercepat."
+      },
+      {
+        "text": "Pengurangan biaya hingga 30% dan penyelesaian lebih cepat hingga 40%.",
+        "isCorrect": true,
+        "rationale": "Integrasi filosofi efisiensi (Lean) dan struktur (PMBOK) memberikan hasil optimal. (Metodologi Manajemen Proyek, hal. 7)"
+      },
+      {
+        "text": "Penghapusan seluruh risiko proyek secara otomatis.",
+        "isCorrect": false,
+        "rationale": "Risiko tidak bisa dihapus total, hanya dikelola lebih baik."
+      },
+      {
+        "text": "Penambahan jumlah staf administrasi.",
+        "isCorrect": false,
+        "rationale": "Lean justru berusaha meminimalkan aktivitas non-nilai tambah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 35,
+    "question": "Manakah di bawah ini yang merupakan tantangan utama dalam sistem manajemen risiko manual?",
+    "answerOptions": [
+      {
+        "text": "Terlalu banyak otomatisasi data.",
+        "isCorrect": false,
+        "rationale": "Ini adalah ciri sistem modern, bukan manual."
+      },
+      {
+        "text": "Pemantauan tidak real-time dan rawan kesalahan manusia.",
+        "isCorrect": true,
+        "rationale": "Sistem manual seringkali bersifat reaktif dan lambat mendeteksi risiko baru. (Manajemen Risiko, hal. 9)"
+      },
+      {
+        "text": "Biaya lisensi perangkat lunak yang tinggi.",
+        "isCorrect": false,
+        "rationale": "Sistem manual justru tidak menggunakan lisensi software khusus."
+      },
+      {
+        "text": "Kemudahan dalam berbagi data antar divisi.",
+        "isCorrect": false,
+        "rationale": "Sistem manual justru sulit dalam kolaborasi data (siloh)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 36,
+    "question": "Apa fungsi utama dari 'End Event' dalam diagram BPMN?",
+    "answerOptions": [
+      {
+        "text": "Menunjukkan tempat penyimpanan data terakhir.",
+        "isCorrect": false,
+        "rationale": "Tempat penyimpanan data menggunakan simbol Data Store."
+      },
+      {
+        "text": "Menandai titik di mana aliran proses bisnis berakhir.",
+        "isCorrect": true,
+        "rationale": "End Event (lingkaran garis tebal) menunjukkan selesainya proses. (BPMN, hal. 4)"
+      },
+      {
+        "text": "Memberikan jeda waktu di tengah proses.",
+        "isCorrect": false,
+        "rationale": "Jeda waktu menggunakan Intermediate Event."
+      },
+      {
+        "text": "Mengulang kembali proses ke awal.",
+        "isCorrect": false,
+        "rationale": "Pengulangan menggunakan loop atau alur kembali ke hulu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 37,
+    "question": "Filosofi 'Perfection' dalam prinsip Lean berarti organisasi harus...",
+    "answerOptions": [
+      {
+        "text": "Berhenti melakukan perbaikan jika target sudah tercapai.",
+        "isCorrect": false,
+        "rationale": "Lean menuntut perbaikan terus-menerus tanpa henti."
+      },
+      {
+        "text": "Terus-menerus berupaya menghilangkan pemborosan menuju kondisi tanpa cacat.",
+        "isCorrect": true,
+        "rationale": "Perfection adalah upaya berkelanjutan untuk mencapai efisiensi maksimal. (Metodologi Lean, hal. 3)"
+      },
+      {
+        "text": "Membeli teknologi tercanggih di pasar.",
+        "isCorrect": false,
+        "rationale": "Perfection fokus pada proses, bukan sekadar pembelian alat."
+      },
+      {
+        "text": "Menghukum karyawan yang melakukan kesalahan kecil.",
+        "isCorrect": false,
+        "rationale": "Fokus Lean adalah pada sistem, bukan menyalahkan individu."
+      }
+    ]
+  },
+  {
+    "questionNumber": 38,
+    "question": "Dalam EIS, kemampuan untuk melihat data kinerja berdasarkan wilayah geografis menggunakan peta interaktif disebut sebagai...",
+    "answerOptions": [
+      {
+        "text": "Textual Reporting.",
+        "isCorrect": false,
+        "rationale": "Ini adalah laporan berbasis teks biasa."
+      },
+      {
+        "text": "Visualisasi Intuitif.",
+        "isCorrect": true,
+        "rationale": "Menyajikan data kompleks dalam bentuk peta atau grafik agar mudah dipahami eksekutif. (EIS, hal. 9)"
+      },
+      {
+        "text": "Data Entry.",
+        "isCorrect": false,
+        "rationale": "Ini adalah proses memasukkan data, bukan penyajian."
+      },
+      {
+        "text": "Manual Audit.",
+        "isCorrect": false,
+        "rationale": "Audit manual tidak menggunakan visualisasi interaktif sistem."
+      }
+    ]
+  },
+  {
+    "questionNumber": 39,
+    "question": "Proses Manajemen Risiko Kualitatif memiliki potensi signifikan untuk mempengaruhi tujuan proyek.",
+    "answerOptions": [
+      {
+        "text": "Benar.",
+        "isCorrect": true,
+        "rationale": "Analisis kualitatif membantu memfokuskan perhatian pada risiko prioritas tinggi secara cepat. (Modul 2, hal. 8)"
+      },
+      {
+        "text": "Salah.",
+        "isCorrect": false,
+        "rationale": "Pernyataan tersebut benar karena identifikasi kualitatif adalah dasar langkah strategis selanjutnya."
+      }
+    ]
+  },
+  {
+    "questionNumber": 40,
+    "question": "Siapa yang bertanggung jawab sebagai 'Fasilitator Utama' dalam proses pengambilan keputusan tim proyek?",
+    "answerOptions": [
+      {
+        "text": "Direktur Utama.",
+        "isCorrect": false,
+        "rationale": "Direktur Utama biasanya hanya menerima laporan akhir atau keputusan sangat besar."
+      },
+      {
+        "text": "Manajer Proyek.",
+        "isCorrect": true,
+        "rationale": "Manajer proyek memimpin diskusi dan memastikan keputusan diambil berdasarkan data. (Siklus Hidup Proyek, hal. 8)"
+      },
+      {
+        "text": "Staf Administrasi.",
+        "isCorrect": false,
+        "rationale": "Staf administrasi mendukung dokumentasi, bukan memfasilitasi keputusan tim."
+      },
+      {
+        "text": "Pelanggan.",
+        "isCorrect": false,
+        "rationale": "Pelanggan memberikan kebutuhan, tapi tim internal yang mengambil keputusan eksekusi."
+      }
+    ]
+  },
+  {
+    "questionNumber": 41,
+    "question": "Membangun budaya berbagi pengetahuan (sharing culture) sangat penting karena...",
+    "answerOptions": [
+      {
+        "text": "Dapat mengurangi beban kerja atasan.",
+        "isCorrect": false,
+        "rationale": "Bukan sekadar beban kerja, tapi tentang nilai aset intelektual."
+      },
+      {
+        "text": "Pengetahuan yang tersembunyi pada individu (tacit) tidak akan memberikan nilai bagi organisasi jika tidak dibagikan.",
+        "isCorrect": true,
+        "rationale": "Budaya berbagi memastikan pengetahuan menjadi aset kolektif perusahaan. (Pekerjaan Pengetahuan, hal. 9)"
+      },
+      {
+        "text": "Agar karyawan bisa saling mencontek pekerjaan.",
+        "isCorrect": false,
+        "rationale": "Berbagi pengetahuan bertujuan untuk kolaborasi dan inovasi, bukan kecurangan."
+      },
+      {
+        "text": "Mengurangi kebutuhan akan sistem komputer.",
+        "isCorrect": false,
+        "rationale": "Sistem justru dibutuhkan untuk mendokumentasikan pengetahuan yang dibagikan."
+      }
+    ]
+  },
+  {
+    "questionNumber": 42,
+    "question": "Apa yang dimaksud dengan 'Muda' dalam metodologi Lean?",
+    "answerOptions": [
+      {
+        "text": "Karyawan yang masih baru bergabung.",
+        "isCorrect": false,
+        "rationale": "Ini bukan istilah umur manusia dalam manajemen."
+      },
+      {
+        "text": "Segala bentuk pemborosan atau aktivitas yang tidak memberikan nilai tambah.",
+        "isCorrect": true,
+        "rationale": "Fokus utama Lean adalah mengidentifikasi dan mengeliminasi 'muda'. (Metodologi Lean, hal. 3)"
+      },
+      {
+        "text": "Teknologi terbaru yang digunakan perusahaan.",
+        "isCorrect": false,
+        "rationale": "Teknologi bukan 'muda' kecuali jika penggunaannya boros."
+      },
+      {
+        "text": "Keuntungan bersih perusahaan.",
+        "isCorrect": false,
+        "rationale": "Keuntungan justru ingin ditingkatkan dengan membuang 'muda'."
+      }
+    ]
+  },
+  {
+    "questionNumber": 43,
+    "question": "Simbol panah dengan garis utuh (Sequence Flow) dalam BPMN digunakan untuk...",
+    "answerOptions": [
+      {
+        "text": "Menunjukkan aliran pesan antar pool.",
+        "isCorrect": false,
+        "rationale": "Aliran pesan antar pool menggunakan garis putus-putus (Message Flow)."
+      },
+      {
+        "text": "Menunjukkan urutan aktivitas yang akan dilakukan dalam satu proses.",
+        "isCorrect": true,
+        "rationale": "Sequence flow mengatur urutan langkah demi langkah secara logis. (BPMN, hal. 5)"
+      },
+      {
+        "text": "Menghubungkan teks tambahan ke elemen.",
+        "isCorrect": false,
+        "rationale": "Ini menggunakan Association (garis titik-titik)."
+      },
+      {
+        "text": "Menandai proses yang dibatalkan.",
+        "isCorrect": false,
+        "rationale": "Pembatalan menggunakan simbol khusus (Cancel Event)."
+      }
+    ]
+  },
+  {
+    "questionNumber": 44,
+    "question": "Salah satu keunggulan EIS adalah memberikan 'Peringatan Dini' (Early Warning). Contoh implementasinya adalah...",
+    "answerOptions": [
+      {
+        "text": "Sistem mengirimkan email otomatis saat stok bahan baku berada di bawah batas minimum.",
+        "isCorrect": true,
+        "rationale": "Peringatan otomatis membantu eksekutif bertindak sebelum masalah menjadi kritis. (EIS, hal. 9)"
+      },
+      {
+        "text": "Sistem mencetak laporan tahunan secara otomatis.",
+        "isCorrect": false,
+        "rationale": "Laporan tahunan bersifat historis, bukan peringatan dini."
+      },
+      {
+        "text": "Sistem meminta karyawan mengganti password setiap bulan.",
+        "isCorrect": false,
+        "rationale": "Ini adalah prosedur keamanan TI rutin, bukan informasi strategis."
+      },
+      {
+        "text": "Sistem menghitung total absensi karyawan.",
+        "isCorrect": false,
+        "rationale": "Ini adalah fungsi operasional SDM biasa."
+      }
+    ]
+  },
+  {
+    "questionNumber": 45,
+    "question": "Prinsip 'Pull System' pada Lean mencegah terjadinya...",
+    "answerOptions": [
+      {
+        "text": "Kekurangan karyawan di lini produksi.",
+        "isCorrect": false,
+        "rationale": "Pull system fokus pada aliran barang/jasa, bukan jumlah staf."
+      },
+      {
+        "text": "Overproduction (produksi berlebih) yang menyebabkan penumpukan stok.",
+        "isCorrect": true,
+        "rationale": "Produksi hanya dilakukan jika ada permintaan dari tahap selanjutnya atau pelanggan. (Metodologi Lean, hal. 3)"
+      },
+      {
+        "text": "Kerusakan mesin secara mendadak.",
+        "isCorrect": false,
+        "rationale": "Ini dicegah dengan Preventive Maintenance, bukan pull system."
+      },
+      {
+        "text": "Kenaikan harga bahan baku di pasar.",
+        "isCorrect": false,
+        "rationale": "Harga pasar berada di luar kendali sistem produksi internal."
+      }
+    ]
+  },
+  {
+    "questionNumber": 46,
+    "question": "Dalam fase 'Penutupan' proyek, aktivitas utama yang harus dilakukan adalah...",
+    "answerOptions": [
+      {
+        "text": "Mencari investor baru untuk proyek selanjutnya.",
+        "isCorrect": false,
+        "rationale": "Ini adalah kegiatan pengembangan bisnis, bukan penutupan proyek saat ini."
+      },
+      {
+        "text": "Melakukan finalisasi semua aktivitas dan mengevaluasi hasil proyek (lessons learned).",
+        "isCorrect": true,
+        "rationale": "Penutupan bertujuan untuk memastikan semua janji terpenuhi dan mengambil pelajaran untuk masa depan. (Siklus Hidup Proyek, hal. 3)"
+      },
+      {
+        "text": "Mengubah ruang lingkup proyek agar lebih besar.",
+        "isCorrect": false,
+        "rationale": "Perubahan ruang lingkup dilakukan saat perencanaan atau eksekusi."
+      },
+      {
+        "text": "Memulai pengujian integrasi sistem.",
+        "isCorrect": false,
+        "rationale": "Pengujian dilakukan saat fase Eksekusi/Monitoring."
+      }
+    ]
+  },
+  {
+    "questionNumber": 47,
+    "question": "BPMN dikembangkan dan dikelola oleh organisasi standar global yang bernama...",
+    "answerOptions": [
+      {
+        "text": "ISO (International Organization for Standardization).",
+        "isCorrect": false,
+        "rationale": "BPMN memang standar, tapi pengembang utamanya bukan ISO."
+      },
+      {
+        "text": "OMG (Object Management Group).",
+        "isCorrect": true,
+        "rationale": "OMG adalah badan yang menetapkan spesifikasi BPMN. (BPMN, hal. 2)"
+      },
+      {
+        "text": "IEEE (Institute of Electrical and Electronics Engineers).",
+        "isCorrect": false,
+        "rationale": "IEEE lebih fokus pada standar teknis kelistrikan dan perangkat lunak."
+      },
+      {
+        "text": "WTO (World Trade Organization).",
+        "isCorrect": false,
+        "rationale": "WTO berurusan dengan perdagangan antar negara."
+      }
+    ]
+  },
+  {
+    "questionNumber": 48,
+    "question": "Analisis Pareto (80/20) membantu manajer proses untuk...",
+    "answerOptions": [
+      {
+        "text": "Menghitung rata-rata gaji seluruh karyawan.",
+        "isCorrect": false,
+        "rationale": "Statistik gaji tidak menggunakan prinsip Pareto secara utama."
+      },
+      {
+        "text": "Fokus pada 20% penyebab yang menimbulkan 80% masalah utama.",
+        "isCorrect": true,
+        "rationale": "Pareto membantu prioritas perbaikan pada hal yang memberikan dampak terbesar. (Modul 2, hal. 7)"
+      },
+      {
+        "text": "Menambah 80% fitur baru ke dalam sistem.",
+        "isCorrect": false,
+        "rationale": "Bukan tentang jumlah fitur, tapi tentang efektivitas penyelesaian masalah."
+      },
+      {
+        "text": "Membagi keuntungan secara merata kepada semua pihak.",
+        "isCorrect": false,
+        "rationale": "Ini adalah kebijakan pembagian laba, bukan alat analisis masalah."
+      }
+    ]
+  },
+  {
+    "questionNumber": 49,
+    "question": "Mengapa visualisasi data yang 'komprehensif' sangat penting bagi seorang eksekutif?",
+    "answerOptions": [
+      {
+        "text": "Agar tampilan komputer terlihat modern dan mahal.",
+        "isCorrect": false,
+        "rationale": "Estetika hanya bonus; tujuan utamanya adalah fungsionalitas."
+      },
+      {
+        "text": "Agar eksekutif dapat memahami kondisi bisnis secara menyeluruh dalam waktu singkat.",
+        "isCorrect": true,
+        "rationale": "Eksekutif memiliki waktu terbatas dan membutuhkan gambaran besar (big picture) segera. (EIS, hal. 3)"
+      },
+      {
+        "text": "Agar data tidak bisa dibaca oleh kompetitor.",
+        "isCorrect": false,
+        "rationale": "Keamanan data diatur oleh enkripsi, bukan oleh bentuk visualisasinya."
+      },
+      {
+        "text": "Karena eksekutif tidak suka membaca teks panjang.",
+        "isCorrect": false,
+        "rationale": "Meski benar, alasan profesionalnya adalah efisiensi pengambilan keputusan strategis."
+      }
+    ]
+  },
+  {
+    "questionNumber": 50,
+    "question": "Langkah pertama dalam implementasi manajemen pengetahuan yang efektif menurut materi adalah...",
+    "answerOptions": [
+      {
+        "text": "Membeli perangkat lunak terbaru.",
+        "isCorrect": false,
+        "rationale": "Teknologi adalah langkah kedua setelah kebutuhan diketahui."
+      },
+      {
+        "text": "Analisis kebutuhan pengetahuan (identifikasi kesenjangan).",
+        "isCorrect": true,
+        "rationale": "Kita harus tahu jenis pengetahuan apa yang bernilai sebelum mulai mengelolanya. (Pekerjaan Pengetahuan, hal. 9)"
+      },
+      {
+        "text": "Memecat karyawan yang tidak mau berbagi.",
+        "isCorrect": false,
+        "rationale": "Budaya dibangun melalui motivasi dan penghargaan, bukan pemecatan langsung."
+      },
+      {
+        "text": "Membuat laporan keuangan perusahaan.",
+        "isCorrect": false,
+        "rationale": "Ini adalah proses akuntansi rutin, bukan manajemen pengetahuan."
+      }
+    ]
+  }
+]
+
+  
+
+  function renderSoal() {
+    const container = document.getElementById('container');
+    soalList.forEach(soal => {
+      const soalDiv = document.createElement('div');
+      soalDiv.className = 'soal';
+      soalDiv.setAttribute('data-qnum', soal.questionNumber);
+      
+      let soalHTML = `<h3>Soal ${soal.questionNumber}.</h3>`;
+      soalHTML += `<p>${soal.question}</p>`;
+      soalHTML += `<div class="jawaban">`;
+      
+      soal.answerOptions.forEach((option, index) => {
+          const label = String.fromCharCode(65 + index); 
+          
+          soalHTML += `
+              <button 
+                  onclick="checkAnswer(this, ${soal.questionNumber}, ${option.isCorrect})"
+                  data-iscorrect="${option.isCorrect}"
+                  data-label="${label}">
+                  ${label}. ${option.text}
+              </button>
+              <div class="penjelasan-opsi">
+                <strong>Penjelasan Opsi ${label}:</strong> ${option.rationale}
+              </div>
+          `;
+      });
+      
+      soalHTML += `</div>`;
+      soalDiv.innerHTML = soalHTML;
+      container.appendChild(soalDiv);
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', renderSoal);
+</script>
+
+</body>
+</html>
